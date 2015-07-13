@@ -7,28 +7,28 @@ import locale
 import gettext
 
 # Make sure we'll find the pygobject module, even in JHBuild
-sys.path.insert(1, '@pyexecdir@')
+sys.path.insert(1, "@pyexecdir@")
 # Make sure we'll find the gnomenews module, even in JHBuild
-sys.path.insert(1, '@pythondir@')
+sys.path.insert(1, "@pythondir@")
 
-from optparse import OptionParser
+import argparse
 import logging
 from gi.repository import Gio
 import gnomenews
 
-localedir = '@localedir@'
-srcdir = os.path.abspath(os.path.join(os.path.dirname(gnomenews.__file__), '..'))
-if os.path.exists(os.path.join(srcdir, 'gnome-news.doap')):
-    print('Running from source tree, using local files')
-    pkgdatadir = os.path.join(srcdir, 'data')
-    libgd_libdir = os.path.join(srcdir, 'libgd', '.libs')
-    libgd_typelibdir = os.path.join(srcdir, 'libgd')
-    if not os.environ.get('GSETTINGS_SCHEMA_DIR'):
-        os.environ['GSETTINGS_SCHEMA_DIR'] = pkgdatadir
+localedir = "@localedir@"
+srcdir = os.path.abspath(os.path.join(os.path.dirname(gnomenews.__file__), ".."))
+if os.path.exists(os.path.join(srcdir, "gnome-news.doap")):
+    print("Running from source tree, using local files")
+    pkgdatadir = os.path.join(srcdir, "data")
+    libgd_libdir = os.path.join(srcdir, "libgd", ".libs")
+    libgd_typelibdir = os.path.join(srcdir, "libgd")
+    if not os.environ.get("GSETTINGS_SCHEMA_DIR"):
+        os.environ["GSETTINGS_SCHEMA_DIR"] = pkgdatadir
 else:
-    pkgdatadir = '@pkgdatadir@'
-    libgd_libdir = '@pkglibdir@'
-    libgd_typelibdir = '@pkglibdir@/girepository-1.0'
+    pkgdatadir = "@pkgdatadir@"
+    libgd_libdir = "@pkglibdir@"
+    libgd_typelibdir = "@pkglibdir@/girepository-1.0"
 
 # We use our own libgd.so, so let gi.repository find it
 from gi.repository import GIRepository
@@ -51,29 +51,29 @@ def install_excepthook():
 if __name__ == "__main__":
     install_excepthook()
 
-    parser = OptionParser()
-    parser.add_option('-d', "--debug", action="store_true", default=False, dest="debug")
-    opts, args = parser.parse_args()
-    if opts.debug:
+    parser = argparse.ArgumentParser()
+    parser.add_option("-d", "--debug", action="store_true", default=False, dest="debug")
+    args = parser.parse_args()
+    if args.debug:
         logging.basicConfig(level=logging.DEBUG,
-                            format='%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s',
-                            datefmt='%H:%M:%S')
+                            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+                            datefmt="%H:%M:%S")
         # Gtk hates "-d" switch, so lets drop it
-        if '-d' in sys.argv:
+        if "-d" in sys.argv:
             sys.argv.remove("-d")
-        if '--debug' in sys.argv:
+        if "--debug" in sys.argv:
             sys.argv.remove("--debug")
     else:
         logging.basicConfig(level=logging.WARN,
-                            format='%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s',
-                            datefmt='%H:%M:%S')
+                            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+                            datefmt="%H:%M:%S")
 
-    locale.bindtextdomain('gnome-news', localedir)
-    locale.textdomain('gnome-news')
-    gettext.bindtextdomain('gnome-news', localedir)
-    gettext.textdomain('gnome-news')
+    locale.bindtextdomain("gnome-news", localedir)
+    locale.textdomain("gnome-news")
+    gettext.bindtextdomain("gnome-news", localedir)
+    gettext.textdomain("gnome-news")
 
-    resource = Gio.resource_load(os.path.join(pkgdatadir, 'gnome-news.gresource'))
+    resource = Gio.resource_load(os.path.join(pkgdatadir, "gnome-news.gresource"))
     Gio.Resource._register(resource)
 
     from gnomenews.application import Application
