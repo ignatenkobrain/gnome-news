@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Igor Gnatenko <ignatenko@src.gnome.org> -->
+<component type="desktop">
+  <id>org.gnome.News.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <!-- TRANSLATORS: the application name -->
+  <_name>News</_name>
+  <!-- TRANSLATORS: one-line description for the app -->
+  <_summary>Feed Reader</_summary>
+  <description>
+    <!-- TRANSLATORS: AppData description marketing paragraph -->
+    <_p>
+      GNOME News can be used to read news.
+    </_p>
+  </description>
+  <screenshots>
+  </screenshots>
+  <!--
+          Validate with `appstream-util validate *.appdata.xml`
+   Use `date -d now +%s` or `date -d 2010-01-32 +%s` to get the timestamp.
+  -->
+  <releases>
+  </releases>
+  <url type="homepage">https://wiki.gnome.org/Design/Apps/Potential/News</url>
+  <url type="bugtracker">https://github.com/ignatenkobrain/gnome-news/issues</url>
+  <update_contact>ignatenko@src.gnome.org</update_contact>
+</component>
