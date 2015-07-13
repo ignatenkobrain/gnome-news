@@ -11,6 +11,10 @@ CLEANFILES = \
 	$(bin_SCRIPTS) \
 	$(NULL)
 
+DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-appstream-util \
+	$(NULL)
+
 GITIGNOREFILES = \
 	**/*.swp \
 	m4/ \
