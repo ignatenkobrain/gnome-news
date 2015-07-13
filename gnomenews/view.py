@@ -25,46 +25,66 @@ logger = logging.getLogger(__name__)
 class GenericFeedsView(Gtk.Stack):
 
     @log
-    def __init__(self, name, title=None):
+    def __init__(self, name, title=None, show_feedlist=False):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.name = name
         self.title = title
 
-        self.webview = WebKit2.WebView()
+        self.flowbox = Gtk.FlowBox(
+            max_children_per_line=2, homogeneous=True)
 
-        scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.add(self.webview)
+        self.feedlist = Gtk.ListBox()
 
-        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self._box.pack_start(scrolled_window, True, True, 0)
+        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        if show_feedlist:
+            self._box.pack_start(self.feedlist, True, True, 0)
+        self._box.pack_end(self.flowbox, True, True, 0)
         self.add(self._box)
 
         self.show_all()
+
+    def _add_new_item_with_url(self, url):
+        webview = WebKit2.WebView()
+        webview.load_uri(url)
+        self.flowbox.insert(webview, -1)
 
 
 class NewView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'new', _("New"))
-        self.webview.load_uri('http://new')
+
+        # Insert some fake data
+        for x in range(0, 10):
+            self._add_new_item_with_url('http://new%d' % x)
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self):
-        GenericFeedsView.__init__(self, 'feeds', _("Feeds"))
-        self.webview.load_uri('http://feeds')
+        GenericFeedsView.__init__(self, 'feeds', _("Feeds"), show_feedlist=True)
+        # Insert some fake data
+        for x in range(0, 10):
+            self._add_new_item_with_url('http://feeds%d' % x)
+
+        # Add some fake feeds
+        for x in range(0, 10):
+            self.feedlist.insert(Gtk.Label('test%d' % x), -1)
 
 
 class StarredView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'starred', _("Starred"))
-        self.webview.load_uri('http://starred')
+        # Insert some fake data
+        for x in range(0, 10):
+            self._add_new_item_with_url('http://starred%d' % x)
 
 
 class ReadView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'read', _("Read"))
-        self.webview.load_uri('http://read')
+        # Insert some fake data
+        for x in range(0, 10):
+            self._add_new_item_with_url('http://read%d' % x)
 
 
 class SearchView(GenericFeedsView):
