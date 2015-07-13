@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, WebKit
+from gi.repository import Gtk, WebKit2
 
 from gettext import gettext as _
 
@@ -31,7 +31,7 @@ class GenericFeedsView(Gtk.Stack):
         self.name = name
         self.title = title
 
-        self.webview = WebKit.WebView()
+        self.webview = WebKit2.WebView()
 
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.add(self.webview)
