@@ -29,7 +29,7 @@ class ToolbarState:
 class Toolbar(GObject.GObject):
 
     __gsignals__ = {
-        'state-changed': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'state-changed': (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     @log
