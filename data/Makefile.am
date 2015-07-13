@@ -1,3 +1,6 @@
+EXTRA_DIST = \
+	$(NULL)
+
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --sourcedir=$(builddir) --generate-dependencies $(builddir)/gnome-news.gresource.xml) 
 gnome-news.gresource: gnome-news.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --sourcedir=$(builddir) $<
@@ -10,14 +13,14 @@ apps_DATA = gnome-news.desktop
 
 @INTLTOOL_DESKTOP_RULE@
 
-appdatadir = $(datadir)/appdata
-appdata_DATA = $(appdata_in_files:.xml.in=.xml)
-appdata_in_files = gnome-news.appdata.xml.in
+# AppData
+appstream_in_files = gnome-news.appdata.xml.in
+appstream_XML = $(appstream_in_files:.appdata.xml.in=.appdata.xml)
 
+@APPSTREAM_XML_RULES@
 @INTLTOOL_XML_RULE@
 
-man1_MANS = gnome-news.1
-
+# GSettings
 gsettings_SCHEMAS = org.gnome.News.gschema.xml
 
 # For uninstalled use
@@ -28,16 +31,15 @@ gschemas.compiled: $(gsettings_SCHEMAS) Makefile
 
 EXTRA_DIST = \
 	$(resource_files) \
-	gnome-news.appdata.xml.in \
+	$(appstream_in_files) \
 	gnome-news.desktop.in \
 	gnome-news.gresource.xml \
 	org.gnome.News.gschema.xml \
-	$(man1_MANS) \
 	$(NULL)
 
 CLEANFILES = \
 	gnome-news.gresource \
-	gnome-news.appdata.xml \
+	$(appstream_XML) \
 	$(apps_DATA) \
 	*.valid \
 	gschemas.compiled \

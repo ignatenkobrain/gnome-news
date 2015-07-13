@@ -1,4 +1,4 @@
-SUBDIRS = gnomenews po
+SUBDIRS = data gnomenews po
 
 bin_SCRIPTS = gnome-news
 
