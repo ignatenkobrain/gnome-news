@@ -45,18 +45,20 @@ if __name__ == "__main__":
     parser.add_option("-d", "--debug", action="store_true", default=False, dest="debug")
     args = parser.parse_args()
     if args.debug:
-        logging.basicConfig(level=logging.DEBUG,
-                            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
-                            datefmt="%H:%M:%S")
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+            datefmt="%H:%M:%S")
         # Gtk hates "-d" switch, so lets drop it
         if "-d" in sys.argv:
             sys.argv.remove("-d")
         if "--debug" in sys.argv:
             sys.argv.remove("--debug")
     else:
-        logging.basicConfig(level=logging.WARN,
-                            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
-                            datefmt="%H:%M:%S")
+        logging.basicConfig(
+            level=logging.WARN,
+            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+            datefmt="%H:%M:%S")
 
     locale.bindtextdomain("gnome-news", localedir)
     locale.textdomain("gnome-news")
