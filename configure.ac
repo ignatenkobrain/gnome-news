@@ -19,7 +19,7 @@ PKG_CHECK_MODULES(GTK, gtk+-3.0 >= gtk_required_version)
 PKG_CHECK_MODULES(PYGOBJECT, pygobject-3.0 >= pygobject_required_version)
 
 # GResources
-AC_PATH_PROG([GLIB_COMPILE_RESOURCES],[glib-compile-resources])
+AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
 
 # Internationalisation
 GETTEXT_PACKAGE=gnome-news
