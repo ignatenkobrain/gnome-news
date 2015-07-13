@@ -4,7 +4,7 @@
          xmlns:gnome="http://api.gnome.org/doap-extensions#"
          xmlns="http://usefulinc.com/ns/doap#">
 
-  <name xml:lang="en">gnome-news</name>
+  <name xml:lang="en">News</name>
   <shortdesc xml:lang="en">Feed Reader</shortdesc>
   <homepage rdf:resource="https://wiki.gnome.org/Design/Apps/Potential/News" />
   <download-page rdf:resource="https://github.com/ignatenkobrain/gnome-news/releases" />
