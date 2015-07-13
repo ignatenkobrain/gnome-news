@@ -12,3 +12,33 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from itertools import chain
+import logging
+import time
+logger = logging.getLogger(__name__)
+tabbing = 0
+
+
+def log(fn):
+    if logger.getEffectiveLevel() > logging.DEBUG:
+        return fn
+
+    def wrapped(*v, **k):
+        global tabbing
+        name = fn.__name__
+        module = fn.__module__
+        params = ", ".join(map(repr, chain(v, k.values())))
+
+        tabbing += 1
+        start = time.time()
+        retval = fn(*v, **k)
+        elapsed = time.time() - start
+        tabbing -= 1
+        elapsed_time = ''
+        if elapsed > 0.5:
+            elapsed_time = ', took %02f' % elapsed
+        logger.debug("%s%s.%s(%s), returned %s%s", '|' * tabbing, module, name, params, retval, elapsed_time)
+
+        return retval
+    return wrapped
