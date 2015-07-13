@@ -42,7 +42,7 @@ if __name__ == "__main__":
     install_excepthook()
 
     parser = argparse.ArgumentParser()
-    parser.add_option("-d", "--debug", action="store_true", default=False, dest="debug")
+    parser.add_argument("-d", "--debug", action="store_true", default=False, dest="debug")
     args = parser.parse_args()
     if args.debug:
         logging.basicConfig(
