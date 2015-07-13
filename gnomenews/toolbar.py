@@ -44,6 +44,11 @@ class Toolbar(GObject.GObject):
         self.header_bar.set_show_close_button(True)
         self.header_bar.set_custom_title(self._stack_switcher)
 
+        self.add_button = self._ui.get_object('add-toggle-button')
+        self.add_popover = self._ui.get_object('add-popover')
+        self.add_popover.hide()
+        self.add_button.set_popover(self.add_popover)
+
     @log
     def reset_header_title(self):
         self.header_bar.set_custom_title(self._stack_switcher)
