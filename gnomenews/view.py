@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
+from gi.repository import Gtk, WebKit
 
 from gettext import gettext as _
 
@@ -30,27 +30,41 @@ class GenericFeedsView(Gtk.Stack):
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.name = name
         self.title = title
+
+        self.webview = WebKit.WebView()
+
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.add(self.webview)
+
+        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self._box.pack_start(scrolled_window, True, True, 0)
+        self.add(self._box)
+
         self.show_all()
 
 
 class NewView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'new', _("New"))
+        self.webview.load_uri('http://new')
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'feeds', _("Feeds"))
+        self.webview.load_uri('http://feeds')
 
 
 class StarredView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'starred', _("Starred"))
+        self.webview.load_uri('http://starred')
 
 
 class ReadView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'read', _("Read"))
+        self.webview.load_uri('http://read')
 
 
 class SearchView(GenericFeedsView):

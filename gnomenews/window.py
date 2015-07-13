@@ -91,8 +91,7 @@ class Window(Gtk.ApplicationWindow):
 
         self._add_views()
 
-        self._box.show()
-        self.show()
+        self.show_all()
 
     @log
     def _add_views(self):
@@ -108,3 +107,4 @@ class Window(Gtk.ApplicationWindow):
                 self._stack.add_named(i, i.name)
 
         self.toolbar.set_stack(self._stack)
+        self._stack.set_visible_child(self.views[0])
