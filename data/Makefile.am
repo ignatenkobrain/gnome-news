@@ -1,5 +1,8 @@
-EXTRA_DIST = \
-	$(NULL)
+# Desktop file
+@INTLTOOL_DESKTOP_RULE@
+desktopdir = $(datadir)/applications
+desktop_in_files = org.gnome.News.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --sourcedir=$(builddir) --generate-dependencies $(builddir)/gnome-news.gresource.xml) 
 gnome-news.gresource: gnome-news.gresource.xml $(resource_files)
@@ -7,11 +10,6 @@ gnome-news.gresource: gnome-news.gresource.xml $(resource_files)
 
 resourcedir = $(pkgdatadir)
 resource_DATA = gnome-news.gresource
-
-appsdir = $(datadir)/applications
-apps_DATA = gnome-news.desktop
-
-@INTLTOOL_DESKTOP_RULE@
 
 # AppData
 appstream_in_files = gnome-news.appdata.xml.in
@@ -30,17 +28,17 @@ gschemas.compiled: $(gsettings_SCHEMAS) Makefile
 @GSETTINGS_RULES@
 
 EXTRA_DIST = \
+	$(desktop_in_files) \
 	$(resource_files) \
 	$(appstream_in_files) \
-	gnome-news.desktop.in \
 	gnome-news.gresource.xml \
 	org.gnome.News.gschema.xml \
 	$(NULL)
 
 CLEANFILES = \
+	$(desktop_DATA) \
 	gnome-news.gresource \
 	$(appstream_XML) \
-	$(apps_DATA) \
 	*.valid \
 	gschemas.compiled \
 	$(NULL)

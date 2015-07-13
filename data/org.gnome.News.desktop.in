@@ -1,0 +1,9 @@
+[Desktop Entry]
+_Name=News
+_Comment=Feed reader for GNOME
+Exec=gnome-news
+Icon=gnome-news
+Terminal=false
+Type=Application
+Categories=Network;Feed;News;GNOME;GTK;
+Keywords=News;Feed;
