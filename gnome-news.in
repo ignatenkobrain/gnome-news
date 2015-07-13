@@ -21,20 +21,10 @@ srcdir = os.path.abspath(os.path.join(os.path.dirname(gnomenews.__file__), "..")
 if os.path.exists(os.path.join(srcdir, "gnome-news.doap")):
     print("Running from source tree, using local files")
     pkgdatadir = os.path.join(srcdir, "data")
-    libgd_libdir = os.path.join(srcdir, "libgd", ".libs")
-    libgd_typelibdir = os.path.join(srcdir, "libgd")
     if not os.environ.get("GSETTINGS_SCHEMA_DIR"):
         os.environ["GSETTINGS_SCHEMA_DIR"] = pkgdatadir
 else:
     pkgdatadir = "@pkgdatadir@"
-    libgd_libdir = "@pkglibdir@"
-    libgd_typelibdir = "@pkglibdir@/girepository-1.0"
-
-# We use our own libgd.so, so let gi.repository find it
-from gi.repository import GIRepository
-GIRepository.Repository.prepend_search_path(libgd_typelibdir)
-GIRepository.Repository.prepend_library_path(libgd_libdir)
-
 
 def install_excepthook():
     """ Make sure we exit when an unhandled exception occurs. """
