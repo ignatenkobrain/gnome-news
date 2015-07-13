@@ -1,4 +1,4 @@
-SUBDIRS = po
+SUBDIRS = gnomenews po
 
 EXTRA_DIST = \
 	AUTHORS \
@@ -13,6 +13,7 @@ GITIGNOREFILES = \
 	INSTALL \
 	install-sh \
 	missing \
+	py-compile \
 	$(NULL)
 
 AUTHORS:

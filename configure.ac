@@ -19,6 +19,7 @@ IT_PROG_INTLTOOL([0.50.2])
 
 AC_CONFIG_FILES([
   Makefile
+  gnomenews/Makefile
   po/Makefile.in
 ])
 AC_OUTPUT
