@@ -16,6 +16,9 @@
 from gi.repository import Gtk, Gio, GLib
 from gettext import gettext as _
 
+from gnomenews.toolbar import Toolbar
+from gnomenews import view
+
 from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
@@ -54,6 +57,9 @@ class Window(Gtk.ApplicationWindow):
         self.connect("window-state-event", self._on_window_state_event)
         self.configure_event_handler = self.connect("configure-event", self._on_configure_event)
 
+        # Start drawing UI
+        self._setup_view()
+
     def _on_window_state_event(self, widget, event):
         self.settings.set_boolean('window-maximized', 'GDK_WINDOW_STATE_MAXIMIZED' in event.new_window_state.value_names)
 
@@ -67,3 +73,38 @@ class Window(Gtk.ApplicationWindow):
 
         position = widget.get_position()
         self.settings.set_value('window-position', GLib.Variant('ai', [position[0], position[1]]))
+
+    @log
+    def _setup_view(self):
+        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.views = []
+        self.toolbar = Toolbar()
+        self._stack = Gtk.Stack(
+            transition_type=Gtk.StackTransitionType.CROSSFADE,
+            transition_duration=100,
+            visible=True,
+            can_focus=False)
+        self._overlay = Gtk.Overlay(child=self._stack)
+        self.set_titlebar(self.toolbar.header_bar)
+        self._box.pack_start(self._overlay, True, True, 0)
+        self.add(self._box)
+
+        self._add_views()
+
+        self._box.show()
+        self.show()
+
+    @log
+    def _add_views(self):
+        self.views.append(view.NewView())
+        self.views.append(view.FeedsView())
+        self.views.append(view.StarredView())
+        self.views.append(view.ReadView())
+
+        for i in self.views:
+            if i.title:
+                self._stack.add_titled(i, i.name, i.title)
+            else:
+                self._stack.add_named(i, i.name)
+
+        self.toolbar.set_stack(self._stack)
