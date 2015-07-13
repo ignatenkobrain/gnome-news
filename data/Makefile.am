@@ -26,10 +26,10 @@ appstream_XML = $(appstream_in_files:.appdata.xml.in=.appdata.xml)
 
 EXTRA_DIST = \
 	$(desktop_in_files) \
-	$(resource_files) \
 	$(appstream_in_files) \
+	$(gsettings_SCHEMAS) \
+	$(resource_files) \
 	gnome-news.gresource.xml \
-	org.gnome.News.gschema.xml \
 	$(NULL)
 
 CLEANFILES = \
