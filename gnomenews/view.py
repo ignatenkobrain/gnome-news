@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class GenericFeedsView(Gtk.Stack):
 
     __gsignals__ = {
-        'open-article': (GObject.SIGNAL_RUN_FIRST, None, (str, str, str)),
+        'open-article': (GObject.SignalFlags.RUN_FIRST, None, (str, str, str)),
     }
 
     @log

@@ -28,8 +28,8 @@ PREDEFINED_CHANNELS = [
 class Fetcher(GObject.GObject):
 
     __gsignals__ = {
-        'new-item': (GObject.SIGNAL_RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
-        'items-updated': (GObject.SIGNAL_RUN_LAST, None, ()),
+        'new-item': (GObject.SignalFlags.RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
+        'items-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     @log
