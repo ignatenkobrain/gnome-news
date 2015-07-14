@@ -32,7 +32,7 @@ class Fetcher(GObject.GObject):
         self._pool = Grss.FeedsPool.new()
         self._pool.connect('feed-ready', self.on_feed_ready)
         self._pool.switch(True)
-        self._channels = []
+        self._channels = channels
 
     @log
     def add_channel(self, uri):
