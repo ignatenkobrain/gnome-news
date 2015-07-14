@@ -46,6 +46,6 @@ class Fetcher(GObject.GObject):
         self._pool.listen(self._channels)
 
     @log
-    def on_feed_ready(pool, feed, items):
+    def on_feed_ready(self, pool, feed, items):
         for item in items:
             print(item.get_title())

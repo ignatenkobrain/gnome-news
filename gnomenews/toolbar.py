@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, GLib
 
 from gnomenews import log
 import logging
@@ -83,4 +83,5 @@ class Toolbar(GObject.GObject):
     @log
     def _add_new_feed(self, button):
         new_url = self.new_url.get_text()
-        self.window.fetcher.add_channel(new_url)
+        GLib.idle_add(self.window.fetcher.add_channel, new_url)
+        self.add_popover.hide()
