@@ -16,8 +16,6 @@
 from gi.repository import GObject, Grss
 
 from gnomenews import log
-
-from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
 
