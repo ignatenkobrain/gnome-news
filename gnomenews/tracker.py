@@ -111,7 +111,6 @@ class TrackerRSS(GObject.GObject):
             dbus_value = FALSE
             anti_value = TRUE
 
-        print("Sending ", SET_URI_AS_READED % (uri, anti_value, uri, dbus_value))
         self.iface.SparqlUpdate(SET_URI_AS_READED % (uri, anti_value, uri, dbus_value))
 
     @log
@@ -126,11 +125,7 @@ class TrackerRSS(GObject.GObject):
         """  Returns(?title ?date ?isRead)
         """
         details = self.iface.SparqlQuery(QUERY_FOR_URI % (uri, uri))
-        if(len(details) < 1):
-            print("No details !??!!")
-            return None
-        if(len(details) > 1):
-            print("OMG what are you asking for?!?!?!")
+        if len(details) != 1:
             return None
 
         info = details[0]
@@ -161,7 +156,7 @@ class TrackerRSS(GObject.GObject):
             date = datetime.fromtimestamp(timestamp).isoformat()
             title = item.get_title()
             text = item.get_description()
-            escaped_text = Tracker.sparql_escape_string(GLib.utf8_casefold(text, -1))
+            escaped_text = Tracker.sparql_escape_string(text)
 
             query = INSERT_QUERY % (uri, date, source_uri, escaped_text, title)
             logger.info("New feed: \n%s" % query)

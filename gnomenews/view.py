@@ -46,10 +46,25 @@ class GenericFeedsView(Gtk.Stack):
 
         self.show_all()
 
-    def _add_new_item_with_url(self, url, text_contents):
+    def _add_a_new_preview(self, post):
+        # FIXME: Track a click on this box to open a new view
+        url = post[0]
+        title = post[1]
+        date = post[2]
+        text = post[3]
+
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        title_label = Gtk.Label(label=title)
+        box.pack_start(title_label, False, False, 0)
+
+        #date_label = Gtk.Label(label=date)
+        #box.pack_start(date_label, True, True, 0)
+
         webview = WebKit2.WebView()
-        webview.load_html(text_contents)
-        self.flowbox.insert(webview, -1)
+        webview.load_html(text)
+        box.pack_end(webview, True, True, 0)
+
+        self.flowbox.insert(box, -1)
 
     def _add_new_feed(self, url):
         self.feedlist.insert(Gtk.Label(url), -1)
@@ -57,7 +72,7 @@ class GenericFeedsView(Gtk.Stack):
     def update_items(self, _=None):
         posts = self.tracker.get_post_sorted_by_date(10)
         for post in posts:
-            self._add_new_item_with_url(post[0], post[3])
+            self._add_a_new_preview(post)
         self.show_all()
 
     def update_feeds(self, _=None):
