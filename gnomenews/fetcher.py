@@ -20,6 +20,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+UPDATE_INTERVAL = 30 # 30 mins by default
+
 class Fetcher(GObject.GObject):
 
     @log
@@ -42,7 +44,9 @@ class Fetcher(GObject.GObject):
         Args:
             uri (str): URI of feed
         """
-        self._channels.append(Grss.FeedChannel.new_with_source(uri))
+        channel = Grss.FeedChannel.new_with_source(uri)
+        channel.set_update_interval(UPDATE_INTERVAL)
+        self._channels.append(channel)
         self._pool.listen(self._channels)
 
     @log
