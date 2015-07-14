@@ -106,11 +106,11 @@ class Toolbar(GObject.GObject):
         self.add_popover.hide()
 
     @log
-    def _open_article_view(self, view, post):
+    def _update_title(self, view, title, author, url):
         self.set_state(ToolbarState.CHILD_VIEW)
-        self.header_bar.set_title(post[1])
-        self.header_bar.sub_title = post[2]
-        self.window._open_article_view(post[3])
+        self.header_bar.set_title(title)
+        self.header_bar.set_subtitle(author)
+        self.window._open_article_view(url)
 
     @log
     def on_back_button_clicked(self, widget):

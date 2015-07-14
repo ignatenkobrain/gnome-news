@@ -112,7 +112,7 @@ class Window(Gtk.ApplicationWindow):
                 self._stack.add_titled(i, i.name, i.title)
             else:
                 self._stack.add_named(i, i.name)
-            i.connect('open-article', self.toolbar._open_article_view)
+            i.connect('open-article', self.toolbar._update_title)
 
         self.views.append(view.SearchView(self.tracker))
 
@@ -122,8 +122,8 @@ class Window(Gtk.ApplicationWindow):
         self.fetcher.connect('items-updated', self.views[0].update_items)
 
     @log
-    def _open_article_view(self, text_content):
-        self.feed_view = view.FeedView(text_content)
+    def _open_article_view(self, url):
+        self.feed_view = view.FeedView(self.tracker, url)
         self._stack.previous_view = self._stack.get_visible_child()
         self._stack.add_named(self.feed_view, 'feedview')
         self._stack.set_visible_child(self.feed_view)

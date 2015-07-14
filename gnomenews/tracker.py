@@ -61,12 +61,10 @@ QUERY_ALL_SUBSCRIBED_FEEDS = """
 """
 
 QUERY_FOR_URI = """
-    SELECT ?title ?date ?author ?isRead ?channel WHERE {
+    SELECT ?title ?author WHERE {
       <%s> a mfo:FeedMessage ;
              nie:title ?title ;
-             nmo:from ?author ;
-             nie:contentLastModified ?date ;
-             nmo:communicationChannel ?channel .
+             nmo:from ?author .
       OPTIONAL {
       <%s> nmo:isRead ?isRead.
       }
@@ -132,10 +130,7 @@ class TrackerRSS(GObject.GObject):
             return None
 
         info = details[0]
-        if(info[2] == TRUE):
-            return(info[0], info[1], True)
-        else:
-            return(info[0], info[1], False)
+        return(str(info[0]), str(info[1]))
 
     @log
     def get_text_for_uri(self, uri):
@@ -144,7 +139,7 @@ class TrackerRSS(GObject.GObject):
             text = text[0][0].replace("\\n", "\n")
         else:
             text = ""
-        return text
+        return str(text)
 
     @log
     def new_feed_item_signal(self, fetcher, feed, item):

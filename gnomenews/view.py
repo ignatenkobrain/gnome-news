@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class GenericFeedsView(Gtk.Stack):
 
     __gsignals__ = {
-        'open-article': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
+        'open-article': (GObject.SIGNAL_RUN_FIRST, None, (str, str, str)),
     }
 
     @log
@@ -53,11 +53,11 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     def _add_a_new_preview(self, post):
-        url = post[0]
-        title = post[1]
-        date = post[2]
-        author = post[3]
-        text = post[4]
+        url = str(post[0])
+        title = str(post[1])
+        date = str(post[2])
+        author = str(post[3])
+        text = str(post[4])
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         title_label = Gtk.Label(label=title)
@@ -71,7 +71,7 @@ class GenericFeedsView(Gtk.Stack):
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on
-        box.post = [url, title, author, text]
+        box.url = url
 
         self.flowbox.insert(box, -1)
 
@@ -79,8 +79,9 @@ class GenericFeedsView(Gtk.Stack):
         self.feedlist.insert(Gtk.Label(url), -1)
 
     def _child_activated(self, box, child, user_data=None):
-        post = child.get_children()[0].post
-        self.emit('open-article', post)
+        url = child.get_children()[0].url
+        details = self.tracker.get_info_for_entry(url)
+        self.emit('open-article', details[0], details[1], url)
 
     def update_items(self, _=None):
         posts = self.tracker.get_post_sorted_by_date(10)
@@ -96,16 +97,14 @@ class GenericFeedsView(Gtk.Stack):
 
 
 class FeedView(Gtk.Stack):
-    def __init__(self, text_content):
+    def __init__(self, tracker, url):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
+        text_content = tracker.get_text_for_uri(url)
         webview = WebKit2.WebView()
         webview.load_html(text_content)
         self.add(webview)
         self.show_all()
-
-    def _back_button_clicked(self, widget):
-        self.set_visible_child(view)
 
 
 class NewView(GenericFeedsView):
