@@ -16,7 +16,7 @@
 from gi.repository import Gtk, Gio, GLib
 from gettext import gettext as _
 
-from gnomenews.toolbar import Toolbar
+from gnomenews.toolbar import Toolbar, ToolbarState
 from gnomenews.fetcher import Fetcher
 from gnomenews.tracker import TrackerRSS
 from gnomenews import view
@@ -98,6 +98,7 @@ class Window(Gtk.ApplicationWindow):
         self._add_views()
 
         self.show_all()
+        self.toolbar._back_button.set_visible(False)
 
     @log
     def _add_views(self):
@@ -111,8 +112,26 @@ class Window(Gtk.ApplicationWindow):
                 self._stack.add_titled(i, i.name, i.title)
             else:
                 self._stack.add_named(i, i.name)
+            i.connect('open-article', self.toolbar._open_article_view)
+
+        self.views.append(view.SearchView(self.tracker))
 
         self.toolbar.set_stack(self._stack)
         self._stack.set_visible_child(self.views[0])
 
         self.fetcher.connect('items-updated', self.views[0].update_items)
+
+    @log
+    def _open_article_view(self, text_content):
+        self.feed_view = view.FeedView(text_content)
+        self._stack.previous_view = self._stack.get_visible_child()
+        self._stack.add_named(self.feed_view, 'feedview')
+        self._stack.set_visible_child(self.feed_view)
+
+    @log
+    def on_back_button_clicked(self, widget):
+        self._stack.set_visible_child(self._stack.previous_view)
+        self._stack.previous_view = None
+        self._stack.remove(self.feed_view)
+        self.feed_view = None
+        self.toolbar.set_state(ToolbarState.MAIN)

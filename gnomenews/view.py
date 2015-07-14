@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, WebKit2
+from gi.repository import Gtk, GObject, WebKit2
 
 from gettext import gettext as _
 
@@ -24,6 +24,10 @@ logger = logging.getLogger(__name__)
 
 class GenericFeedsView(Gtk.Stack):
 
+    __gsignals__ = {
+        'open-article': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
+    }
+
     @log
     def __init__(self, tracker, name, title=None, show_feedlist=False):
         Gtk.Stack.__init__(self,
@@ -32,7 +36,9 @@ class GenericFeedsView(Gtk.Stack):
         self.title = title
 
         self.flowbox = Gtk.FlowBox(
-            max_children_per_line=2, homogeneous=True)
+            max_children_per_line=2, homogeneous=True,
+            activate_on_single_click=True)
+        self.flowbox.connect('child-activated', self._child_activated)
 
         self.feedlist = Gtk.ListBox()
 
@@ -47,7 +53,6 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     def _add_a_new_preview(self, post):
-        # FIXME: Track a click on this box to open a new view
         url = post[0]
         title = post[1]
         date = post[2]
@@ -65,10 +70,17 @@ class GenericFeedsView(Gtk.Stack):
         webview.load_html(text)
         box.pack_end(webview, True, True, 0)
 
+        #Store the post object to refer to it later on
+        box.post = [url, title, author, text]
+
         self.flowbox.insert(box, -1)
 
     def _add_new_feed(self, url):
         self.feedlist.insert(Gtk.Label(url), -1)
+
+    def _child_activated(self, box, child, user_data=None):
+        post = child.get_children()[0].post
+        self.emit('open-article', post)
 
     def update_items(self, _=None):
         posts = self.tracker.get_post_sorted_by_date(10)
@@ -81,6 +93,19 @@ class GenericFeedsView(Gtk.Stack):
         for feed in feeds:
             self._add_new_feed(feed[0])
         self.show_all()
+
+
+class FeedView(Gtk.Stack):
+    def __init__(self, text_content):
+        Gtk.Stack.__init__(self,
+                           transition_type=Gtk.StackTransitionType.CROSSFADE)
+        webview = WebKit2.WebView()
+        webview.load_html(text_content)
+        self.add(webview)
+        self.show_all()
+
+    def _back_button_clicked(self, widget):
+        self.set_visible_child(view)
 
 
 class NewView(GenericFeedsView):

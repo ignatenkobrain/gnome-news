@@ -38,7 +38,7 @@ class Toolbar(GObject.GObject):
         self.window = window
         self._stack_switcher = Gtk.StackSwitcher(
             margin_top=2, margin_bottom=2, can_focus=False, halign="center")
-        self._stack_switcher.show()
+
         self._ui = Gtk.Builder()
         self._ui.add_from_resource('/org/gnome/News/HeaderBar.ui')
         self.header_bar = self._ui.get_object('header-bar')
@@ -53,6 +53,15 @@ class Toolbar(GObject.GObject):
         self.new_url = self._ui.get_object('new-url')
         self.add_button = self._ui.get_object('add-button')
         self.add_button.connect('clicked', self._add_new_feed)
+
+        self._back_button = self._ui.get_object('back-button')
+        self._back_button.connect('clicked', self.window.on_back_button_clicked)
+
+        self._search_button = self._ui.get_object('search-button')
+
+        self.set_state(ToolbarState.MAIN)
+
+        self._stack_switcher.show()
 
     @log
     def reset_header_title(self):
@@ -81,7 +90,30 @@ class Toolbar(GObject.GObject):
         self.emit('state-changed')
 
     @log
+    def _update(self):
+        if self._state != ToolbarState.MAIN:
+            self.header_bar.set_custom_title(None)
+        else:
+            self.reset_header_title()
+
+        self._search_button.set_visible(self._state != ToolbarState.SEARCH_VIEW)
+        self._back_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
+
+    @log
     def _add_new_feed(self, button):
         new_url = self.new_url.get_text()
         GLib.idle_add(self.window.fetcher.add_channel, new_url)
         self.add_popover.hide()
+
+    @log
+    def _open_article_view(self, view, post):
+        self.set_state(ToolbarState.CHILD_VIEW)
+        self.header_bar.set_title(post[1])
+        self.header_bar.sub_title = post[2]
+        self.window._open_article_view(post[3])
+
+    @log
+    def on_back_button_clicked(self, widget):
+        view = self._stack_switcher.get_stack().get_visible_child()
+        view._back_button_clicked(view)
+        self.set_state(ToolbarState.MAIN)
