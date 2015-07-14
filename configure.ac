@@ -13,9 +13,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_PATH_PYTHON([3.4])
 
 PKG_PROG_PKG_CONFIG([0.22])
-m4_define([gtk_required_version], [3.14])
 m4_define([pygobject_required_version], [3.0.0])
-PKG_CHECK_MODULES(GTK, gtk+-3.0 >= gtk_required_version)
 PKG_CHECK_MODULES(PYGOBJECT, pygobject-3.0 >= pygobject_required_version)
 
 # GResources
