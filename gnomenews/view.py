@@ -17,8 +17,6 @@ from gi.repository import Gtk, WebKit2
 
 from gettext import gettext as _
 
-from gnomenews.tracker import TrackerRSS
-
 from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
@@ -26,10 +24,8 @@ logger = logging.getLogger(__name__)
 
 class GenericFeedsView(Gtk.Stack):
 
-    tracker = TrackerRSS()
-
     @log
-    def __init__(self, name, title=None, show_feedlist=False):
+    def __init__(self, tracker, name, title=None, show_feedlist=False):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.name = name
@@ -46,6 +42,8 @@ class GenericFeedsView(Gtk.Stack):
         self._box.pack_end(self.flowbox, True, True, 0)
         self.add(self._box)
 
+        self.tracker = tracker
+
         self.show_all()
 
     def _add_new_item_with_url(self, url):
@@ -58,8 +56,8 @@ class GenericFeedsView(Gtk.Stack):
 
 
 class NewView(GenericFeedsView):
-    def __init__(self):
-        GenericFeedsView.__init__(self, 'new', _("New"))
+    def __init__(self, tracker):
+        GenericFeedsView.__init__(self, tracker, 'new', _("New"))
 
         posts = self.tracker.get_post_sorted_by_date(10)
         for post in posts:
@@ -67,8 +65,8 @@ class NewView(GenericFeedsView):
 
 
 class FeedsView(GenericFeedsView):
-    def __init__(self):
-        GenericFeedsView.__init__(self, 'feeds', _("Feeds"), show_feedlist=True)
+    def __init__(self, tracker):
+        GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
 
         posts = self.tracker.get_post_sorted_by_date(10)
         for post in posts:
@@ -80,8 +78,8 @@ class FeedsView(GenericFeedsView):
 
 
 class StarredView(GenericFeedsView):
-    def __init__(self):
-        GenericFeedsView.__init__(self, 'starred', _("Starred"))
+    def __init__(self, tracker):
+        GenericFeedsView.__init__(self, tracker, 'starred', _("Starred"))
 
         posts = self.tracker.get_post_sorted_by_date(10)
         for post in posts:
@@ -89,8 +87,8 @@ class StarredView(GenericFeedsView):
 
 
 class ReadView(GenericFeedsView):
-    def __init__(self):
-        GenericFeedsView.__init__(self, 'read', _("Read"))
+    def __init__(self, tracker):
+        GenericFeedsView.__init__(self, tracker, 'read', _("Read"))
 
         posts = self.tracker.get_post_sorted_by_date(10)
         for post in posts:
@@ -98,5 +96,5 @@ class ReadView(GenericFeedsView):
 
 
 class SearchView(GenericFeedsView):
-    def __init__(self):
-        GenericFeedsView.__init__(self, 'search')
+    def __init__(self, tracker):
+        GenericFeedsView.__init__(self, tracker, 'search')

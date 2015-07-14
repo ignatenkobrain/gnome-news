@@ -33,8 +33,9 @@ class Toolbar(GObject.GObject):
     }
 
     @log
-    def __init__(self):
+    def __init__(self, window):
         GObject.GObject.__init__(self)
+        self.window = window
         self._stack_switcher = Gtk.StackSwitcher(
             margin_top=2, margin_bottom=2, can_focus=False, halign="center")
         self._stack_switcher.show()
@@ -44,10 +45,14 @@ class Toolbar(GObject.GObject):
         self.header_bar.set_show_close_button(True)
         self.header_bar.set_custom_title(self._stack_switcher)
 
-        self.add_button = self._ui.get_object('add-toggle-button')
+        self.add_toggle_button = self._ui.get_object('add-toggle-button')
         self.add_popover = self._ui.get_object('add-popover')
         self.add_popover.hide()
-        self.add_button.set_popover(self.add_popover)
+        self.add_toggle_button.set_popover(self.add_popover)
+
+        self.new_url = self._ui.get_object('new-url')
+        self.add_button = self._ui.get_object('add-button')
+        self.add_button.connect('clicked', self._add_new_feed)
 
     @log
     def reset_header_title(self):
@@ -74,3 +79,8 @@ class Toolbar(GObject.GObject):
         self._state = state
         self._update()
         self.emit('state-changed')
+
+    @log
+    def _add_new_feed(self, button):
+        new_url = self.new_url.get_text()
+        self.window.fetcher.add_channel(new_url)

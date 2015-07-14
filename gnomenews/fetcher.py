@@ -16,13 +16,16 @@
 from gi.repository import GObject, Grss
 
 from gnomenews import log
+
+from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
+
 
 class Fetcher(GObject.GObject):
 
     @log
-    def __init__(self, channels):
+    def __init__(self, channels=[]):
         """
 
         Args:
@@ -45,7 +48,6 @@ class Fetcher(GObject.GObject):
         self._pool.listen(self._channels)
 
     @log
-    @staticmethod
     def on_feed_ready(pool, feed, items):
         for item in items:
             print(item.get_title())

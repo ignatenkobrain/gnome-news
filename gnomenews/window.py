@@ -17,6 +17,8 @@ from gi.repository import Gtk, Gio, GLib
 from gettext import gettext as _
 
 from gnomenews.toolbar import Toolbar
+from gnomenews.fetcher import Fetcher
+from gnomenews.tracker import TrackerRSS
 from gnomenews import view
 
 from gnomenews import log
@@ -34,7 +36,13 @@ class Window(Gtk.ApplicationWindow):
         self.settings = Gio.Settings.new('org.gnome.News')
         self.set_size_request(200, 100)
         self.set_icon_name('gnome-news')
+
+        self.fetcher = Fetcher()
+        self.tracker = TrackerRSS()
+
         self.restore_saved_size()
+        # Start drawing UI
+        self._setup_view()
 
     @log
     def restore_saved_size(self):
@@ -57,9 +65,6 @@ class Window(Gtk.ApplicationWindow):
         self.connect("window-state-event", self._on_window_state_event)
         self.configure_event_handler = self.connect("configure-event", self._on_configure_event)
 
-        # Start drawing UI
-        self._setup_view()
-
     def _on_window_state_event(self, widget, event):
         self.settings.set_boolean('window-maximized', 'GDK_WINDOW_STATE_MAXIMIZED' in event.new_window_state.value_names)
 
@@ -78,7 +83,7 @@ class Window(Gtk.ApplicationWindow):
     def _setup_view(self):
         self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.views = []
-        self.toolbar = Toolbar()
+        self.toolbar = Toolbar(self)
         self._stack = Gtk.Stack(
             transition_type=Gtk.StackTransitionType.CROSSFADE,
             transition_duration=100,
@@ -95,10 +100,10 @@ class Window(Gtk.ApplicationWindow):
 
     @log
     def _add_views(self):
-        self.views.append(view.NewView())
-        self.views.append(view.FeedsView())
-        self.views.append(view.StarredView())
-        self.views.append(view.ReadView())
+        self.views.append(view.NewView(self.tracker))
+        self.views.append(view.FeedsView(self.tracker))
+        self.views.append(view.StarredView(self.tracker))
+        self.views.append(view.ReadView(self.tracker))
 
         for i in self.views:
             if i.title:
