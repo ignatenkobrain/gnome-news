@@ -20,7 +20,7 @@
 
 import dbus
 from datetime import datetime
-from gi.repository import GObject, Tracker, GLib
+from gi.repository import GObject, Tracker
 
 from gnomenews import log
 import logging
@@ -34,10 +34,11 @@ FALSE = "false"
 TRUE = "true"
 
 QUERY_FIRST_ENTRIES = """
-    SELECT ?entry ?title ?date ?text ?isRead WHERE {
+    SELECT ?entry ?title ?date ?author ?text ?isRead WHERE {
       ?entry a mfo:FeedMessage ;
          nie:title ?title ;
          nie:contentLastModified ?date ;
+         nmo:from ?author ;
          nie:plainTextContent ?text .
     OPTIONAL {
        ?entry nmo:isRead ?isRead.
@@ -60,9 +61,10 @@ QUERY_ALL_SUBSCRIBED_FEEDS = """
 """
 
 QUERY_FOR_URI = """
-    SELECT ?title ?date ?isRead ?channel WHERE {
+    SELECT ?title ?date ?author ?isRead ?channel WHERE {
       <%s> a mfo:FeedMessage ;
              nie:title ?title ;
+             nmo:from ?author ;
              nie:contentLastModified ?date ;
              nmo:communicationChannel ?channel .
       OPTIONAL {
@@ -72,10 +74,11 @@ QUERY_FOR_URI = """
 """
 
 INSERT_QUERY = """
-    INSERT {
+    INSERT OR REPLACE {
         <%s> a mfo:FeedMessage ;
          nie:contentLastModified "%s" ;
          nmo:communicationChannel <%s>;
+         nmo:from "%s" ;
          nie:plainTextContent "%s" ;
          nie:title "%s".
     }
@@ -147,18 +150,19 @@ class TrackerRSS(GObject.GObject):
     def new_feed_item_signal(self, fetcher, feed, item):
         try:
             uri = item.get_source()
-            if self.get_info_for_entry(uri) is not None:
-                logger.info("Item %s is already added" % uri)
-                return
+            # if self.get_info_for_entry(uri) is not None:
+            #     logger.info("Item %s is already added" % uri)
+            #     return
 
             source_uri = feed.get_source()
             timestamp = item.get_publish_time()
+            author = item.get_author()
             date = datetime.fromtimestamp(timestamp).isoformat()
             title = item.get_title()
             text = item.get_description()
             escaped_text = Tracker.sparql_escape_string(text)
 
-            query = INSERT_QUERY % (uri, date, source_uri, escaped_text, title)
+            query = INSERT_QUERY % (uri, date, source_uri, author, escaped_text, title)
             logger.info("New feed: \n%s" % query)
             self.iface.SparqlUpdate(query)
         except Exception as e:
