@@ -19,7 +19,8 @@
 #
 
 import dbus
-import os
+from datetime import datetime
+from gi.repository import GObject
 
 TRACKER = 'org.freedesktop.Tracker1'
 TRACKER_OBJ = '/org/freedesktop/Tracker1/Resources'
@@ -64,6 +65,16 @@ QUERY_FOR_URI = """
     }
 """
 
+INSERT_QUERY = """
+    INSERT {
+        <%s> a mfo:FeedMessage ;
+         nie:contentLastModified "%s" ;
+         nmo:communicationChannel <%s>;
+         nie:plainTextContent "%s" ;
+         nie:title "%s".
+    }
+"""
+
 QUERY_FOR_TEXT = """
     SELECT ?text WHERE {
     <%s> nie:plainTextContent ?text .
@@ -71,8 +82,9 @@ QUERY_FOR_TEXT = """
 """
 
 
-class TrackerRSS:
+class TrackerRSS(GObject.GObject):
     def __init__(self):
+        GObject.GObject.__init__(self)
         bus = dbus.SessionBus()
         self.tracker = bus.get_object(TRACKER, TRACKER_OBJ)
         self.iface = dbus.Interface(self.tracker,
@@ -123,3 +135,21 @@ class TrackerRSS:
         else:
             text = ""
         return text
+
+    def new_feed_item_signal(self, fetcher, feed, item):
+        uri = item.get_source()
+        if self.get_info_for_entry(uri) is not None:
+            # Item was already added
+            return
+
+        source_uri = feed.get_source()
+        timestamp = item.get_publish_time()
+        date = datetime.fromtimestamp(timestamp).isoformat()
+        title = item.get_title()
+        # FIXME - should be properly wrapped
+        #text = item.get_description()
+        text = 'Lorem Ipsum'
+
+        query = INSERT_QUERY % (uri, date, source_uri, text, title)
+        print(query)
+        self.iface.SparqlUpdate(query)

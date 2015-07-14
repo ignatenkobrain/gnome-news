@@ -21,8 +21,15 @@ logger = logging.getLogger(__name__)
 
 
 UPDATE_INTERVAL = 30 # 30 mins by default
+PREDEFINED_CHANNELS = [
+    'http://planet.gnome.org/atom.xml']
+
 
 class Fetcher(GObject.GObject):
+
+    __gsignals__ = {
+        'new-item': (GObject.SIGNAL_RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
+    }
 
     @log
     def __init__(self, channels=[]):
@@ -35,7 +42,11 @@ class Fetcher(GObject.GObject):
         self._pool = Grss.FeedsPool.new()
         self._pool.connect('feed-ready', self.on_feed_ready)
         self._pool.switch(True)
+
         self._channels = channels
+
+        for channel in PREDEFINED_CHANNELS:
+            self.add_channel(channel)
 
     @log
     def add_channel(self, uri):
@@ -46,10 +57,18 @@ class Fetcher(GObject.GObject):
         """
         channel = Grss.FeedChannel.new_with_source(uri)
         channel.set_update_interval(UPDATE_INTERVAL)
+        channel.fetch()
         self._channels.append(channel)
         self._pool.listen(self._channels)
 
     @log
     def on_feed_ready(self, pool, feed, items):
-        for item in items:
-            print(item.get_title())
+        try:
+            for item in items:
+                try:
+                    self.emit('new-item', feed, item)
+                except Exception as e:
+                    logger.warn('Error emitting new-item for %s %s: %s' % (
+                        feed, item, str(e)))
+        except Exception as e:
+            logger.warn(str(e))

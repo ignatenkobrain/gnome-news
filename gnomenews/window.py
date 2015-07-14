@@ -39,6 +39,7 @@ class Window(Gtk.ApplicationWindow):
 
         self.fetcher = Fetcher()
         self.tracker = TrackerRSS()
+        self.fetcher.connect('new-item', self.tracker.new_feed_item_signal)
 
         self.restore_saved_size()
         # Start drawing UI
