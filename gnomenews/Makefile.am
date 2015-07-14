@@ -5,6 +5,7 @@ app_PYTHON = \
 	application.py \
 	window.py \
 	toolbar.py \
+	tracker.py \
 	view.py \
 	$(NULL)
 

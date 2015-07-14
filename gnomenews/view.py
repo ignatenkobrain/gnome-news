@@ -17,12 +17,16 @@ from gi.repository import Gtk, WebKit2
 
 from gettext import gettext as _
 
+from gnomenews.tracker import TrackerRSS
+
 from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
 
 
 class GenericFeedsView(Gtk.Stack):
+
+    tracker = TrackerRSS()
 
     @log
     def __init__(self, name, title=None, show_feedlist=False):
@@ -49,42 +53,48 @@ class GenericFeedsView(Gtk.Stack):
         webview.load_uri(url)
         self.flowbox.insert(webview, -1)
 
+    def _add_new_feed(self, url):
+        self.feedlist.insert(Gtk.Label(url), -1)
+
 
 class NewView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'new', _("New"))
 
-        # Insert some fake data
-        for x in range(0, 10):
-            self._add_new_item_with_url('http://new%d' % x)
+        posts = self.tracker.get_post_sorted_by_date(10)
+        for post in posts:
+            self._add_new_item_with_url(post[0])
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'feeds', _("Feeds"), show_feedlist=True)
-        # Insert some fake data
-        for x in range(0, 10):
-            self._add_new_item_with_url('http://feeds%d' % x)
 
-        # Add some fake feeds
-        for x in range(0, 10):
-            self.feedlist.insert(Gtk.Label('test%d' % x), -1)
+        posts = self.tracker.get_post_sorted_by_date(10)
+        for post in posts:
+            self._add_new_item_with_url(post[0])
+
+        feeds = self.tracker.get_all_subscribed_feeds()
+        for feed in feeds:
+            self._add_new_feed([0])
 
 
 class StarredView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'starred', _("Starred"))
-        # Insert some fake data
-        for x in range(0, 10):
-            self._add_new_item_with_url('http://starred%d' % x)
+
+        posts = self.tracker.get_post_sorted_by_date(10)
+        for post in posts:
+            self._add_new_item_with_url(post[0])
 
 
 class ReadView(GenericFeedsView):
     def __init__(self):
         GenericFeedsView.__init__(self, 'read', _("Read"))
-        # Insert some fake data
-        for x in range(0, 10):
-            self._add_new_item_with_url('http://read%d' % x)
+
+        posts = self.tracker.get_post_sorted_by_date(10)
+        for post in posts:
+            self._add_new_item_with_url(post[0])
 
 
 class SearchView(GenericFeedsView):
