@@ -46,53 +46,49 @@ class GenericFeedsView(Gtk.Stack):
 
         self.show_all()
 
-    def _add_new_item_with_url(self, url):
+    def _add_new_item_with_url(self, url, text_contents):
         webview = WebKit2.WebView()
-        webview.load_uri(url)
+        webview.load_html(text_contents)
         self.flowbox.insert(webview, -1)
 
     def _add_new_feed(self, url):
         self.feedlist.insert(Gtk.Label(url), -1)
 
+    def update_items(self, _=None):
+        posts = self.tracker.get_post_sorted_by_date(10)
+        for post in posts:
+            self._add_new_item_with_url(post[0], post[3])
+        self.show_all()
+
+    def update_feeds(self, _=None):
+        feeds = self.tracker.get_all_subscribed_feeds()
+        for feed in feeds:
+            self._add_new_feed(feed[0])
+        self.show_all()
+
 
 class NewView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'new', _("New"))
-
-        posts = self.tracker.get_post_sorted_by_date(10)
-        for post in posts:
-            self._add_new_item_with_url(post[0])
+        self.update_feeds()
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
-
-        posts = self.tracker.get_post_sorted_by_date(10)
-        for post in posts:
-            self._add_new_item_with_url(post[0])
-
-        feeds = self.tracker.get_all_subscribed_feeds()
-        for feed in feeds:
-            self._add_new_feed([0])
+        self.update_feeds()
 
 
 class StarredView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'starred', _("Starred"))
-
-        posts = self.tracker.get_post_sorted_by_date(10)
-        for post in posts:
-            self._add_new_item_with_url(post[0])
+        self.update_feeds()
 
 
 class ReadView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'read', _("Read"))
-
-        posts = self.tracker.get_post_sorted_by_date(10)
-        for post in posts:
-            self._add_new_item_with_url(post[0])
+        self.update_feeds()
 
 
 class SearchView(GenericFeedsView):

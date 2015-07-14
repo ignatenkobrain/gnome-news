@@ -20,7 +20,12 @@
 
 import dbus
 from datetime import datetime
-from gi.repository import GObject
+from gi.repository import GObject, Tracker, GLib
+
+from gnomenews import log
+import logging
+logger = logging.getLogger(__name__)
+
 
 TRACKER = 'org.freedesktop.Tracker1'
 TRACKER_OBJ = '/org/freedesktop/Tracker1/Resources'
@@ -29,10 +34,11 @@ FALSE = "false"
 TRUE = "true"
 
 QUERY_FIRST_ENTRIES = """
-    SELECT ?entry ?title ?date ?isRead WHERE {
+    SELECT ?entry ?title ?date ?text ?isRead WHERE {
       ?entry a mfo:FeedMessage ;
          nie:title ?title ;
-         nie:contentLastModified ?date .
+         nie:contentLastModified ?date ;
+         nie:plainTextContent ?text .
     OPTIONAL {
        ?entry nmo:isRead ?isRead.
     }
@@ -83,6 +89,7 @@ QUERY_FOR_TEXT = """
 
 
 class TrackerRSS(GObject.GObject):
+    @log
     def __init__(self):
         GObject.GObject.__init__(self)
         bus = dbus.SessionBus()
@@ -90,10 +97,12 @@ class TrackerRSS(GObject.GObject):
         self.iface = dbus.Interface(self.tracker,
                                     "org.freedesktop.Tracker1.Resources")
 
+    @log
     def get_post_sorted_by_date(self, amount):
         results = self.iface.SparqlQuery(QUERY_FIRST_ENTRIES % (amount))
         return results
 
+    @log
     def set_is_read(self, uri, value):
         if(value):
             dbus_value = TRUE
@@ -105,12 +114,14 @@ class TrackerRSS(GObject.GObject):
         print("Sending ", SET_URI_AS_READED % (uri, anti_value, uri, dbus_value))
         self.iface.SparqlUpdate(SET_URI_AS_READED % (uri, anti_value, uri, dbus_value))
 
+    @log
     def get_all_subscribed_feeds(self):
         """ Returns [(uri, feed channel name, entries, visible)]
         """
         results = self.iface.SparqlQuery(QUERY_ALL_SUBSCRIBED_FEEDS)
         return results
 
+    @log
     def get_info_for_entry(self, uri):
         """  Returns(?title ?date ?isRead)
         """
@@ -128,6 +139,7 @@ class TrackerRSS(GObject.GObject):
         else:
             return(info[0], info[1], False)
 
+    @log
     def get_text_for_uri(self, uri):
         text = self.iface.SparqlQuery(QUERY_FOR_TEXT % (uri))
         if(text[0]):
@@ -136,20 +148,23 @@ class TrackerRSS(GObject.GObject):
             text = ""
         return text
 
+    @log
     def new_feed_item_signal(self, fetcher, feed, item):
-        uri = item.get_source()
-        if self.get_info_for_entry(uri) is not None:
-            # Item was already added
-            return
+        try:
+            uri = item.get_source()
+            if self.get_info_for_entry(uri) is not None:
+                logger.info("Item %s is already added" % uri)
+                return
 
-        source_uri = feed.get_source()
-        timestamp = item.get_publish_time()
-        date = datetime.fromtimestamp(timestamp).isoformat()
-        title = item.get_title()
-        # FIXME - should be properly wrapped
-        #text = item.get_description()
-        text = 'Lorem Ipsum'
+            source_uri = feed.get_source()
+            timestamp = item.get_publish_time()
+            date = datetime.fromtimestamp(timestamp).isoformat()
+            title = item.get_title()
+            text = item.get_description()
+            escaped_text = Tracker.sparql_escape_string(GLib.utf8_casefold(text, -1))
 
-        query = INSERT_QUERY % (uri, date, source_uri, text, title)
-        print(query)
-        self.iface.SparqlUpdate(query)
+            query = INSERT_QUERY % (uri, date, source_uri, escaped_text, title)
+            logger.info("New feed: \n%s" % query)
+            self.iface.SparqlUpdate(query)
+        except Exception as e:
+            logger.warn(str(e))

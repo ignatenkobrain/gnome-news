@@ -20,7 +20,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-UPDATE_INTERVAL = 30 # 30 mins by default
+UPDATE_INTERVAL = 30  # 30 mins by default
 PREDEFINED_CHANNELS = [
     'http://planet.gnome.org/atom.xml']
 
@@ -29,6 +29,7 @@ class Fetcher(GObject.GObject):
 
     __gsignals__ = {
         'new-item': (GObject.SIGNAL_RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
+        'items-updated': (GObject.SIGNAL_RUN_LAST, None, ()),
     }
 
     @log
@@ -70,5 +71,6 @@ class Fetcher(GObject.GObject):
                 except Exception as e:
                     logger.warn('Error emitting new-item for %s %s: %s' % (
                         feed, item, str(e)))
+            self.emit('items-updated')
         except Exception as e:
             logger.warn(str(e))
