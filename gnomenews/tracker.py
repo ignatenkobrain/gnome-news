@@ -67,7 +67,6 @@ class Tracker(GObject.GObject):
                 results.get_boolean(5),
             ])
             results.next(None)
-        print(ret)
         return ret
 
     @log
