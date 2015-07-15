@@ -55,8 +55,8 @@ class GenericFeedsView(Gtk.Stack):
     def _add_a_new_preview(self, post):
         url = str(post[0])
         title = str(post[1])
-        date = str(post[2])
-        author = str(post[3])
+        author = str(post[2])
+        date = str(post[3])
         text = str(post[4])
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -80,7 +80,7 @@ class GenericFeedsView(Gtk.Stack):
 
     def _child_activated(self, box, child, user_data=None):
         url = child.get_children()[0].url
-        details = self.tracker.get_info_for_entry(url)
+        #details = self.tracker.get_info_for_entry(url) # FIXME
         self.emit('open-article', details[0], details[1], url)
 
     def update_items(self, _=None):
@@ -90,7 +90,8 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     def update_feeds(self, _=None):
-        feeds = self.tracker.get_all_subscribed_feeds()
+        #feeds = self.tracker.get_all_subscribed_feeds() # FIXME
+        feeds = []
         for feed in feeds:
             self._add_new_feed(feed[0])
         self.show_all()
@@ -100,7 +101,8 @@ class FeedView(Gtk.Stack):
     def __init__(self, tracker, url):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
-        text_content = tracker.get_text_for_uri(url)
+        #text_content = tracker.get_text_for_uri(url) # FIXME
+        text_content = "<html/>"
         webview = WebKit2.WebView()
         webview.load_html(text_content)
         self.add(webview)

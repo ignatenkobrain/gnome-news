@@ -17,8 +17,7 @@ from gi.repository import Gtk, Gio, GLib
 from gettext import gettext as _
 
 from gnomenews.toolbar import Toolbar, ToolbarState
-from gnomenews.fetcher import Fetcher
-from gnomenews.tracker import TrackerRSS
+from gnomenews.tracker import Tracker
 from gnomenews import view
 
 from gnomenews import log
@@ -37,9 +36,7 @@ class Window(Gtk.ApplicationWindow):
         self.set_size_request(200, 100)
         self.set_icon_name('gnome-news')
 
-        self.fetcher = Fetcher()
-        self.tracker = TrackerRSS()
-        self.fetcher.connect('new-item', self.tracker.new_feed_item_signal)
+        self.tracker = Tracker()
 
         self.restore_saved_size()
         # Start drawing UI
@@ -119,7 +116,7 @@ class Window(Gtk.ApplicationWindow):
         self.toolbar.set_stack(self._stack)
         self._stack.set_visible_child(self.views[0])
 
-        self.fetcher.connect('items-updated', self.views[0].update_items)
+        self.tracker.connect('items-updated', self.views[0].update_items)
 
     @log
     def _open_article_view(self, url):
