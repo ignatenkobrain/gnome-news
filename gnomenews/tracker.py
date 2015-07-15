@@ -38,7 +38,7 @@ QUERY_FIRST_ENTRIES = """
       ?entry a mfo:FeedMessage ;
          nie:title ?title ;
          nie:contentLastModified ?date ;
-         nmo:from ?author ;
+         nco:creator ?author ;
          nie:plainTextContent ?text .
     OPTIONAL {
        ?entry nmo:isRead ?isRead.
@@ -64,7 +64,7 @@ QUERY_FOR_URI = """
     SELECT ?title ?author WHERE {
       <%s> a mfo:FeedMessage ;
              nie:title ?title ;
-             nmo:from ?author .
+             nco:creator ?author .
       OPTIONAL {
       <%s> nmo:isRead ?isRead.
       }
@@ -76,7 +76,7 @@ INSERT_QUERY = """
         <%s> a mfo:FeedMessage ;
          nie:contentLastModified "%s" ;
          nmo:communicationChannel <%s>;
-         nmo:from "%s" ;
+         nco:creator "%s" ;
          nie:plainTextContent "%s" ;
          nie:title "%s".
     }
