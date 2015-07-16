@@ -53,21 +53,15 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     def _add_a_new_preview(self, post):
-        url = str(post[0])
-        title = str(post[1])
-        author = str(post[2])
-        date = str(post[3])
-        text = str(post[4])
-
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        title_label = Gtk.Label(label=title)
+        title_label = Gtk.Label(label=post["title"])
         box.pack_start(title_label, False, False, 0)
 
-        info_label = Gtk.Label(label=_("by %s at %s" % (author, date)))
+        info_label = Gtk.Label(label=_("by {author} at {date}".format(**post)))
         box.pack_start(info_label, False, False, 0)
 
         webview = WebKit2.WebView()
-        webview.load_html(text)
+        webview.load_html(post["plaintext"])
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on
