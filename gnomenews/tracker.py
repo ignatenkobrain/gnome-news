@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import GLib, GObject, Gio, Tracker as Trackr
+from datetime import datetime
 
 from gnomenews import log
 import logging
@@ -215,7 +216,9 @@ class Tracker(GObject.GObject):
                     t == Trackr.SparqlValueType.STRING]):
                 value = sparql_ret.get_string(column)[0]
             elif t == Trackr.SparqlValueType.DATETIME:
-                value = 0 # FIXME : properly get date
+                # Tracker returns ISO 8601 format, for example "2015-07-16T23:00:37Z"
+                value = datetime.strptime(sparql_ret.get_string(column)[0],
+                                          "%Y-%m-%dT%H:%M:%SZ")
             elif t == Trackr.SparqlValueType.BOOLEAN:
                 value = sparql_ret.get_boolean(column)
             else:
