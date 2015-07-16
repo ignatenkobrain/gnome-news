@@ -84,7 +84,7 @@ class Tracker(GObject.GObject):
                            mfo:updateInterval %i .
           _:Feed a nie:DataObject, mfo:FeedChannel ;
                    mfo:feedSettings _:FeedSettings ;
-                   nie:url "%s"
+                   nie:url "%s" }
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
 
     @log
