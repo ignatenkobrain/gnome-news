@@ -45,16 +45,16 @@ class Tracker(GObject.GObject):
     @log
     def get_post_sorted_by_date(self, amount):
         results = self.sparql.query("""
-        select
+        SELECT
           nie:url(?msg)
           nie:title(?msg)
-          nco:fullname(nco:creator (?msg))
+          nco:fullname(nco:creator(?msg))
           nie:contentLastModified(?msg)
           nie:plainTextContent(?msg)
-          nmo:isRead(?msg)
-          { ?msg a mfo:FeedMessage }
-        order by desc (nie:contentLastModified(?msg))
-        limit %s
+          nmo:isRead(?msg) {
+            ?msg a mfo:FeedMessage }
+        ORDER BY DESC(nie:contentLastModified(?msg))
+        LIMIT %s
         """ % amount)
         ret = []
         for _ in range(amount):
