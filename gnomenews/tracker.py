@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import GObject, Gio, Tracker as Trackr
+from gi.repository import GLib, GObject, Gio, Tracker as Trackr
 
 from gnomenews import log
 import logging
@@ -94,7 +94,8 @@ class Tracker(GObject.GObject):
         Args:
             url (str): URL of the channel.
         """
-        self.sparql.update("DELETE { <%s> a mfo:FeedMessage. }" % url)
+        self.sparql.update("DELETE { <%s> a mfo:FeedMessage. }" % url,
+                           GLib.PRIORITY_DEFAULT, None)
 
     @log
     def on_graph_updated(self, connection, sender_name, object_path,
