@@ -43,21 +43,28 @@ class Tracker(GObject.GObject):
         self.sparql = Trackr.SparqlConnection.get(None)
 
     @log
-    def get_post_sorted_by_date(self, amount):
-        results = self.sparql.query("""
+    def get_post_sorted_by_date(self, amount, unread=False):
+        query = """
         SELECT
           nie:url(?msg)
           nie:title(?msg)
           nco:fullname(nco:creator(?msg))
-          nie:contentLastModified(?msg)
+          nie:contentCreated(?msg)
           nie:plainTextContent(?msg)
-          nmo:isRead(?msg) {
-            ?msg a mfo:FeedMessage }
-        ORDER BY DESC(nie:contentLastModified(?msg))
+          nmo:isRead(?msg)
+          { ?msg a mfo:FeedMessage """
+
+        if unread:
+            query += "; nmo:isRead false "
+
+        query += """}
+        ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
-        """ % amount)
+        """ % amount
+
+        results = self.sparql.query(query)
         ret = []
-        for _ in range(amount):
+        while (results.next(None)):
             ret.append([
                 results.get_string(0)[0],
                 results.get_string(1)[0],
@@ -66,7 +73,6 @@ class Tracker(GObject.GObject):
                 results.get_string(4)[0],
                 results.get_boolean(5),
             ])
-            results.next(None)
         return ret
 
     @log
@@ -96,6 +102,108 @@ class Tracker(GObject.GObject):
         """
         self.sparql.update("DELETE { <%s> a mfo:FeedMessage. }" % url,
                            GLib.PRIORITY_DEFAULT, None)
+
+    @log
+    def get_posts_for_channel(self, urn, amount, unread=False):
+        """Get posts for channel id
+
+        Args:
+            urn (str): urn:uuid:... of the channel.
+            amount (int): number of items to fetch.
+        """
+        query = """
+        SELECT
+          nie:url(?msg)
+          nie:title(?msg)
+          nco:fullname(nco:creator(?msg))
+          nie:contentCreated(?msg)
+          nie:plainTextContent(?msg)
+          nmo:isRead(?msg)
+          { ?msg a mfo:FeedMessage;
+                 nmo:communicationChannel <%s> """
+
+        if unread:
+            query += "; nmo:isRead false"
+
+        query += """}
+        ORDER BY DESC nie:contentLastModified(?msg)
+        LIMIT %s
+        """ % (urn, amount)
+
+        results = self.sparql.query(query)
+        ret = []
+        while (results.next(None)):
+            ret.append([
+                results.get_string(0)[0],
+                results.get_string(1)[0],
+                results.get_string(2)[0],
+                0, # FIXME: get date
+                results.get_string(4)[0],
+                results.get_boolean(5),
+            ])
+        return ret
+
+    def get_channels(self):
+        """Returns list of channels"""
+        results = self.sparql.query("""
+        SELECT
+          nie:url(?chan)
+          nie:title(?chan)
+          nie:description(?chan)
+          ?chan
+          { ?chan a mfo:FeedChannel }
+        ORDER BY nie:title(?chan)
+        """)
+        ret = []
+        while (results.next(None)):
+            ret.append([
+                results.get_string(0)[0],
+                results.get_string(1)[0],
+                results.get_string(2)[0],
+                results.get_string(3)[0]
+            ])
+        return ret
+
+    def get_text_matches(self, text, amount, channel=None):
+        """Do text search lookup
+
+        Args:
+            text (str): text to search for.
+            channel (str): urn:uuid:... of the channel.
+            amount (int): number of items to fetch.
+        """
+        query = """
+        SELECT
+          nie:url(?msg)
+          nie:title(?msg)
+          nco:fullname(nco:creator (?msg))
+          nie:contentCreated(?msg)
+          nie:plainTextContent(?msg)
+          nmo:isRead(?msg)
+          { ?msg a mfo:FeedMessage; """
+
+        if channel:
+            query += """nmo:communicationChannel <%s>;""" % channel
+
+        query += """
+                 fts:match "%s"
+          }
+        ORDER BY fts:rank(?msg)
+        LIMIT %d
+        """ % (text, amount)
+
+        results = self.sparql.query(query)
+        ret = []
+        while (results.next(None)):
+            ret.append([
+                results.get_string(0)[0],
+                results.get_string(1)[0],
+                results.get_string(2)[0],
+                0, # FIXME: get date
+                results.get_string(4)[0],
+                results.get_boolean(5),
+            ])
+        return ret
 
     @log
     def on_graph_updated(self, connection, sender_name, object_path,
