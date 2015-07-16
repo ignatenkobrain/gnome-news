@@ -197,7 +197,7 @@ class Tracker(GObject.GObject):
     @log
     def _handle_insert_event(self, items):
         added_items = 0
-        for i in item:
+        for i in items:
             tmp = EventItem(i)
             # FIXME: handle items
         if added_items > 0:
