@@ -48,16 +48,16 @@ class Tracker(GObject.GObject):
         SELECT
           nie:url(?msg) AS url
           nie:title(?msg) AS title
-          nco:fullname(nco:creator(?msg)) AS fullname
+          nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date_created
           nie:plainTextContent(?msg) AS plaintext
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage """
 
         if unread:
-            query += "; nmo:isRead false "
+            query += "; nmo:isRead false"
 
-        query += """}
+        query += """; nco:creator ?creator }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
         """ % amount
@@ -110,7 +110,7 @@ class Tracker(GObject.GObject):
         SELECT
           nie:url(?msg) AS url
           nie:title(?msg) AS title
-          nco:fullname(nco:creator(?msg)) AS fullname
+          nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date_created
           nie:plainTextContent(?msg) AS plaintext
           nmo:isRead(?msg) AS is_read
@@ -120,7 +120,7 @@ class Tracker(GObject.GObject):
         if unread:
             query += "; nmo:isRead false"
 
-        query += """}
+        query += """; nco:creator ?creator }
         ORDER BY DESC nie:contentLastModified(?msg)
         LIMIT %s
         """ % (urn, amount)
@@ -163,7 +163,7 @@ class Tracker(GObject.GObject):
         SELECT
           nie:url(?msg) AS url
           nie:title(?msg) AS title
-          nco:fullname(nco:creator(?msg)) AS fullname
+          nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date_created
           nie:plainTextContent(?msg) AS plaintext
           nmo:isRead(?msg) AS is_read
@@ -173,7 +173,8 @@ class Tracker(GObject.GObject):
             query += """nmo:communicationChannel <%s>;""" % channel
 
         query += """
-                 fts:match "%s"
+                 fts:match "%s";
+                 nco:creator ?creator
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
