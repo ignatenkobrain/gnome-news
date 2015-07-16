@@ -6,7 +6,6 @@ app_PYTHON = \
 	window.py \
 	toolbar.py \
 	tracker.py \
-	fetcher.py \
 	view.py \
 	$(NULL)
 

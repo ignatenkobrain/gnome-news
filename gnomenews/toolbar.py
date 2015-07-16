@@ -102,7 +102,7 @@ class Toolbar(GObject.GObject):
     @log
     def _add_new_feed(self, button):
         new_url = self.new_url.get_text()
-        GLib.idle_add(self.window.fetcher.add_channel, new_url)
+        self.window.tracker.add_channel(new_url)
         self.add_popover.hide()
 
     @log
