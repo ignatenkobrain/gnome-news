@@ -74,7 +74,7 @@ class Tracker(GObject.GObject):
         """Add channel to fetching by tracker
 
         Args:
-            url (str): URL of the feed.
+            url (str): URL of the channel.
             update_interval (Optional[int]): Update interval in minutes.
                                              Don't use less than 1 minute.
         """
