@@ -95,11 +95,6 @@ class Tracker(GObject.GObject):
         self._handle_insert_event(unpacked[2])
 
     @log
-    def add_channel(self, uri):
-        # TODO: implement
-        raise NotImplemented
-
-    @log
     def _handle_insert_event(self, items):
         added_items = 0
         for i in item:
