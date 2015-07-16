@@ -88,6 +88,15 @@ class Tracker(GObject.GObject):
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
 
     @log
+    def remove_channel(self, url):
+        """Drop channel from fetching by tracker
+
+        Args:
+            url (str): URL of the channel.
+        """
+        self.sparql.update("DELETE { <%s> a mfo:FeedMessage. }" % url)
+
+    @log
     def on_graph_updated(self, connection, sender_name, object_path,
                          interface_name, signal_name, parameters, user_data=None):
         unpacked = parameters.unpack()
