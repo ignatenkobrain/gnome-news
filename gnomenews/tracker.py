@@ -62,6 +62,7 @@ class Tracker(GObject.GObject):
         LIMIT %s
         """ % amount
 
+        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
@@ -124,6 +125,7 @@ class Tracker(GObject.GObject):
         LIMIT %s
         """ % (urn, amount)
 
+        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
@@ -132,7 +134,7 @@ class Tracker(GObject.GObject):
 
     def get_channels(self):
         """Returns list of channels"""
-        results = self.sparql.query("""
+        query = """
         SELECT
           nie:url(?chan) AS url
           nie:title(?chan) AS title
@@ -140,7 +142,10 @@ class Tracker(GObject.GObject):
           ?chan AS channel
           { ?chan a mfo:FeedChannel }
         ORDER BY nie:title(?chan)
-        """)
+        """
+
+        logger.debug(query)
+        results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
             ret.append(self.parse_sparql(results))
@@ -174,6 +179,7 @@ class Tracker(GObject.GObject):
         LIMIT %d
         """ % (text, amount)
 
+        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
