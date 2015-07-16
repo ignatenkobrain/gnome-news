@@ -86,6 +86,7 @@ class Tracker(GObject.GObject):
                    mfo:feedSettings _:FeedSettings ;
                    nie:url "%s"
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
+
     @log
     def on_graph_updated(self, connection, sender_name, object_path,
                          interface_name, signal_name, parameters, user_data=None):
