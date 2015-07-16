@@ -46,12 +46,12 @@ class Tracker(GObject.GObject):
     def get_post_sorted_by_date(self, amount, unread=False):
         query = """
         SELECT
-          nie:url(?msg)
-          nie:title(?msg)
-          nco:fullname(nco:creator(?msg))
-          nie:contentCreated(?msg)
-          nie:plainTextContent(?msg)
-          nmo:isRead(?msg)
+          nie:url(?msg) AS url
+          nie:title(?msg) AS title
+          nco:fullname(nco:creator(?msg)) AS fullname
+          nie:contentCreated(?msg) AS date_created
+          nie:plainTextContent(?msg) AS plaintext
+          nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage """
 
         if unread:
@@ -65,14 +65,7 @@ class Tracker(GObject.GObject):
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
-            ret.append([
-                results.get_string(0)[0],
-                results.get_string(1)[0],
-                results.get_string(2)[0],
-                0, # FIXME: get date
-                results.get_string(4)[0],
-                results.get_boolean(5),
-            ])
+            ret.append(self.parse_sparql(results))
         return ret
 
     @log
@@ -110,15 +103,16 @@ class Tracker(GObject.GObject):
         Args:
             urn (str): urn:uuid:... of the channel.
             amount (int): number of items to fetch.
+            unread (Optional[bool]): return only unread items if True.
         """
         query = """
         SELECT
-          nie:url(?msg)
-          nie:title(?msg)
-          nco:fullname(nco:creator(?msg))
-          nie:contentCreated(?msg)
-          nie:plainTextContent(?msg)
-          nmo:isRead(?msg)
+          nie:url(?msg) AS url
+          nie:title(?msg) AS title
+          nco:fullname(nco:creator(?msg)) AS fullname
+          nie:contentCreated(?msg) AS date_created
+          nie:plainTextContent(?msg) AS plaintext
+          nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
                  nmo:communicationChannel <%s> """
 
@@ -133,35 +127,23 @@ class Tracker(GObject.GObject):
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
-            ret.append([
-                results.get_string(0)[0],
-                results.get_string(1)[0],
-                results.get_string(2)[0],
-                0, # FIXME: get date
-                results.get_string(4)[0],
-                results.get_boolean(5),
-            ])
+            ret.append(self.parse_sparql(results))
         return ret
 
     def get_channels(self):
         """Returns list of channels"""
         results = self.sparql.query("""
         SELECT
-          nie:url(?chan)
-          nie:title(?chan)
-          nie:description(?chan)
-          ?chan
+          nie:url(?chan) AS url
+          nie:title(?chan) AS title
+          nie:description(?chan) AS description
+          ?chan AS channel
           { ?chan a mfo:FeedChannel }
         ORDER BY nie:title(?chan)
         """)
         ret = []
         while (results.next(None)):
-            ret.append([
-                results.get_string(0)[0],
-                results.get_string(1)[0],
-                results.get_string(2)[0],
-                results.get_string(3)[0]
-            ])
+            ret.append(self.parse_sparql(results))
         return ret
 
     def get_text_matches(self, text, amount, channel=None):
@@ -174,12 +156,12 @@ class Tracker(GObject.GObject):
         """
         query = """
         SELECT
-          nie:url(?msg)
-          nie:title(?msg)
-          nco:fullname(nco:creator (?msg))
-          nie:contentCreated(?msg)
-          nie:plainTextContent(?msg)
-          nmo:isRead(?msg)
+          nie:url(?msg) AS url
+          nie:title(?msg) AS title
+          nco:fullname(nco:creator(?msg)) AS fullname
+          nie:contentCreated(?msg) AS date_created
+          nie:plainTextContent(?msg) AS plaintext
+          nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage; """
 
         if channel:
@@ -195,14 +177,7 @@ class Tracker(GObject.GObject):
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
-            ret.append([
-                results.get_string(0)[0],
-                results.get_string(1)[0],
-                results.get_string(2)[0],
-                0, # FIXME: get date
-                results.get_string(4)[0],
-                results.get_boolean(5),
-            ])
+            ret.append(self.parse_sparql(results))
         return ret
 
     @log
@@ -220,6 +195,27 @@ class Tracker(GObject.GObject):
             # FIXME: handle items
         if added_items > 0:
             self.emit('items-updated')
+
+    @staticmethod
+    @log
+    def parse_sparql(sparql_ret):
+        ret = {}
+        n_columns = sparql_ret.get_n_columns()
+        for column in range(n_columns):
+            t = sparql_ret.get_value_type(column)
+            name = sparql_ret.get_variable_name(column)
+            if any([t == Trackr.SparqlValueType.URI,
+                    t == Trackr.SparqlValueType.STRING]):
+                value = sparql_ret.get_string(column)[0]
+            elif t == Trackr.SparqlValueType.DATETIME:
+                value = 0 # FIXME : properly get date
+            elif t == Trackr.SparqlValueType.BOOLEAN:
+                value = sparql_ret.get_boolean(column)
+            else:
+                value = None
+                logger.error("We should not get this type from sparql. name: %s, type: %s", name, t)
+            ret[name] = value
+        return ret
 
 class EventItem:
     def __init__(self, items):
