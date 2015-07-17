@@ -9,3 +9,13 @@
 .feed-author {
     font-weight: bold;
 }
+
+.channel-list {
+    border-right: 3px solid #a1a1a1;
+    background-color: #d7dad7;
+}
+
+.channel {
+    font-weight: bold;
+    padding: 10px;
+}

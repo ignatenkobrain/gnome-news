@@ -42,12 +42,14 @@ class GenericFeedsView(Gtk.Stack):
             selection_mode=Gtk.SelectionMode.NONE)
         self.flowbox.connect('child-activated', self._post_activated)
 
-        self.feedlist = Gtk.ListBox(activate_on_single_click=True)
+        self.feedlist = Gtk.ListBox(
+            activate_on_single_click=True)
+        self.feedlist.get_style_context().add_class('channel-list')
         self.feedlist.connect('row-activated', self._feed_activated)
 
         self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         if show_feedlist:
-            self._box.pack_start(self.feedlist, True, True, 0)
+            self._box.pack_start(self.feedlist, False, True, 0)
         self._box.pack_end(self.flowbox, True, True, 0)
         self.add(self._box)
 
@@ -81,7 +83,8 @@ class GenericFeedsView(Gtk.Stack):
     @log
     def _add_new_feed(self, feed):
         label = Gtk.Label(label=feed['title'])
-        label.channel = feed['url']
+        label.channel = feed['channel']
+        label.get_style_context().add_class('channel')
         self.feedlist.insert(label, -1)
 
     @log
