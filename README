@@ -1,2 +1,18 @@
 GNOME News
 ==========
+
+Requirements
+------------
+All requirements checked at configure step. Note that it checks for
+GObject Introspection module, not for pkg-config file.
+Also you need to have:
+* tracker-1.0 -- 7ed0e4c0881ebc45df6e01d15cbcb0093eab1d3e
+* libgrss-0.6 -- 7e81cc6b402e45c1000802e2c5b02019ea464156
+
+Debugging
+---------
+Remove all channels and feeds from tracker first.
+For adding channels use `tracker-miner-rss -a URL` or add from GUI.
+DON'T ADD FEEDS YOURSELF.
+
+Here is no queries now. Just do `tracker reset -r`.
