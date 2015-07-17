@@ -1,13 +1,22 @@
+.feeds-list {
+    padding-top: 20px;
+    margin: 15px;
+}
+
 .feed-box {
+    border: 1px solid #a1a1a1;
+    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white;
     background-color: #ffffff;
 }
 
 .feed-title {
     font-size: 16px;
+    padding: 5px;
 }
 
 .feed-author {
     font-weight: bold;
+    padding: 5px;
 }
 
 .channel-list {

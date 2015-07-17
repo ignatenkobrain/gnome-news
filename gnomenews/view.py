@@ -39,7 +39,10 @@ class GenericFeedsView(Gtk.Stack):
             min_children_per_line=2,
             max_children_per_line=4, homogeneous=True,
             activate_on_single_click=True,
+            row_spacing=10, column_spacing=10,
+            margin=10,
             selection_mode=Gtk.SelectionMode.NONE)
+        self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
 
         self.feedlist = Gtk.ListBox(
@@ -67,13 +70,14 @@ class GenericFeedsView(Gtk.Stack):
         title_label.get_style_context().add_class('feed-title')
         author_label = ui.get_object('author-label')
         author_label.get_style_context().add_class('feed-author')
-        webview = WebKit2.WebView()
+        webview = WebKit2.WebView(sensitive=False)
 
         title_label.set_label(post['title'])
         author_label.set_label(post['fullname'])
         webview.load_html(post["content"])
 
-        box.pack_end(webview, True, True, 0)
+        box.pack_start(webview, True, True, 0)
+        box.show_all()
 
         #Store the post object to refer to it later on
         box.post = post
