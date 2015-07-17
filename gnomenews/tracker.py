@@ -221,7 +221,10 @@ class Tracker(GObject.GObject):
             elif t == Trackr.SparqlValueType.BOOLEAN:
                 value = sparql_ret.get_boolean(column)
             else:
-                value = None
+                try:
+                    value = sparql_ret.get_string(column)[0]
+                except Exception:
+                    value = None
                 logger.error("We should not get this type from sparql. name: %s, type: %s", name, t)
             ret[name] = value
         return ret
