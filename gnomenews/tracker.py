@@ -43,15 +43,16 @@ class Tracker(GObject.GObject):
         self.sparql = Trackr.SparqlConnection.get(None)
 
     @log
-    def get_post_sorted_by_date(self, amount, unread=False):
+    def get_post_sorted_by_date(self, amount, unread=False, starred=False):
         query = """
         SELECT
           nie:url(?msg) AS url
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
-          nie:contentCreated(?msg) AS date_created
+          nie:contentCreated(?msg) AS date
           nie:plainTextContent(?msg) AS plaintext
           nmo:isRead(?msg) AS is_read
+        WHERE
           { ?msg a mfo:FeedMessage """
 
         if unread:
@@ -68,6 +69,10 @@ class Tracker(GObject.GObject):
         while (results.next(None)):
             ret.append(self.parse_sparql(results))
         return ret
+
+    @log
+    def get_info_for_entry(self, url):
+        pass
 
     @log
     def add_channel(self, url, update_interval=30):
@@ -132,6 +137,7 @@ class Tracker(GObject.GObject):
             ret.append(self.parse_sparql(results))
         return ret
 
+    @log
     def get_channels(self):
         """Returns list of channels"""
         query = """
@@ -143,13 +149,13 @@ class Tracker(GObject.GObject):
         ORDER BY nie:title(?chan)
         """
 
-        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
             ret.append(self.parse_sparql(results))
         return ret
 
+    @log
     def get_text_matches(self, text, amount, channel=None):
         """Do text search lookup
 

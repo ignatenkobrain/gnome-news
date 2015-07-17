@@ -65,7 +65,7 @@ class GenericFeedsView(Gtk.Stack):
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on
-        box.url = url
+        box.url = post['url']
 
         self.flowbox.insert(box, -1)
 
@@ -74,13 +74,22 @@ class GenericFeedsView(Gtk.Stack):
 
     def _child_activated(self, box, child, user_data=None):
         url = child.get_children()[0].url
-        #details = self.tracker.get_info_for_entry(url) # FIXME
+        details = self.tracker.get_info_for_entry(url)
         self.emit('open-article', details[0], details[1], url)
 
-    def update_items(self, _=None):
-        posts = self.tracker.get_post_sorted_by_date(10)
-        for post in posts:
-            self._add_a_new_preview(post)
+    def update_new_items(self):
+        posts = self.tracker.get_post_sorted_by_date(10, unread=True)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()
+
+    def update_all_items(self):
+        posts = self.tracker.get_post_sorted_by_date(10, unread=False)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()
+
+    def update_starred_items(self):
+        posts = self.tracker.get_post_sorted_by_date(10, unread=False, starred=True)
+        [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
     def update_feeds(self, _=None):
@@ -122,7 +131,7 @@ class StarredView(GenericFeedsView):
 class ReadView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'read', _("Read"))
-        self.update_feeds()
+        self.update_starred_items()
 
 
 class SearchView(GenericFeedsView):
