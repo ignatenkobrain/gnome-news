@@ -94,7 +94,7 @@ class Tracker(GObject.GObject):
         Args:
             url (str): URL of the channel.
         """
-        self.sparql.update("DELETE { <%s> a mfo:FeedMessage. }" % url,
+        self.sparql.update("DELETE { <%s> a mfo:FeedChannel. }" % url,
                            GLib.PRIORITY_DEFAULT, None)
 
     @log
