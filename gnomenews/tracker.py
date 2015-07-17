@@ -138,7 +138,6 @@ class Tracker(GObject.GObject):
         SELECT
           nie:url(?chan) AS url
           nie:title(?chan) AS title
-          nie:description(?chan) AS description
           ?chan AS channel
           { ?chan a mfo:FeedChannel }
         ORDER BY nie:title(?chan)
