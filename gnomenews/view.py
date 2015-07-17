@@ -36,8 +36,10 @@ class GenericFeedsView(Gtk.Stack):
         self.title = title
 
         self.flowbox = Gtk.FlowBox(
-            max_children_per_line=2, homogeneous=True,
-            activate_on_single_click=True)
+            min_children_per_line=2,
+            max_children_per_line=4, homogeneous=True,
+            activate_on_single_click=True,
+            selection_mode=Gtk.SelectionMode.NONE)
         self.flowbox.connect('child-activated', self._post_activated)
 
         self.feedlist = Gtk.ListBox(activate_on_single_click=True)
@@ -55,17 +57,20 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def _add_a_new_preview(self, post):
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        title_label = Gtk.Label(label=post["title"])
-        box.pack_start(title_label, False, False, 0)
-
-        info_label_text = _("by {0} at {1}".format(
-            post['fullname'], post['date'].format('%F %H:%m')))
-        info_label = Gtk.Label(label=info_label_text)
-        box.pack_start(info_label, False, False, 0)
-
+        ui = Gtk.Builder()
+        ui.add_from_resource('/org/gnome/News/Feed.ui')
+        box = ui.get_object('feed-box')
+        box.get_style_context().add_class('feed-box')
+        title_label = ui.get_object('title-label')
+        title_label.get_style_context().add_class('feed-title')
+        author_label = ui.get_object('author-label')
+        author_label.get_style_context().add_class('feed-author')
         webview = WebKit2.WebView()
+
+        title_label.set_label(post['title'])
+        author_label.set_label(post['fullname'])
         webview.load_html(post["content"])
+
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on

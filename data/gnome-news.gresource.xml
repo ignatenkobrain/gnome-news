@@ -2,5 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/News">
     <file preprocess="xml-stripblanks">HeaderBar.ui</file>
+    <file preprocess="xml-stripblanks">Feed.ui</file>
+    <file>application.css</file>
   </gresource>
 </gresources>

@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gi.repository import Gtk, GLib, Gio
+from gi.repository import Gtk, GLib, Gio, Gdk
 from gettext import gettext as _
 
 from gnomenews import log
@@ -30,6 +30,15 @@ class Application(Gtk.Application):
         GLib.set_application_name(_("News"))
         GLib.set_prgname('gnome-news')
         self.settings = Gio.Settings.new('org.gnome.News')
+
+        cssProviderFile = Gio.File.new_for_uri('resource:///org/gnome/News/application.css')
+        cssProvider = Gtk.CssProvider()
+        cssProvider.load_from_file(cssProviderFile)
+        screen = Gdk.Screen.get_default()
+        styleContext = Gtk.StyleContext()
+        styleContext.add_provider_for_screen(screen, cssProvider,
+                                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
+
         self._window = None
 
     @log
