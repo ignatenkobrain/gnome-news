@@ -18,6 +18,7 @@ from gi.repository import Gtk, GObject, WebKit2, GLib
 from gettext import gettext as _
 
 from gnomenews import log
+from gnomenews.post import Post
 import logging
 logger = logging.getLogger(__name__)
 
@@ -35,12 +36,15 @@ class GenericFeedsView(Gtk.Stack):
         self.name = name
         self.title = title
 
+        scrolledWindow = Gtk.ScrolledWindow()
+        self.add(scrolledWindow)
+
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             max_children_per_line=4, homogeneous=True,
             activate_on_single_click=True,
             row_spacing=10, column_spacing=10,
-            margin=10,
+            margin=15,
             selection_mode=Gtk.SelectionMode.NONE)
         self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
@@ -54,36 +58,26 @@ class GenericFeedsView(Gtk.Stack):
         if show_feedlist:
             self._box.pack_start(self.feedlist, False, True, 0)
         self._box.pack_end(self.flowbox, True, True, 0)
-        self.add(self._box)
+        scrolledWindow.add(self._box)
 
         self.tracker = tracker
 
         self.show_all()
 
     @log
-    def _add_a_new_preview(self, post):
-        ui = Gtk.Builder()
-        ui.add_from_resource('/org/gnome/News/Feed.ui')
-        box = ui.get_object('feed-box')
-        box.get_style_context().add_class('feed-box')
-        title_label = ui.get_object('title-label')
-        title_label.get_style_context().add_class('feed-title')
-        author_label = ui.get_object('author-label')
-        author_label.get_style_context().add_class('feed-author')
-        webview = WebKit2.WebView(sensitive=False)
+    def _add_a_new_preview(self, cursor):
+        p = Post(cursor)
+        p.connect('info-updated', self._insert_post)
 
-        title_label.set_label(post['title'])
-        author_label.set_label(post['fullname'])
-        if post["content"]:
-            webview.load_html(post["content"])
-
-        box.pack_start(webview, True, True, 0)
-        box.show_all()
+    def _insert_post(self, source, post):
+        image = Gtk.Image.new_from_surface(post.thumbnail)
+        image.get_style_context().add_class('feed-box')
+        image.show_all()
 
         #Store the post object to refer to it later on
-        box.post = post
+        image.post = post.cursor
 
-        self.flowbox.insert(box, -1)
+        self.flowbox.insert(image, -1)
 
     @log
     def _add_new_feed(self, feed):
