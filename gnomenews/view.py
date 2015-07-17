@@ -69,8 +69,8 @@ class GenericFeedsView(Gtk.Stack):
 
         self.flowbox.insert(box, -1)
 
-    def _add_new_feed(self, url):
-        self.feedlist.insert(Gtk.Label(url), -1)
+    def _add_new_feed(self, feed):
+        self.feedlist.insert(Gtk.Label(feed['title']), -1)
 
     def _child_activated(self, box, child, user_data=None):
         url = child.get_children()[0].url
@@ -84,10 +84,8 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     def update_feeds(self, _=None):
-        #feeds = self.tracker.get_all_subscribed_feeds() # FIXME
-        feeds = []
-        for feed in feeds:
-            self._add_new_feed(feed[0])
+        feeds = self.tracker.get_channels()  # FIXME
+        [self._add_new_feed(feed) for feed in feeds]
         self.show_all()
 
 
