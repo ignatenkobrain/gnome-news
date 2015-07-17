@@ -133,6 +133,8 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def update_feeds(self, _=None):
+        [self.feedlist.remove(old_feed) for old_feed in self.feedlist.get_children()]
+
         feeds = self.tracker.get_channels()
         [self._add_new_feed(feed) for feed in feeds]
         if len(self.feedlist.get_children()) > 0:

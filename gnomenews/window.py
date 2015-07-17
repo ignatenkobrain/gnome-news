@@ -117,6 +117,7 @@ class Window(Gtk.ApplicationWindow):
         self._stack.set_visible_child(self.views[0])
 
         self.tracker.connect('items-updated', self.views[0].update_new_items)
+        self.tracker.connect('feeds-updated', self.views[1].update_feeds)
 
     @log
     def _open_article_view(self, url, contents):

@@ -26,6 +26,7 @@ class Tracker(GObject.GObject):
     __gsignals__ = {
         #'new-item': (GObject.SignalFlags.RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
         'items-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
+        'feeds-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     @log
@@ -107,6 +108,7 @@ class Tracker(GObject.GObject):
                    mfo:feedSettings _:FeedSettings ;
                    nie:url "%s" }
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
+        self.emit('feeds-updated')
 
     @log
     def mark_post_as_read(self, url, data=None):
@@ -125,6 +127,7 @@ class Tracker(GObject.GObject):
         WHERE
           { ?chan nie:url "%s" }""" % url
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
+        self.emit('feeds-updated')
 
     @log
     def get_posts_for_channel(self, url, amount, unread=False):
