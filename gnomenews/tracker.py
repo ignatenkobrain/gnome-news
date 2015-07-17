@@ -123,11 +123,11 @@ class Tracker(GObject.GObject):
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
 
     @log
-    def get_posts_for_channel(self, urn, amount, unread=False):
+    def get_posts_for_channel(self, url, amount, unread=False):
         """Get posts for channel id
 
         Args:
-            urn (str): urn:uuid:... of the channel.
+            url (str): URL of the channel.
             amount (int): number of items to fetch.
             unread (Optional[bool]): return only unread items if True.
         """
@@ -140,15 +140,17 @@ class Tracker(GObject.GObject):
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
-                 nmo:communicationChannel <%s> """ % urn
+                 nmo:communicationChannel ?chan"""
 
         if unread:
             query += "; nmo:isRead false"
 
-        query += """; nco:creator ?creator }
+        query += """; nco:creator ?creator
+                 { ?chan nie:url "%s" }
+          }
         ORDER BY DESC nie:contentLastModified(?msg)
         LIMIT %s
-        """ % amount
+        """ % (url, amount)
 
         logger.debug(query)
         results = self.sparql.query(query)
@@ -164,7 +166,6 @@ class Tracker(GObject.GObject):
         SELECT
           nie:url(?chan) AS url
           nie:title(?chan) AS title
-          ?chan AS channel
           { ?chan a mfo:FeedChannel }
         ORDER BY nie:title(?chan)
         """
@@ -181,7 +182,7 @@ class Tracker(GObject.GObject):
 
         Args:
             text (str): text to search for.
-            channel (str): urn:uuid:... of the channel.
+            channel (str): URL of the channel.
             amount (int): number of items to fetch.
         """
         query = """
@@ -195,15 +196,16 @@ class Tracker(GObject.GObject):
           { ?msg a mfo:FeedMessage; """
 
         if channel:
-            query += """nmo:communicationChannel <%s>;""" % channel
+            query += """nmo:communicationChannel ?chan;"""
 
         query += """
                  fts:match "%s";
                  nco:creator ?creator
+                 { ?chan nie:url "%s" }
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
-        """ % (text, amount)
+        """ % (text, channel, amount)
 
         logger.debug(query)
         results = self.sparql.query(query)

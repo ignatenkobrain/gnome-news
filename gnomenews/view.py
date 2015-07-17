@@ -76,7 +76,7 @@ class GenericFeedsView(Gtk.Stack):
     @log
     def _add_new_feed(self, feed):
         label = Gtk.Label(label=feed['title'])
-        label.channel = feed['channel']
+        label.channel = feed['url']
         self.feedlist.insert(label, -1)
 
     @log
@@ -89,8 +89,8 @@ class GenericFeedsView(Gtk.Stack):
     def _feed_activated(self, box, child, user_data=None):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
-        urn = child.get_child().channel
-        posts = self.tracker.get_posts_for_channel(urn, 10)
+        url = child.get_child().channel
+        posts = self.tracker.get_posts_for_channel(url, 10)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
@@ -114,7 +114,7 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def update_feeds(self, _=None):
-        feeds = self.tracker.get_channels()  # FIXME
+        feeds = self.tracker.get_channels()
         [self._add_new_feed(feed) for feed in feeds]
         self.show_all()
 
