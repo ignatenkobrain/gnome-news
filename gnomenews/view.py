@@ -74,7 +74,8 @@ class GenericFeedsView(Gtk.Stack):
 
         title_label.set_label(post['title'])
         author_label.set_label(post['fullname'])
-        webview.load_html(post["content"])
+        if post["content"]:
+            webview.load_html(post["content"])
 
         box.pack_start(webview, True, True, 0)
         box.show_all()
@@ -142,7 +143,8 @@ class FeedView(Gtk.Stack):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         webview = WebKit2.WebView()
-        webview.load_html(contents)
+        if contents:
+            webview.load_html(contents)
         self.add(webview)
         self.show_all()
 
