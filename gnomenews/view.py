@@ -57,7 +57,9 @@ class GenericFeedsView(Gtk.Stack):
         title_label = Gtk.Label(label=post["title"])
         box.pack_start(title_label, False, False, 0)
 
-        info_label = Gtk.Label(label=_("by {fullname} at {date}".format(**post)))
+        info_label_text = _("by {0} at {1}".format(
+            post['fullname'], post['date'].format('%F %H:%m')))
+        info_label = Gtk.Label(label=info_label_text)
         box.pack_start(info_label, False, False, 0)
 
         webview = WebKit2.WebView()
