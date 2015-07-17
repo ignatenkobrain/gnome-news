@@ -38,9 +38,10 @@ class GenericFeedsView(Gtk.Stack):
         self.flowbox = Gtk.FlowBox(
             max_children_per_line=2, homogeneous=True,
             activate_on_single_click=True)
-        self.flowbox.connect('child-activated', self._child_activated)
+        self.flowbox.connect('child-activated', self._post_activated)
 
-        self.feedlist = Gtk.ListBox()
+        self.feedlist = Gtk.ListBox(activate_on_single_click=True)
+        self.feedlist.connect('row-activated', self._feed_activated)
 
         self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         if show_feedlist:
@@ -74,13 +75,24 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def _add_new_feed(self, feed):
-        self.feedlist.insert(Gtk.Label(feed['title']), -1)
+        label = Gtk.Label(label=feed['title'])
+        label.channel = feed['channel']
+        self.feedlist.insert(label, -1)
 
     @log
-    def _child_activated(self, box, child, user_data=None):
+    def _post_activated(self, box, child, user_data=None):
         post = child.get_children()[0].post
         self.emit('open-article',
                   post['title'], post['fullname'], post['url'], post["plaintext"])
+
+    @log
+    def _feed_activated(self, box, child, user_data=None):
+        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
+
+        urn = child.get_child().channel
+        posts = self.tracker.get_posts_for_channel(urn, 10)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()
 
     @log
     def update_new_items(self):

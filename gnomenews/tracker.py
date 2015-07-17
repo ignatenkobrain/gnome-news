@@ -132,11 +132,11 @@ class Tracker(GObject.GObject):
           nie:url(?msg) AS url
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
-          nie:contentCreated(?msg) AS date_created
+          nie:contentCreated(?msg) AS date
           nie:plainTextContent(?msg) AS plaintext
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
-                 nmo:communicationChannel <%s> """
+                 nmo:communicationChannel <%s> """ % urn
 
         if unread:
             query += "; nmo:isRead false"
@@ -144,7 +144,7 @@ class Tracker(GObject.GObject):
         query += """; nco:creator ?creator }
         ORDER BY DESC nie:contentLastModified(?msg)
         LIMIT %s
-        """ % (urn, amount)
+        """ % amount
 
         logger.debug(query)
         results = self.sparql.query(query)
