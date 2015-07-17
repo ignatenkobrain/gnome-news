@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class GenericFeedsView(Gtk.Stack):
 
     __gsignals__ = {
-        'open-article': (GObject.SignalFlags.RUN_FIRST, None, (str, str, str)),
+        'open-article': (GObject.SignalFlags.RUN_FIRST, None, (str, str, str, str)),
     }
 
     @log
@@ -52,6 +52,7 @@ class GenericFeedsView(Gtk.Stack):
 
         self.show_all()
 
+    @log
     def _add_a_new_preview(self, post):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         title_label = Gtk.Label(label=post["title"])
@@ -67,33 +68,39 @@ class GenericFeedsView(Gtk.Stack):
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on
-        box.url = post['url']
+        box.post = post
 
         self.flowbox.insert(box, -1)
 
+    @log
     def _add_new_feed(self, feed):
         self.feedlist.insert(Gtk.Label(feed['title']), -1)
 
+    @log
     def _child_activated(self, box, child, user_data=None):
-        url = child.get_children()[0].url
-        details = self.tracker.get_info_for_entry(url)
-        self.emit('open-article', details[0], details[1], url)
+        post = child.get_children()[0].post
+        self.emit('open-article',
+                  post['title'], post['fullname'], post['url'], post["plaintext"])
 
+    @log
     def update_new_items(self):
         posts = self.tracker.get_post_sorted_by_date(10, unread=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
+    @log
     def update_all_items(self):
         posts = self.tracker.get_post_sorted_by_date(10, unread=False)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
+    @log
     def update_starred_items(self):
         posts = self.tracker.get_post_sorted_by_date(10, unread=False, starred=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
+    @log
     def update_feeds(self, _=None):
         feeds = self.tracker.get_channels()  # FIXME
         [self._add_new_feed(feed) for feed in feeds]
@@ -101,13 +108,11 @@ class GenericFeedsView(Gtk.Stack):
 
 
 class FeedView(Gtk.Stack):
-    def __init__(self, tracker, url):
+    def __init__(self, tracker, url, contents):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
-        #text_content = tracker.get_text_for_uri(url) # FIXME
-        text_content = "<html/>"
         webview = WebKit2.WebView()
-        webview.load_html(text_content)
+        webview.load_html(contents)
         self.add(webview)
         self.show_all()
 

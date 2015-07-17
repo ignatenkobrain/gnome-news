@@ -72,7 +72,23 @@ class Tracker(GObject.GObject):
 
     @log
     def get_info_for_entry(self, url):
-        pass
+        query = """
+        SELECT
+          nie:title(?msg) AS title
+          nco:fullname(?creator) AS fullname
+        WHERE
+          { ?msg a mfo:FeedMessage ;
+            nco:creator ?creator ;
+            nie:url <%s> }""" % url
+
+        logger.debug(query)
+        results = self.sparql.query(query)
+        ret = []
+        while (results.next(None)):
+            ret.append(self.parse_sparql(results))
+        if len(ret) != 1:
+            raise Exception("More than one result returned by feed with url %s" % url)
+        return ret[0]
 
     @log
     def add_channel(self, url, update_interval=30):
@@ -233,6 +249,7 @@ class Tracker(GObject.GObject):
                 logger.error("We should not get this type from sparql. name: %s, type: %s", name, t)
             ret[name] = value
         return ret
+
 
 class EventItem:
     def __init__(self, items):

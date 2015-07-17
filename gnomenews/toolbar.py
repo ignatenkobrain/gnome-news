@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject, GLib
+from gi.repository import Gtk, GObject
 
 from gnomenews import log
 import logging
@@ -106,11 +106,11 @@ class Toolbar(GObject.GObject):
         self.add_popover.hide()
 
     @log
-    def _update_title(self, view, title, author, url):
+    def _update_title(self, view, title, author, url, contents):
         self.set_state(ToolbarState.CHILD_VIEW)
         self.header_bar.set_title(title)
         self.header_bar.set_subtitle(author)
-        self.window._open_article_view(url)
+        self.window._open_article_view(url, contents)
 
     @log
     def on_back_button_clicked(self, widget):
