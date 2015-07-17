@@ -50,7 +50,7 @@ class Tracker(GObject.GObject):
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date
-          nie:plainTextContent(?msg) AS plaintext
+          nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
         WHERE
           { ?msg a mfo:FeedMessage """
@@ -133,7 +133,7 @@ class Tracker(GObject.GObject):
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date
-          nie:plainTextContent(?msg) AS plaintext
+          nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
                  nmo:communicationChannel <%s> """ % urn
@@ -186,7 +186,7 @@ class Tracker(GObject.GObject):
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
           nie:contentCreated(?msg) AS date_created
-          nie:plainTextContent(?msg) AS plaintext
+          nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage; """
 

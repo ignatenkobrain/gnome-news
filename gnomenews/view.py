@@ -65,7 +65,7 @@ class GenericFeedsView(Gtk.Stack):
         box.pack_start(info_label, False, False, 0)
 
         webview = WebKit2.WebView()
-        webview.load_html(post["plaintext"])
+        webview.load_html(post["content"])
         box.pack_end(webview, True, True, 0)
 
         #Store the post object to refer to it later on
@@ -83,7 +83,7 @@ class GenericFeedsView(Gtk.Stack):
     def _post_activated(self, box, child, user_data=None):
         post = child.get_children()[0].post
         self.emit('open-article',
-                  post['title'], post['fullname'], post['url'], post["plaintext"])
+                  post['title'], post['fullname'], post['url'], post["content"])
 
     @log
     def _feed_activated(self, box, child, user_data=None):
