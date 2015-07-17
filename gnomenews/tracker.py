@@ -115,8 +115,12 @@ class Tracker(GObject.GObject):
         Args:
             url (str): URL of the channel.
         """
-        self.sparql.update("DELETE { <%s> a mfo:FeedChannel. }" % url,
-                           GLib.PRIORITY_DEFAULT, None)
+        query = """
+        DELETE
+          { ?chan a mfo:FeedChannel }
+        WHERE
+          { ?chan nie:url "%s" }""" % url
+        self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
 
     @log
     def get_posts_for_channel(self, urn, amount, unread=False):
