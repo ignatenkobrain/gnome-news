@@ -124,11 +124,13 @@ class Window(Gtk.ApplicationWindow):
         self._stack.previous_view = self._stack.get_visible_child()
         self._stack.add_named(self.feed_view, 'feedview')
         self._stack.set_visible_child(self.feed_view)
+        self.tracker.post_read_signal = self.feed_view.connect('post-read', self.tracker.mark_post_as_read)
 
     @log
     def on_back_button_clicked(self, widget):
         self._stack.set_visible_child(self._stack.previous_view)
         self._stack.previous_view = None
         self._stack.remove(self.feed_view)
-        self.feed_view = None
         self.toolbar.set_state(ToolbarState.MAIN)
+        self.feed_view.disconnect(self.tracker.post_read_signal)
+        self.feed_view = None

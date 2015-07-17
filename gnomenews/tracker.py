@@ -109,6 +109,10 @@ class Tracker(GObject.GObject):
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
 
     @log
+    def mark_post_as_read(self, url, data=None):
+        pass  # FIXME
+
+    @log
     def remove_channel(self, url):
         """Drop channel from fetching by tracker
 

@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject, WebKit2
+from gi.repository import Gtk, GObject, WebKit2, GLib
 
 from gettext import gettext as _
 
@@ -133,6 +133,11 @@ class GenericFeedsView(Gtk.Stack):
 
 
 class FeedView(Gtk.Stack):
+
+    __gsignals__ = {
+        'post-read': (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
     def __init__(self, tracker, url, contents):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
@@ -140,6 +145,14 @@ class FeedView(Gtk.Stack):
         webview.load_html(contents)
         self.add(webview)
         self.show_all()
+
+        self.url = url
+
+        GLib.timeout_add(1000, self.mark_post_as_read)
+
+    def mark_post_as_read(self):
+        self.emit('post-read', self.url)
+        return False
 
 
 class NewView(GenericFeedsView):
