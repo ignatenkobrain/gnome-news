@@ -112,7 +112,27 @@ class Tracker(GObject.GObject):
 
     @log
     def mark_post_as_read(self, url, data=None):
-        pass  # FIXME
+        """Marks given post as read
+
+        Args:
+            url (str): URL of the post.
+            data (Optional): user data.
+        """
+
+        query = """
+        DELETE
+          { ?msg nmo:isRead ?any }
+        WHERE
+          { ?msg nie:url "%s";
+                 nmo:isRead ?any }
+        INSERT
+          { ?msg nmo:isRead true }
+        WHERE
+          { ?msg nie:url "%s" }
+        """ % (url, url)
+
+        logger.debug(query)
+        self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
 
     @log
     def remove_channel(self, url):
