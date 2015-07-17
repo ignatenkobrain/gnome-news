@@ -3,6 +3,8 @@ GNOME News
 
 Requirements
 ------------
+To use `autogen.sh` you need autoconf-archive.
+
 All requirements checked at configure step. Note that it checks for
 GObject Introspection module, not for pkg-config file.
 Also you need to have:
