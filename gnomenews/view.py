@@ -87,7 +87,7 @@ class GenericFeedsView(Gtk.Stack):
     @log
     def _add_new_feed(self, feed):
         label = Gtk.Label(label=feed['title'])
-        label.channel = feed['channel']
+        label.channel = feed['url']
         label.get_style_context().add_class('channel')
         self.feedlist.insert(label, -1)
 
