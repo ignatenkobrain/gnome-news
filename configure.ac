@@ -17,7 +17,7 @@ AX_PYTHON_GI(Gio, 2.0)
 AX_PYTHON_GI(Gtk, 3.0)
 AX_PYTHON_GI(Gdk, 3.0)
 AX_PYTHON_GI(Tracker, 1.0)
-AX_PYTHON_GI(Grss, 0.6)
+AX_PYTHON_GI(Grss, 0.7)
 AX_PYTHON_GI(WebKit2, 4.0)
 
 # GResources
