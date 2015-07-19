@@ -15,7 +15,7 @@ import argparse
 import logging
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('Grss', '0.6')
+gi.require_version('Grss', '0.7')
 gi.require_version('Tracker', '1.0')
 gi.require_version('WebKit2', '4.0')
 from gi.repository import Gio
