@@ -70,6 +70,7 @@ class GenericFeedsView(Gtk.Stack):
         p = Post(cursor)
         p.connect('info-updated', self._insert_post)
 
+    @log
     def _insert_post(self, source, post):
         image = Gtk.Image.new_from_surface(post.thumbnail)
         image.get_style_context().add_class('feed-box')

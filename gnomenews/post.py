@@ -15,12 +15,18 @@
 
 from gi.repository import WebKit2, GObject
 
+import hashlib
+import os.path
+import cairo
+
 from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
 
 THUMBNAIL_WIDTH = 256
 THUMBNAIL_HEIGHT = 256
+# FIXME: Remove duplication with application.py
+CACHE_PATH = "~/.cache/gnome-news"
 
 
 class Post(GObject.GObject):
@@ -38,6 +44,18 @@ class Post(GObject.GObject):
         self.title = cursor['title']
         self.content = cursor['content']
         self.author = cursor['fullname']
+
+        # Check cache first
+        hashed_url = hashlib.md5(cursor['url'].encode()).hexdigest()
+        self.cached_thumbnail_path = os.path.join(os.path.expanduser(CACHE_PATH), '%s.png' % hashed_url)
+        if os.path.isfile(self.cached_thumbnail_path):
+            try:
+                surface = cairo.ImageSurface.create_from_png(self.cached_thumbnail_path)
+                self.thumbnail = surface.copy()
+                self.emit('info-updated', self)
+                return
+            except Exception as e:
+                logger.error("Could not fetch thumbnail from cache for %s: %s" % (self.title, str(e)))
 
         self.webview = WebKit2.WebView(sensitive=False)
         self.webview.connect('load-changed', self._draw_thumbnail)
@@ -65,11 +83,12 @@ class Post(GObject.GObject):
         try:
             original_surface = self.webview.get_snapshot_finish(res)
 
-            import cairo
             new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)
             ctx = cairo.Context(new_surface)
             ctx.set_source_surface(original_surface, 0, 0)
             ctx.paint()
+
+            new_surface.write_to_png(self.cached_thumbnail_path)
 
             self.thumbnail = new_surface
             self.emit('info-updated', self)

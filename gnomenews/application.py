@@ -20,6 +20,11 @@ from gettext import gettext as _
 from gnomenews import log
 from gnomenews.window import Window
 
+import os
+import os.path
+
+CACHE_PATH = "~/.cache/gnome-news"
+
 
 class Application(Gtk.Application):
     @log
@@ -40,6 +45,14 @@ class Application(Gtk.Application):
                                              Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         self._window = None
+
+        self.create_cache()
+
+    @log
+    def create_cache(self):
+        cache_full_path = os.path.expanduser(CACHE_PATH)
+        if not os.path.isdir(cache_full_path):
+            os.mkdir(cache_full_path)
 
     @log
     def do_startup(self):
