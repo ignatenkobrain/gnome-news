@@ -41,7 +41,6 @@ class GenericFeedsView(Gtk.Stack):
 
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
-            max_children_per_line=4, homogeneous=True,
             activate_on_single_click=True,
             row_spacing=10, column_spacing=10,
             margin=15,
@@ -54,7 +53,9 @@ class GenericFeedsView(Gtk.Stack):
         self.feedlist.get_style_context().add_class('channel-list')
         self.feedlist.connect('row-activated', self._feed_activated)
 
-        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self._box = Gtk.Box(
+            valign=Gtk.Align.START,
+            orientation=Gtk.Orientation.HORIZONTAL)
         if show_feedlist:
             self._box.pack_start(self.feedlist, False, True, 0)
         self._box.pack_end(self.flowbox, True, True, 0)
