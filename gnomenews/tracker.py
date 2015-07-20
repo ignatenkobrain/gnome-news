@@ -156,7 +156,7 @@ class Tracker(GObject.GObject):
         self.emit('feeds-updated')
 
     @log
-    def get_posts_for_channel(self, url, amount, unread=False):
+    def get_posts_for_channel(self, url, amount):
         """Get posts for channel id
 
         Args:
@@ -175,13 +175,10 @@ class Tracker(GObject.GObject):
           { ?msg a mfo:FeedMessage;
                  nmo:communicationChannel ?chan"""
 
-        if unread:
-            query += "; nmo:isRead false"
-
         query += """; nco:creator ?creator
                  { ?chan nie:url "%s" }
           }
-        ORDER BY DESC nie:contentLastModified(?msg)
+        ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
         """ % (url, amount)
 
