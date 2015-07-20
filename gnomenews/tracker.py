@@ -62,6 +62,9 @@ class Tracker(GObject.GObject):
         if read_only:
             query += "; nmo:isRead true"
 
+        if starred:
+            query += "; nao:hasTag nao:predefined-tag-favorite "
+
         query += """; nco:creator ?creator }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
