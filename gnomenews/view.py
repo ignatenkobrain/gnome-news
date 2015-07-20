@@ -108,6 +108,8 @@ class GenericFeedsView(Gtk.Stack):
         posts = self.tracker.get_posts_for_channel(feed['url'], 10)
         [self._add_a_new_preview(post, flowbox) for post in posts]
 
+        if not feed['title']:
+            feed['title'] = _("Unknown feed")
         self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
 
     @log
