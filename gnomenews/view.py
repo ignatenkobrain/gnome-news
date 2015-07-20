@@ -182,7 +182,7 @@ class StarredView(GenericFeedsView):
 class ReadView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'read', _("Read"))
-        self.update_starred_items()
+        self.update_all_items()
 
 
 class SearchView(GenericFeedsView):
