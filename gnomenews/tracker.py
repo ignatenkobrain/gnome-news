@@ -249,14 +249,10 @@ class Tracker(GObject.GObject):
                          interface_name, signal_name, parameters, user_data=None):
         unpacked = parameters.unpack()
         #FIXME: handle deletes -- unpacked[1]
-        self._handle_insert_event(unpacked[2])
+        GLib.idle_add(self._handle_insert_event, unpacked[2])
 
     @log
     def _handle_insert_event(self, items):
-        added_items = 0
-        for i in items:
-            tmp = EventItem(i)
-            # FIXME: handle items
         self.emit('items-updated')
         self.emit('feeds-updated')
 

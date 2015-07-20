@@ -96,10 +96,6 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def _add_new_feed(self, feed):
-        label = Gtk.Label(label=feed['title'], halign=Gtk.Align.START)
-        label.channel = feed['url']
-        label.get_style_context().add_class('channel')
-
         flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             activate_on_single_click=True,
