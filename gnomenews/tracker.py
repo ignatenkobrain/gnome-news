@@ -108,7 +108,6 @@ class Tracker(GObject.GObject):
                    mfo:feedSettings _:FeedSettings ;
                    nie:url "%s" }
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
-        self.emit('feeds-updated')
 
     @log
     def mark_post_as_read(self, caller, url, data=None):
@@ -255,8 +254,8 @@ class Tracker(GObject.GObject):
         for i in items:
             tmp = EventItem(i)
             # FIXME: handle items
-        if added_items > 0:
-            self.emit('items-updated')
+        self.emit('items-updated')
+        self.emit('feeds-updated')
 
     @staticmethod
     @log
