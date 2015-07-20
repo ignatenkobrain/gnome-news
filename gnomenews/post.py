@@ -47,7 +47,7 @@ class Post(GObject.GObject):
     @log
     def _generate_thumbnail(self):
         self.webview.load_html("""
-            <div style="width: 256px">
+            <div style="width: 250px">
                 <h3 style="margin-bottom: 2px">%s</h3>
                 <small style="color: #333">%s</small>
                 <small style="color: #9F9F9F">%s</small>
