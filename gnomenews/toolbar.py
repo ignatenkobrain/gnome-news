@@ -98,6 +98,7 @@ class Toolbar(GObject.GObject):
 
         self._search_button.set_visible(self._state != ToolbarState.SEARCH_VIEW)
         self._back_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
+        self.add_toggle_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
 
     @log
     def _add_new_feed(self, button):
