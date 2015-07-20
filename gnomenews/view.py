@@ -136,6 +136,10 @@ class GenericFeedsView(Gtk.Stack):
             self._feed_activated(None, self.feedlist.get_children()[0])
         self.show_all()
 
+    @log
+    def update(self):
+        pass
+
 
 class FeedView(Gtk.Stack):
 
@@ -164,24 +168,36 @@ class FeedView(Gtk.Stack):
 class NewView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'new', _("New"))
+
+    @log
+    def update(self):
         self.update_new_items()
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
+
+    @log
+    def update(self):
         self.update_feeds()
 
 
 class StarredView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'starred', _("Starred"))
+
+    @log
+    def update(self):
         self.update_starred_items()
 
 
 class ReadView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'read', _("Read"))
+
+    @log
+    def update(self):
         self.update_all_items()
 
 

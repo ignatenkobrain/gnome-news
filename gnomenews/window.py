@@ -87,6 +87,7 @@ class Window(Gtk.ApplicationWindow):
             transition_duration=100,
             visible=True,
             can_focus=False)
+        self._stack.connect("notify::visible-child", self.view_changed)
         self._overlay = Gtk.Overlay(child=self._stack)
         self.set_titlebar(self.toolbar.header_bar)
         self._box.pack_start(self._overlay, True, True, 0)
@@ -96,6 +97,13 @@ class Window(Gtk.ApplicationWindow):
 
         self.show_all()
         self.toolbar._back_button.set_visible(False)
+
+    @log
+    def view_changed(self, stack, property_name):
+        view = self._stack.get_visible_child()
+        if view in self.views:
+            view.update()
+
 
     @log
     def _add_views(self):
