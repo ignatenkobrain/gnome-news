@@ -100,9 +100,9 @@ class Window(Gtk.ApplicationWindow):
 
     @log
     def view_changed(self, stack, property_name):
-        view = self._stack.get_visible_child()
-        if view in self.views:
-            view.update()
+        visible_view = self._stack.get_visible_child()
+        if visible_view in self.views:
+            visible_view.update()
 
     @log
     def _add_views(self):

@@ -111,9 +111,3 @@ class Toolbar(GObject.GObject):
         self.header_bar.set_title(title)
         self.header_bar.set_subtitle(author)
         self.window._open_article_view(url, contents)
-
-    @log
-    def on_back_button_clicked(self, widget):
-        view = self._stack_switcher.get_stack().get_visible_child()
-        view._back_button_clicked(view)
-        self.set_state(ToolbarState.MAIN)

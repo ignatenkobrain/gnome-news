@@ -48,26 +48,39 @@ class GenericFeedsView(Gtk.Stack):
         self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
 
-        self.feedlist = Gtk.ListBox(
-            activate_on_single_click=True)
-        self.feedlist.get_style_context().add_class('channel-list')
-        self.feedlist.connect('row-activated', self._feed_activated)
+        self.feed_stack = Gtk.Stack(
+            transition_type=Gtk.StackTransitionType.CROSSFADE,
+            transition_duration=100,
+            visible=True,
+            can_focus=False)
+
+        self.stacksidebar = Gtk.StackSidebar(
+            visible=True,
+            stack=self.feed_stack)
 
         self._box = Gtk.Box(
             valign=Gtk.Align.START,
-            orientation=Gtk.Orientation.HORIZONTAL)
+            orientation=Gtk.Orientation.VERTICAL)
+
         if show_feedlist:
-            self._box.pack_start(self.feedlist, False, True, 0)
-        self._box.pack_end(self.flowbox, True, True, 0)
+            self._box.set_orientation(Gtk.Orientation.HORIZONTAL)
+            self._box.pack_start(self.stacksidebar, True, True, 0)
+            self._box.pack_end(self.feed_stack, True, True, 0)
+        else:
+            self._box.pack_end(self.flowbox, True, True, 0)
+
         scrolledWindow.add(self._box)
 
         self.tracker = tracker
-
         self.show_all()
 
     @log
-    def _add_a_new_preview(self, cursor):
+    def _add_a_new_preview(self, cursor, child=None):
         p = Post(cursor)
+        if child:
+            p.flowbox = child
+        else:
+            p.flowbox = self.flowbox
         p.connect('info-updated', self._insert_post)
 
     @log
@@ -79,31 +92,33 @@ class GenericFeedsView(Gtk.Stack):
         #Store the post object to refer to it later on
         image.post = post.cursor
 
-        self.flowbox.insert(image, -1)
+        source.flowbox.insert(image, -1)
 
     @log
     def _add_new_feed(self, feed):
         label = Gtk.Label(label=feed['title'], halign=Gtk.Align.START)
         label.channel = feed['url']
         label.get_style_context().add_class('channel')
-        self.feedlist.insert(label, -1)
+
+        flowbox = Gtk.FlowBox(
+            min_children_per_line=2,
+            activate_on_single_click=True,
+            row_spacing=10, column_spacing=10,
+            margin=15,
+            selection_mode=Gtk.SelectionMode.NONE)
+        flowbox.get_style_context().add_class('feeds-list')
+        flowbox.connect('child-activated', self._post_activated)
+        flowbox.show()
+        posts = self.tracker.get_posts_for_channel(feed['url'], 10)
+        [self._add_a_new_preview(post, flowbox) for post in posts]
+
+        self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
 
     @log
     def _post_activated(self, box, child, user_data=None):
         post = child.get_children()[0].post
         self.emit('open-article',
                   post['title'], post['fullname'], post['url'], post["content"])
-
-    @log
-    def _feed_activated(self, box, child, user_data=None):
-        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
-
-        url = child.get_child().channel
-        posts = self.tracker.get_posts_for_channel(url, 10)
-        [self._add_a_new_preview(post) for post in posts]
-        self.show_all()
-
-        self.selected_feed = url
 
     @log
     def update_new_items(self, _=None):
@@ -131,13 +146,10 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def update_feeds(self, _=None):
-        [self.feedlist.remove(old_feed) for old_feed in self.feedlist.get_children()]
-
         feeds = self.tracker.get_channels()
-        [self._add_new_feed(feed) for feed in feeds]
-        if len(self.feedlist.get_children()) > 0 and self.selected_feed is None:
-            self._feed_activated(None, self.feedlist.get_children()[0])
-        self.show_all()
+        for new_feed in feeds:
+            if not self.feed_stack.get_child_by_name(new_feed['url']):
+                self._add_new_feed(new_feed)
 
     @log
     def update(self):
@@ -194,15 +206,10 @@ class NewView(GenericFeedsView):
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
-        self.selected_feed = None
 
     @log
     def update(self):
         self.update_feeds()
-        if self.selected_feed:
-            # Find the feed with the saved URL
-            [self.feedlist.select_row(row) for row in self.feedlist.get_children()
-             if row.get_child().channel == self.selected_feed]
 
 
 class StarredView(GenericFeedsView):
