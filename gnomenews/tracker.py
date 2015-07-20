@@ -138,7 +138,6 @@ class Tracker(GObject.GObject):
 
         logger.debug(query)
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
-        self.emit('items-updated')
 
     @log
     def remove_channel(self, url):
