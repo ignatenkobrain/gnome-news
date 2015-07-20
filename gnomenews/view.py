@@ -103,6 +103,8 @@ class GenericFeedsView(Gtk.Stack):
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
+        self.selected_feed = url
+
     @log
     def update_new_items(self, _=None):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
@@ -133,7 +135,7 @@ class GenericFeedsView(Gtk.Stack):
 
         feeds = self.tracker.get_channels()
         [self._add_new_feed(feed) for feed in feeds]
-        if len(self.feedlist.get_children()) > 0:
+        if len(self.feedlist.get_children()) > 0 and self.selected_feed is None:
             self._feed_activated(None, self.feedlist.get_children()[0])
         self.show_all()
 
@@ -178,10 +180,15 @@ class NewView(GenericFeedsView):
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
+        self.selected_feed = None
 
     @log
     def update(self):
         self.update_feeds()
+        if self.selected_feed:
+            # Find the feed with the saved URL
+            [self.feedlist.select_row(row) for row in self.feedlist.get_children()
+             if row.get_child().channel == self.selected_feed]
 
 
 class StarredView(GenericFeedsView):
