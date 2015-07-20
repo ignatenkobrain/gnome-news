@@ -111,10 +111,10 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     @log
-    def update_all_items(self):
+    def update_read_items(self):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
-        posts = self.tracker.get_post_sorted_by_date(10, unread=False)
+        posts = self.tracker.get_post_sorted_by_date(10, read_only=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
@@ -122,7 +122,7 @@ class GenericFeedsView(Gtk.Stack):
     def update_starred_items(self):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
-        posts = self.tracker.get_post_sorted_by_date(10, unread=False, starred=True)
+        posts = self.tracker.get_post_sorted_by_date(10, starred=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
@@ -198,7 +198,7 @@ class ReadView(GenericFeedsView):
 
     @log
     def update(self):
-        self.update_all_items()
+        self.update_read_items()
 
 
 class SearchView(GenericFeedsView):

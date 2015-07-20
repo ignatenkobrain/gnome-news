@@ -44,7 +44,7 @@ class Tracker(GObject.GObject):
         self.sparql = Trackr.SparqlConnection.get(None)
 
     @log
-    def get_post_sorted_by_date(self, amount, unread=False, starred=False):
+    def get_post_sorted_by_date(self, amount, unread=False, read_only=False, starred=False):
         query = """
         SELECT
           nie:url(?msg) AS url
@@ -58,6 +58,9 @@ class Tracker(GObject.GObject):
 
         if unread:
             query += "; nmo:isRead false"
+
+        if read_only:
+            query += "; nmo:isRead true"
 
         query += """; nco:creator ?creator }
         ORDER BY DESC (nie:contentCreated(?msg))

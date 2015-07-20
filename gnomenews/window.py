@@ -104,7 +104,6 @@ class Window(Gtk.ApplicationWindow):
         if view in self.views:
             view.update()
 
-
     @log
     def _add_views(self):
         self.views.append(view.NewView(self.tracker))
