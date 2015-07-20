@@ -155,7 +155,21 @@ class FeedView(Gtk.Stack):
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         webview = WebKit2.WebView()
         if contents:
-            webview.load_html(contents)
+            webview.load_html("""
+            <style>
+              article {
+                overflow-y: hidden;
+                margin: 20px auto;
+                width: 600px;
+                color: #333;
+                font-family: Cantarell;
+                font-size: 18px;
+              }
+            </style>
+            <body>
+              <article>%s</article>
+            </body>
+            """ % contents)
         self.add(webview)
         self.show_all()
 
