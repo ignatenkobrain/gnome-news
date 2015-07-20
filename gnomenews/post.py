@@ -19,6 +19,10 @@ from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
 
+THUMBNAIL_WIDTH = 256
+THUMBNAIL_HEIGHT = 256
+
+
 class Post(GObject.GObject):
 
     __gsignals__ = {
@@ -43,7 +47,7 @@ class Post(GObject.GObject):
     @log
     def _generate_thumbnail(self):
         self.webview.load_html("""
-            <div style="width: 256px; height: 256px;">
+            <div style="width: 256px">
                 <h3 style="margin-bottom: 2px">%s</h3>
                 <small style="color: #333">%s</small>
                 <small style="color: #9F9F9F">%s</small>
@@ -59,7 +63,15 @@ class Post(GObject.GObject):
     @log
     def _save_thumbnail(self, webview, res, data):
         try:
-            self.thumbnail = self.webview.get_snapshot_finish(res)
+            original_surface = self.webview.get_snapshot_finish(res)
+
+            import cairo
+            new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)
+            ctx = cairo.Context(new_surface)
+            ctx.set_source_surface(original_surface, 0, 0)
+            ctx.paint()
+
+            self.thumbnail = new_surface
             self.emit('info-updated', self)
-        except Exception:
-            logger.error("Could not draw thumbnail for: " % self.title)
+        except Exception as e:
+            logger.error("Could not draw thumbnail for %s: %s" % (self.title, str(e)))
