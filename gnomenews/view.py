@@ -103,7 +103,7 @@ class GenericFeedsView(Gtk.Stack):
         self.show_all()
 
     @log
-    def update_new_items(self):
+    def update_new_items(self, _=None):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
         posts = self.tracker.get_post_sorted_by_date(10, unread=True)
