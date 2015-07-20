@@ -111,7 +111,7 @@ class Tracker(GObject.GObject):
         self.emit('feeds-updated')
 
     @log
-    def mark_post_as_read(self, url, data=None):
+    def mark_post_as_read(self, caller, url, data=None):
         """Marks given post as read
 
         Args:
