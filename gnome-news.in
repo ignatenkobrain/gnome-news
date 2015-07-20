@@ -52,7 +52,7 @@ if __name__ == "__main__":
     if args.debug:
         logging.basicConfig(
             level=logging.DEBUG,
-            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+            format="%(asctime)s %(levelname)s\t%(message)s",
             datefmt="%H:%M:%S")
         # Gtk hates "-d" switch, so lets drop it
         if "-d" in sys.argv:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     else:
         logging.basicConfig(
             level=logging.WARN,
-            format="%(asctime)s %(levelname)s\t%(filename)s:%(lineno)d \t%(message)s",
+            format="%(asctime)s %(levelname)s\t%(message)s",
             datefmt="%H:%M:%S")
 
     locale.bindtextdomain("gnome-news", localedir)
