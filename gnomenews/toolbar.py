@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, GLib
 
 from gnomenews import log
 import logging
@@ -122,6 +122,10 @@ class Toolbar(GObject.GObject):
             self.add_button.set_sensitive(False)
             already_subscribed_label.set_visible(False)
         else:
+            if not GLib.uri_parse_scheme(text):
+                self.add_button.set_sensitive(False)
+                already_subscribed_label.set_visible(False)
+                return
             if len(self.window.tracker.get_channels(text)) == 0:
                 already_subscribed_label.set_visible(False)
                 self.add_button.set_sensitive(True)
