@@ -1,4 +1,5 @@
 # Copyright (C) 2015 Vadim Rutkovsky <vrutkovs@redhat.com>
+# Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,6 +52,7 @@ class Toolbar(GObject.GObject):
         self.add_toggle_button.set_popover(self.add_popover)
 
         self.new_url = self._ui.get_object('new-url')
+        self.new_url.connect('changed', self.on_new_url_changed)
         self.add_button = self._ui.get_object('add-button')
         self.add_button.connect('clicked', self._add_new_feed)
 
@@ -112,3 +114,17 @@ class Toolbar(GObject.GObject):
         self.header_bar.set_title(title)
         self.header_bar.set_subtitle(author)
         self.window._open_article_view(url, contents)
+
+    def on_new_url_changed(self, entry):
+        text = self.new_url.get_text()
+        already_subscribed_label = self._ui.get_object("add-box-already-subscribed-label")
+        if len(text) == 0:
+            self.add_button.set_sensitive(False)
+            already_subscribed_label.set_visible(False)
+        else:
+            if len(self.window.tracker.get_channels(text)) == 0:
+                already_subscribed_label.set_visible(False)
+                self.add_button.set_sensitive(True)
+            else:
+                self.add_button.set_sensitive(False)
+                already_subscribed_label.set_visible(True)

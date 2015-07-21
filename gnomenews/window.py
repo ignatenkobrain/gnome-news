@@ -1,4 +1,5 @@
 # Copyright (C) 2015 Vadim Rutkovsky <vrutkovs@redhat.com>
+# Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

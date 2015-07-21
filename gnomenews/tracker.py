@@ -189,13 +189,26 @@ class Tracker(GObject.GObject):
         return ret
 
     @log
-    def get_channels(self):
-        """Returns list of channels"""
+    def get_channels(self, url=None):
+        """Returns list of channels
+
+        Args:
+            url (Optional[str]): URL of the channel
+
+        Returns:
+            list of all channels of list limited to one channel if url is
+            not None
+        """
         query = """
         SELECT
           nie:url(?chan) AS url
           nie:title(?chan) AS title
-          { ?chan a mfo:FeedChannel }
+          { ?chan a mfo:FeedChannel"""
+
+        if url is not None:
+            query += """; nie:url "%s" """ % url
+        query += """
+          }
         ORDER BY nie:title(?chan)
         """
 

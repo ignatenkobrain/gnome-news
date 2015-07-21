@@ -13,19 +13,44 @@
         <property name="can_focus">False</property>
         <property name="valign">center</property>
         <property name="sensitive">True</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkEntry" id="new-url">
+          <object class="GtkLabel" id="add-box-enter-address-label">
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Enter feed address to add</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="add-button">
+          <object class="GtkBox" id="add-entry-box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Add</property>
-            <style>
-              <class name="suggested-action"/>
-            </style>
+            <child>
+              <object class="GtkEntry" id="new-url">
+                <property name="visible">True</property>
+                <property name="input_purpose">url</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="add-button">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="sensitive">False</property>
+                <property name="label" translatable="yes">Add</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="add-box-already-subscribed-label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">You are already subscribed to that feed!</property>
           </object>
         </child>
       </object>
