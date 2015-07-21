@@ -11,14 +11,6 @@ AM_MAINTAINER_MODE([enable])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AM_PATH_PYTHON([3.4])
-AX_PYTHON_GI(GLib, 2.0)
-AX_PYTHON_GI(GObject, 2.0)
-AX_PYTHON_GI(Gio, 2.0)
-AX_PYTHON_GI(Gtk, 3.0)
-AX_PYTHON_GI(Gdk, 3.0)
-AX_PYTHON_GI(Tracker, 1.0)
-AX_PYTHON_GI(Grss, 0.7)
-AX_PYTHON_GI(WebKit2, 4.0)
 
 # GResources
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])

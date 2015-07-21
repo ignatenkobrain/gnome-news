@@ -5,10 +5,14 @@ Requirements
 ------------
 To use `autogen.sh` you need autoconf-archive.
 
-All requirements checked at configure step. Note that it checks for
-GObject Introspection module, not for pkg-config file.
-Also you need to have:
-* tracker-1.0 -- from wip/GrssPerson branch
+All GObject Introspection (typelib) modules you want to use gnome-news:
+* GLib-2.0
+* Gio-2.0
+* GObject-2.0
+* Gtk-3.0     >= 3.12
+* Gdk-3.0     >= 3.12
+* Tracker-1.0 >= 1.5.1
+* WebKit2-4.0
 
 Debugging
 ---------
