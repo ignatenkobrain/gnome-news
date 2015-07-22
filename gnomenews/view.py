@@ -44,6 +44,7 @@ class GenericFeedsView(Gtk.Stack):
             activate_on_single_click=True,
             row_spacing=10, column_spacing=10,
             margin=15,
+            valign=Gtk.Align.START,
             selection_mode=Gtk.SelectionMode.NONE)
         self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
@@ -58,15 +59,12 @@ class GenericFeedsView(Gtk.Stack):
             visible=True,
             stack=self.feed_stack)
 
-        self._box = Gtk.Box(
-            valign=Gtk.Align.START,
-            orientation=Gtk.Orientation.VERTICAL)
-
         if show_feedlist:
-            self._box.set_orientation(Gtk.Orientation.HORIZONTAL)
+            self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
             self._box.pack_start(self.stacksidebar, True, True, 0)
-            self._box.pack_end(self.feed_stack, True, True, 0)
+            self._box.pack_start(self.feed_stack, True, True, 0)
         else:
+            self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             self._box.pack_end(self.flowbox, True, True, 0)
 
         scrolledWindow.add(self._box)
@@ -100,6 +98,7 @@ class GenericFeedsView(Gtk.Stack):
             min_children_per_line=2,
             activate_on_single_click=True,
             row_spacing=10, column_spacing=10,
+            valign=Gtk.Align.START,
             margin=15,
             selection_mode=Gtk.SelectionMode.NONE)
         flowbox.get_style_context().add_class('feeds-list')
