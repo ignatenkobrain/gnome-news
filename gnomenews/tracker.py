@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 class Tracker(GObject.GObject):
 
     __gsignals__ = {
+        # 'new-item': (GObject.SignalFlags.RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
         'items-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
         'feeds-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
