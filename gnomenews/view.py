@@ -36,9 +36,6 @@ class GenericFeedsView(Gtk.Stack):
         self.name = name
         self.title = title
 
-        scrolledWindow = Gtk.ScrolledWindow()
-        self.add(scrolledWindow)
-
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             activate_on_single_click=True,
@@ -59,15 +56,18 @@ class GenericFeedsView(Gtk.Stack):
             visible=True,
             stack=self.feed_stack)
 
+        scrolledWindow = Gtk.ScrolledWindow()
         if show_feedlist:
             self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-            self._box.pack_start(self.stacksidebar, True, True, 0)
-            self._box.pack_start(self.feed_stack, True, True, 0)
+            self._box.pack_start(self.stacksidebar, False, True, 0)
+            self._box.pack_start(scrolledWindow, True, True, 0)
+            scrolledWindow.add(self.feed_stack)
+            self.add(self._box)
         else:
             self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             self._box.pack_end(self.flowbox, True, True, 0)
-
-        scrolledWindow.add(self._box)
+            scrolledWindow.add(self._box)
+            self.add(scrolledWindow)
 
         self.tracker = tracker
         self.show_all()
