@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+  override:
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+    - docker build -t gnome-news .
+    - mkdir -p ~/docker; docker save gnome-news > ~/docker/image.tar
+
+test:
+  override:
+    - docker run gnome-news python3-pyflakes gnomenews
+    - docker run gnome-news python3-pep8 gnomenews/*.py --ignore=E501
