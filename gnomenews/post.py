@@ -17,6 +17,7 @@ from gi.repository import WebKit2, GObject, GLib
 
 import hashlib
 import os.path
+import re
 
 from gnomenews import log
 import logging
@@ -27,6 +28,11 @@ THUMBNAIL_HEIGHT = 256
 # FIXME: Remove duplication with application.py
 CACHE_PATH = "~/.cache/gnome-news"
 
+EMAIL_REGEX = re.compile("([a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`"
+                         "{|}~-]+)*(@|\sat\s)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(\.|"
+                         "\sdot\s))+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)")
+
+NAME_REGEX = re.compile("\(([^\)]+)\)")
 
 class Post(GObject.GObject):
 
@@ -42,13 +48,29 @@ class Post(GObject.GObject):
 
         self.title = cursor['title']
         self.content = cursor['content']
-        self.author = cursor['fullname']
+        self.url = cursor['url']
 
+        self.author_detail = ""
+        self.author = self.sanitize_author(cursor['fullname'])
         # Check cache first
         hashed_url = hashlib.md5(cursor['url'].encode()).hexdigest()
         self.cached_thumbnail_path = os.path.join(os.path.expanduser(CACHE_PATH), '%s.png' % hashed_url)
 
         GLib.idle_add(self.try_to_load_image_from_cache)
+
+    @log
+    def sanitize_author(self, author):
+        """
+        It separates Name from Author in an author string
+
+        Args:
+            author (str): an author string extracted from a rss feed
+        """
+        try:
+            self.author_detail = re.findall(EMAIL_REGEX, author)[0][0]
+            return re.findall(NAME_REGEX, author)[0]
+        except:
+            return author
 
     @log
     def try_to_load_image_from_cache(self):

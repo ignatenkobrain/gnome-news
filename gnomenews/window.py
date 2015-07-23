@@ -20,6 +20,7 @@ from gettext import gettext as _
 from gnomenews.toolbar import Toolbar, ToolbarState
 from gnomenews.tracker import Tracker
 from gnomenews import view
+from gnomenews.post import Post
 
 from gnomenews import log
 import logging
@@ -128,8 +129,8 @@ class Window(Gtk.ApplicationWindow):
         self.tracker.connect('feeds-updated', self.views[1].update_feeds)
 
     @log
-    def _open_article_view(self, url, contents, title, author):
-        self.feed_view = view.FeedView(self.tracker, url, contents, title, author)
+    def _open_article_view(self, post):
+        self.feed_view = view.FeedView(self.tracker, post)
         self._stack.previous_view = self._stack.get_visible_child()
         self._stack.add_named(self.feed_view, 'feedview')
         self._stack.set_visible_child(self.feed_view)

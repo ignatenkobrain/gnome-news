@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class GenericFeedsView(Gtk.Stack):
 
     __gsignals__ = {
-        'open-article': (GObject.SignalFlags.RUN_FIRST, None, (str, str, str, str)),
+        'open-article': (GObject.SignalFlags.RUN_FIRST, None, (GObject.GObject,)),
     }
 
     @log
@@ -114,9 +114,9 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def _post_activated(self, box, child, user_data=None):
-        post = child.get_children()[0].post
-        self.emit('open-article',
-                  post['title'], post['fullname'], post['url'], post["content"])
+        cursor = child.get_children()[0].post
+        post = Post(cursor)
+        self.emit('open-article', post)
 
     @log
     def update_new_items(self, _=None):
@@ -160,11 +160,11 @@ class FeedView(Gtk.Stack):
         'post-read': (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
-    def __init__(self, tracker, url, contents, title, author):
+    def __init__(self, tracker, post):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         webview = WebKit2.WebView()
-        if contents:
+        if post.content:
             webview.load_html("""
             <style>
               article {
@@ -185,14 +185,15 @@ class FeedView(Gtk.Stack):
               <h1>%s</h1>
               <span>%s</span>
               <p>%s</p>
+              <small>%s</small>
               </article>
             </body>
-            """ % (title, author, contents))
+            """ % (post.title, post.author, post.content, post.author_detail))
         webview.connect("decide-policy", self._on_webview_decide_policy)
         self.add(webview)
         self.show_all()
 
-        self.url = url
+        self.url = post.url
 
         GLib.timeout_add(1000, self.mark_post_as_read)
 
