@@ -165,7 +165,7 @@ class FeedView(Gtk.Stack):
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         webview = WebKit2.WebView()
         if post.content:
-            webview.load_html("""
+            html = """
             <style>
               article {
                 overflow-y: hidden;
@@ -183,12 +183,25 @@ class FeedView(Gtk.Stack):
             <body>
               <article>
               <h1>%s</h1>
-              <span>%s</span>
-              <p>%s</p>
-              <small>%s</small>
-              </article>
+              <span>
+            """ % post.title
+
+            if post.author_homepage:
+                html += """<a href="%s">%s</a>""" % (post.author_homepage, post.author)
+            else:
+                html += """%s""" % post.author
+
+            html += """<p>%s</p>""" % post.content
+
+            if post.author_email:
+                html += """<small>%s</small>""" % post.author_email
+
+            html += """
+            </article>
             </body>
-            """ % (post.title, post.author, post.content, post.author_detail))
+            """
+            webview.load_html(html)
+
         webview.connect("decide-policy", self._on_webview_decide_policy)
         self.add(webview)
         self.show_all()
