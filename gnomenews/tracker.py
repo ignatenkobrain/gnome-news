@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 class Tracker(GObject.GObject):
 
     __gsignals__ = {
-        #'new-item': (GObject.SignalFlags.RUN_FIRST, None, (Grss.FeedChannel, Grss.FeedItem)),
         'items-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
         'feeds-updated': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
@@ -273,7 +272,7 @@ class Tracker(GObject.GObject):
     def on_graph_updated(self, connection, sender_name, object_path,
                          interface_name, signal_name, parameters, user_data=None):
         unpacked = parameters.unpack()
-        #FIXME: handle deletes -- unpacked[1]
+        # FIXME: handle deletes -- unpacked[1]
         GLib.idle_add(self._handle_insert_event, unpacked[2])
 
     @log

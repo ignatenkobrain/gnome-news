@@ -89,7 +89,7 @@ class GenericFeedsView(Gtk.Stack):
         image.get_style_context().add_class('feed-box')
         image.show_all()
 
-        #Store the post object to refer to it later on
+        # Store the post object to refer to it later on
         image.post = post.cursor
 
         source.flowbox.insert(image, -1)
