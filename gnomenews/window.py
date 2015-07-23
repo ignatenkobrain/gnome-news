@@ -20,7 +20,6 @@ from gettext import gettext as _
 from gnomenews.toolbar import Toolbar, ToolbarState
 from gnomenews.tracker import Tracker
 from gnomenews import view
-from gnomenews.post import Post
 
 from gnomenews import log
 import logging
