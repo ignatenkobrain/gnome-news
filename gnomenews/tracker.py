@@ -50,6 +50,8 @@ class Tracker(GObject.GObject):
           nie:url(?msg) AS url
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
+          nco:websiteUrl(?creator) AS author_homepage
+          nco:emailAddress(?email) AS author_email
           nie:contentCreated(?msg) AS date
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
@@ -65,7 +67,7 @@ class Tracker(GObject.GObject):
         if starred:
             query += "; nao:hasTag nao:predefined-tag-favorite "
 
-        query += """; nco:creator ?creator }
+        query += """; nco:creator ?creator. ?creator nco:hasEmailAddress ?email }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
         """ % amount
@@ -83,10 +85,13 @@ class Tracker(GObject.GObject):
         SELECT
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
+          nco:websiteUrl(?creator) AS author_homepage
+          nco:emailAddress(?email) AS author_email
         WHERE
           { ?msg a mfo:FeedMessage ;
-            nco:creator ?creator ;
-            nie:url <%s> }""" % url
+                 nco:creator ?creator ;
+                 nie:url <%s> .
+            ?creator nco:hasEmailAddress ?email }""" % url
 
         logger.debug(query)
         results = self.sparql.query(query)
@@ -168,14 +173,16 @@ class Tracker(GObject.GObject):
           nie:url(?msg) AS url
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
+          nco:websiteUrl(?creator) AS author_homepage
+          nco:emailAddress(?email) AS author_email
           nie:contentCreated(?msg) AS date
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
-                 nmo:communicationChannel ?chan"""
-
-        query += """; nco:creator ?creator
-                 { ?chan nie:url "%s" }
+                 nmo:communicationChannel ?chan;
+                 nco:creator ?creator
+                   { ?chan nie:url "%s" }.
+            ?creator nco:hasEmailAddress ?email
           }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
@@ -232,6 +239,8 @@ class Tracker(GObject.GObject):
           nie:url(?msg) AS url
           nie:title(?msg) AS title
           nco:fullname(?creator) AS fullname
+          nco:websiteUrl(?creator) AS author_homepage
+          nco:emailAddress(?email) AS author_email
           nie:contentCreated(?msg) AS date_created
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
@@ -243,7 +252,8 @@ class Tracker(GObject.GObject):
         query += """
                  fts:match "%s";
                  nco:creator ?creator
-                 { ?chan nie:url "%s" }
+                 { ?chan nie:url "%s" }.
+            ?creator nco:hasEmailAddress ?email
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
