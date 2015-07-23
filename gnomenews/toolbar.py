@@ -106,6 +106,7 @@ class Toolbar(GObject.GObject):
     def _add_new_feed(self, button):
         new_url = self.new_url.get_text()
         self.window.tracker.add_channel(new_url)
+        self.new_url.set_text("")
         self.add_popover.hide()
 
     @log
