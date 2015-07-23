@@ -67,7 +67,9 @@ class Tracker(GObject.GObject):
         if starred:
             query += "; nao:hasTag nao:predefined-tag-favorite "
 
-        query += """; nco:creator ?creator. ?creator nco:hasEmailAddress ?email }
+        query += """; nco:creator ?creator.
+            OPTIONAL {?creator nco:hasEmailAddress ?email }
+          }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
         """ % amount
@@ -91,7 +93,8 @@ class Tracker(GObject.GObject):
           { ?msg a mfo:FeedMessage ;
                  nco:creator ?creator ;
                  nie:url <%s> .
-            ?creator nco:hasEmailAddress ?email }""" % url
+            OPTIONAL { ?creator nco:hasEmailAddress ?email }
+          }""" % url
 
         logger.debug(query)
         results = self.sparql.query(query)
@@ -253,7 +256,7 @@ class Tracker(GObject.GObject):
                  fts:match "%s";
                  nco:creator ?creator
                  { ?chan nie:url "%s" }.
-            ?creator nco:hasEmailAddress ?email
+            OPTIONAL { ?creator nco:hasEmailAddress ?email }
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
