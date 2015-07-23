@@ -172,7 +172,7 @@ class FeedView(Gtk.Stack):
                 margin: 20px auto;
                 width: 600px;
                 color: #333;
-                font-family: Cantarell;
+                font-family: Sans;
                 font-size: 18px;
               }
             </style>
