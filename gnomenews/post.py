@@ -30,6 +30,7 @@ CACHE_PATH = "~/.cache/gnome-news"
 
 NAME_REGEX = re.compile("\(([^\)]+)\)")
 
+
 class Post(GObject.GObject):
 
     __gsignals__ = {
@@ -56,10 +57,16 @@ class Post(GObject.GObject):
 
         GLib.idle_add(self.try_to_load_image_from_cache)
 
+    @staticmethod
     @log
-    def sanitize_author(self, author):
-        """
-        It separates Name from Email in an author string
+    def sanitize_author(author):
+        """Separates Name from Email in an author string
+
+        RSS 2.0 from https://planet.gnome.org/rss20.xml returns
+        "me@example.com - (Firstname Lastname)" as author fiels. This is a
+        workaround for it.
+
+        TODO: fix this hack in pluggable methods or in libgrss
 
         Args:
             author (str): an author string extracted from a rss feed
