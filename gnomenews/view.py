@@ -160,7 +160,7 @@ class FeedView(Gtk.Stack):
         'post-read': (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
-    def __init__(self, tracker, url, contents):
+    def __init__(self, tracker, url, contents, title, author):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         webview = WebKit2.WebView()
@@ -175,11 +175,19 @@ class FeedView(Gtk.Stack):
                 font-family: Sans;
                 font-size: 18px;
               }
+
+              h1 {
+                margin-bottom: 2px;
+              }
             </style>
             <body>
-              <article>%s</article>
+              <article>
+              <h1>%s</h1>
+              <span>%s</span>
+              <p>%s</p>
+              </article>
             </body>
-            """ % contents)
+            """ % (title, author, contents))
         webview.connect("decide-policy", self._on_webview_decide_policy)
         self.add(webview)
         self.show_all()
