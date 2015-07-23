@@ -213,15 +213,13 @@ class FeedView(Gtk.Stack):
     @staticmethod
     @log
     def _on_webview_decide_policy(web_view, decision, decision_type):
-        uri = decision.get_request().get_uri()
-        if uri == "about:blank":
-            decision.use()
-            return False
-        else:
-            # it's external link
-            decision.ignore()
-            Gtk.show_uri(None, uri, Gdk.CURRENT_TIME)
-            return True
+        if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
+            uri = decision.get_request().get_uri()
+            if uri != "about:blank" and decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
+                decision.ignore()
+                Gtk.show_uri(None, uri, Gdk.CURRENT_TIME)
+                return True
+        return False
 
     def mark_post_as_read(self):
         self.emit('post-read', self.url)
