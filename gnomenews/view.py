@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject, WebKit2, GLib
+from gi.repository import Gtk, GObject, WebKit2, GLib, Gdk
 
 from gettext import gettext as _
 
@@ -180,12 +180,26 @@ class FeedView(Gtk.Stack):
               <article>%s</article>
             </body>
             """ % contents)
+        webview.connect("decide-policy", self._on_webview_decide_policy)
         self.add(webview)
         self.show_all()
 
         self.url = url
 
         GLib.timeout_add(1000, self.mark_post_as_read)
+
+    @staticmethod
+    @log
+    def _on_webview_decide_policy(web_view, decision, decision_type):
+        uri = decision.get_request().get_uri()
+        if uri == "about:blank":
+            decision.use()
+            return False
+        else:
+            # it's external link
+            decision.ignore()
+            Gtk.show_uri(None, uri, Gdk.CURRENT_TIME)
+            return True
 
     def mark_post_as_read(self):
         self.emit('post-read', self.url)
