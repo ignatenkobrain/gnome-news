@@ -184,7 +184,7 @@ class Tracker(GObject.GObject):
                  nmo:communicationChannel ?chan;
                  nco:creator ?creator
                    { ?chan nie:url "%s" }.
-            ?creator nco:hasEmailAddress ?email
+            OPTIONAL { ?creator nco:hasEmailAddress ?email }
           }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
