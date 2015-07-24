@@ -209,7 +209,11 @@ class FeedView(Gtk.Stack):
             uri = decision.get_request().get_uri()
             if uri != "about:blank" and decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 decision.ignore()
-                Gtk.show_uri(None, uri, Gdk.CURRENT_TIME)
+                try:
+                    Gtk.show_uri(None, uri, Gdk.CURRENT_TIME)
+                except GLib.Error:
+                    # for example, irc://irc.gimp.org/#guadec
+                    logger.warning("Couldn't open URI: %s" % uri)
                 return True
         return False
 
