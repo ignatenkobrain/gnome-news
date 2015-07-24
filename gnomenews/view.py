@@ -200,8 +200,6 @@ class FeedView(Gtk.Stack):
 
         self.url = post.url
 
-        GLib.timeout_add(1000, self.mark_post_as_read)
-
     @staticmethod
     @log
     def _on_webview_decide_policy(web_view, decision, decision_type):
