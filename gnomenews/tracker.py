@@ -155,11 +155,16 @@ class Tracker(GObject.GObject):
         """
         query = """
         DELETE
+          { ?mess a mfo:FeedMessage }
+        WHERE
+          { ?chan nie:url "%s" }
+        DELETE
           { ?chan a mfo:FeedChannel }
         WHERE
-          { ?chan nie:url "%s" }""" % url
+          { ?chan nie:url "%s" }
+        """ % (url, url)
+        logger.debug(query)
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
-        self.emit('feeds-updated')
 
     @log
     def get_posts_for_channel(self, url, amount):
