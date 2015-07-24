@@ -204,27 +204,43 @@ class FeedView(Gtk.Stack):
               h1 {
                 margin-bottom: 2px;
               }
+
+              #footer {
+                font-size: 14px;
+                color: #777;
+              }
+
+              #footer a:link,
+              #footer a:active,
+              #footer a:visited {
+                text-decoration: none;
+                color: #777;
+              }
+
+              #footer a:hover {
+                text-decoration: underline;
+              }
             </style>
             <body>
               <article>
               <h1>%s</h1>
-              <span>
-            """ % post.title
+              <span>%s</span>
+              <p>%s</p>
+              <div id="footer">""" % (post.title, post.author, post.content)
 
             if post.author_homepage:
-                html += """<a href="%s">%s</a>""" % (post.author_homepage, post.author)
-            else:
-                html += """%s""" % post.author
-
-            html += """<p>%s</p>""" % post.content
+                html += """<p><a href="%s">%s</a></p>""" % post.author_homepage
 
             if post.author_email:
-                html += """<small>%s</small>""" % post.author_email
+                html += """<p><a href="mailto:%s?Subject=%s">%s</a></p>""" % (post.author_email, post.title, post.author_email)
 
             html += """
+            <p><a href="%s">View post</a></p>
+            </div>
             </article>
             </body>
-            """
+            """ % post.url
+
             webview.load_html(html)
 
         webview.connect("decide-policy", self._on_webview_decide_policy)
