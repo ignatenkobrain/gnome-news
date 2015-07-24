@@ -61,6 +61,8 @@ class GenericFeedsView(Gtk.Stack):
         if show_feedlist:
             self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
             self._box.pack_start(self.stacksidebar, False, True, 0)
+            sep = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
+            self._box.pack_start(sep, False, True, 0)
             self._box.pack_start(scrolledWindow, True, True, 0)
             scrolledWindow.add(self.feed_stack)
             self.add(self._box)
