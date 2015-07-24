@@ -44,7 +44,7 @@ class Tracker(GObject.GObject):
         self.sparql = Trackr.SparqlConnection.get(None)
 
     @log
-    def get_post_sorted_by_date(self, amount, unread=False, read_only=False, starred=False):
+    def get_post_sorted_by_date(self, amount, unread=False, starred=False):
         query = """
         SELECT
           nie:url(?msg) AS url
@@ -60,9 +60,6 @@ class Tracker(GObject.GObject):
 
         if unread:
             query += "; nmo:isRead false"
-
-        if read_only:
-            query += "; nmo:isRead true"
 
         if starred:
             query += "; nao:hasTag nao:predefined-tag-favorite "

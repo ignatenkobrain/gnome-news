@@ -110,7 +110,6 @@ class Window(Gtk.ApplicationWindow):
         self.views.append(view.NewView(self.tracker))
         self.views.append(view.FeedsView(self.tracker))
         self.views.append(view.StarredView(self.tracker))
-        self.views.append(view.ReadView(self.tracker))
 
         for i in self.views:
             if i.title:
