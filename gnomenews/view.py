@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject, WebKit2, GLib, Gdk
+from gi.repository import Gtk, GObject, WebKit2, GLib, Gdk, Gio
 
 from gettext import gettext as _
 
@@ -56,6 +56,8 @@ class GenericFeedsView(Gtk.Stack):
             visible=True,
             stack=self.feed_stack)
         self.stacksidebar.set_size_request(200, -1)
+
+        self.listbox = self.stacksidebar.get_children()[0].get_children()[0].get_children()[0]
 
         scrolledWindow = Gtk.ScrolledWindow()
         if show_feedlist:
@@ -113,6 +115,9 @@ class GenericFeedsView(Gtk.Stack):
         if not feed['title']:
             feed['title'] = _("Unknown feed")
         self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
+
+        # Set URL as a tooltip
+        self.listbox.get_children()[-1].get_child().set_tooltip_text(feed['url'])
 
     @log
     def _post_activated(self, box, child, user_data=None):
@@ -235,9 +240,49 @@ class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
 
+        self.listbox.connect('button-release-event',  self._on_button_release)
+
+        app = Gio.Application.get_default()
+        delete_channel_action = app.lookup_action('delete_channel')
+        delete_channel_action.connect('activate', self.delete_channel)
+
     @log
     def update(self):
         self.update_feeds()
+
+    @log
+    def _on_button_release(self, w, event):
+        (_, button) = event.get_button()
+
+        if button != Gdk.BUTTON_SECONDARY:
+            return Gdk.EVENT_PROPAGATE
+
+        try:
+            selected_row = self.listbox.get_row_at_y(event.y)
+            if selected_row:
+                index = selected_row.get_index()
+
+                menu = Gio.Menu()
+                menu.append("Remove", "app.delete_channel(%s)" % index)
+
+                popover = Gtk.Popover.new_from_model(selected_row, menu)
+                popover.position = Gtk.PositionType.BOTTOM
+                popover.show()
+
+        except Exception as e:
+            logger.warn("Error showing popover: %s" % str(e))
+
+        return Gdk.EVENT_STOP
+
+    @log
+    def delete_channel(self, action, index_variant):
+        try:
+            index = index_variant.get_int32()
+            row = self.listbox.get_children()[index]
+            url = row.get_child().get_tooltip_text()
+            self.tracker.remove_channel(url)
+        except Exception as e:
+            logger.warn("Failed to remove feed %s: %s" % (str(index_variant), str(e)))
 
 
 class StarredView(GenericFeedsView):

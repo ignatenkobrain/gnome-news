@@ -46,6 +46,9 @@ class Application(Gtk.Application):
 
         self._window = None
 
+        delete_action = Gio.SimpleAction.new('delete_channel', parameter_type=GLib.VariantType.new('i'))
+        self.add_action(delete_action)
+
         self.create_cache()
 
     @log
