@@ -180,10 +180,11 @@ class FeedView(Gtk.Stack):
               article {
                 overflow-y: hidden;
                 margin: 20px auto;
-                width: 600px;
+                width: 640px;
                 color: #333;
                 font-family: Sans;
                 font-size: 18px;
+                word-wrap:break-word;
               }
 
               h1 {
