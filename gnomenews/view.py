@@ -143,9 +143,20 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def update_feeds(self, _=None):
-        feeds = self.tracker.get_channels()
-        for new_feed in feeds:
-            if not self.feed_stack.get_child_by_name(new_feed['url']):
+        new_feeds = self.tracker.get_channels()
+        new_feed_urls = [new_feed['url'] for new_feed in new_feeds]
+        old_feed_urls = [child.get_child().get_tooltip_text() for child in self.listbox.get_children()]
+
+        # Remove old feeds
+        for url in old_feed_urls:
+            if url not in new_feed_urls:
+                logger.info("Removing channel %s" % url)
+                self.feed_stack.remove(self.feed_stack.get_child_by_name(url))
+
+        # Add new feeds
+        for new_feed in new_feeds:
+            if new_feed['url'] not in old_feed_urls:
+                logger.info("Adding channel %s" % new_feed['url'])
                 self._add_new_feed(new_feed)
 
     @log
