@@ -274,7 +274,7 @@ class FeedsView(GenericFeedsView):
                 index = selected_row.get_index()
 
                 menu = Gio.Menu()
-                menu.append("Remove", "app.delete_channel(%s)" % index)
+                menu.append(_("Remove"), "app.delete_channel(%s)" % index)
 
                 popover = Gtk.Popover.new_from_model(selected_row, menu)
                 popover.position = Gtk.PositionType.BOTTOM
