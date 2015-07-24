@@ -299,12 +299,16 @@ class Tracker(GObject.GObject):
                 value = GLib.DateTime.new_from_timeval_local(tv[1])
             elif t == Trackr.SparqlValueType.BOOLEAN:
                 value = sparql_ret.get_boolean(column)
+            elif t == Trackr.SparqlValueType.INTEGER:
+                value = sparql_ret.get_integer(column)
+            elif t == Trackr.SparqlValueType.DOUBLE:
+                value = sparql_ret.get_double(column)
             else:
                 try:
                     value = sparql_ret.get_string(column)[0]
                 except Exception:
                     value = None
-                logger.error("We should not get this type from sparql. name: %s, type: %s", name, t)
+                    logger.error("Can't get string value from sparql. name: %s, type: %s", name, t)
             ret[name] = value
         return ret
 
