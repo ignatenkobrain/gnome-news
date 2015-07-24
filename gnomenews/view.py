@@ -55,6 +55,7 @@ class GenericFeedsView(Gtk.Stack):
         self.stacksidebar = Gtk.StackSidebar(
             visible=True,
             stack=self.feed_stack)
+        self.stacksidebar.set_size_request(200, -1)
 
         scrolledWindow = Gtk.ScrolledWindow()
         if show_feedlist:
