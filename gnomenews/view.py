@@ -251,7 +251,7 @@ class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
 
-        self.listbox.connect('button-release-event',  self._on_button_release)
+        self.listbox.connect('button-release-event', self._on_button_release)
 
         app = Gio.Application.get_default()
         delete_channel_action = app.lookup_action('delete_channel')
