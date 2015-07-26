@@ -177,6 +177,11 @@ class FeedView(Gtk.Stack):
         if post.content:
             html = """
             <style>
+              * {
+                max-width: 100%%;
+                height: auto;
+              }
+
               article {
                 overflow-y: hidden;
                 margin: 20px auto;
@@ -185,6 +190,15 @@ class FeedView(Gtk.Stack):
                 font-family: Sans;
                 font-size: 18px;
                 word-wrap:break-word;
+              }
+
+              figure {
+                margin: 0 0 30px 0;
+              }
+
+              figcaption {
+                font-size: 16px;
+                font-style: italic;
               }
 
               h1 {
