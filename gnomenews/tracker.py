@@ -72,7 +72,6 @@ class Tracker(GObject.GObject):
         LIMIT %s
         """ % amount
 
-        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
@@ -95,7 +94,6 @@ class Tracker(GObject.GObject):
             OPTIONAL { ?creator nco:websiteUrl ?website }
           }""" % url
 
-        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
@@ -143,7 +141,6 @@ class Tracker(GObject.GObject):
           { ?msg nie:url "%s" }
         """ % (url, url)
 
-        logger.debug(query)
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
 
     @log
@@ -191,7 +188,6 @@ class Tracker(GObject.GObject):
         LIMIT %s
         """ % (url, amount)
 
-        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):
@@ -263,7 +259,6 @@ class Tracker(GObject.GObject):
         LIMIT %d
         """ % (text, channel, amount)
 
-        logger.debug(query)
         results = self.sparql.query(query)
         ret = []
         while (results.next(None)):

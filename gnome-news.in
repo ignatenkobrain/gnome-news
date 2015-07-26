@@ -66,6 +66,7 @@ if __name__ == "__main__":
             level=logging.DEBUG,
             format="%(asctime)s %(levelname)s\t%(message)s",
             datefmt="%H:%M:%S")
+        os.environ["TRACKER_VERBOSITY"] = "3"
         # Gtk hates "-d" switch, so lets drop it
         if "-d" in sys.argv:
             sys.argv.remove("-d")
