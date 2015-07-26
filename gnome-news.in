@@ -85,11 +85,19 @@ if __name__ == "__main__":
     resource = Gio.resource_load(os.path.join(pkgdatadir, "gnome-news.gresource"))
     Gio.Resource._register(resource)
 
-    WebKit2.WebContext.get_default().connect('initialize-web-extensions', initialize_web_extensions)
+    web_context = WebKit2.WebContext.get_default()
+    signal_id = web_context.connect('initialize-web-extensions', initialize_web_extensions)
 
     from gnomenews.application import Application
 
     app = Application()
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     exit_status = app.run(sys.argv)
+
+    # Workaround a crash in pygi_signal_closure_invalidate when the default web
+    # context is disposed in an exit handler. The crash doesn't occur if there
+    # are no closures to invalidate.
+    # TODO: Maybe file a bug report?
+    web_context.disconnect(signal_id)
+
     sys.exit(exit_status)
