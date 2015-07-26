@@ -17,12 +17,50 @@
  */
 
 #include <webkit2/webkit-web-extension.h>
+#include <webkitdom/webkitdom.h>
+
+static const int MAX_ELEMENT_WIDTH = 630;
+
+static void
+shrink_image_if_needed (WebKitDOMHTMLImageElement *image_element)
+{
+  float scale_percentage;
+  glong new_height;
+  glong original_width = webkit_dom_html_image_element_get_width (image_element);
+  glong original_height = webkit_dom_html_image_element_get_height (image_element);
+
+  if (original_width <= MAX_ELEMENT_WIDTH)
+    return;
+
+  scale_percentage = MAX_ELEMENT_WIDTH / (float)original_width;
+  new_height = original_height * scale_percentage;
+
+  webkit_dom_html_image_element_set_width (image_element, MAX_ELEMENT_WIDTH);
+  webkit_dom_html_image_element_set_height (image_element, new_height);
+}
+
+static void
+shrink_large_images (WebKitDOMDocument *document)
+{
+  WebKitDOMHTMLCollection *collection = webkit_dom_document_get_images (document);
+
+  for (gulong i = 0; i < webkit_dom_html_collection_get_length (collection); i++)
+    {
+      WebKitDOMHTMLImageElement *image_element =
+          WEBKIT_DOM_HTML_IMAGE_ELEMENT (webkit_dom_html_collection_item (collection, i));
+      shrink_image_if_needed (image_element);
+    }
+
+  g_object_unref (collection);
+}
 
 static void
 document_loaded_cb (WebKitWebPage *web_page,
                     gpointer user_data)
 {
   WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
+
+  shrink_large_images (document);
 }
 
 static void
