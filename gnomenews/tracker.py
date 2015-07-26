@@ -64,9 +64,11 @@ class Tracker(GObject.GObject):
         if starred:
             query += "; nao:hasTag nao:predefined-tag-favorite "
 
-        query += """; nco:creator ?creator.
-            OPTIONAL {?creator nco:hasEmailAddress ?email } .
-            OPTIONAL {?creator nco:websiteUrl ?website }
+        query += """.
+            OPTIONAL { ?msg nco:creator ?creator .
+                       OPTIONAL {?creator nco:hasEmailAddress ?email } .
+                       OPTIONAL {?creator nco:websiteUrl ?website }
+            }
           }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
@@ -88,10 +90,10 @@ class Tracker(GObject.GObject):
           nco:emailAddress(?email) AS author_email
         WHERE
           { ?msg a mfo:FeedMessage ;
-                 nco:creator ?creator ;
                  nie:url <%s> .
-            OPTIONAL { ?creator nco:hasEmailAddress ?email } .
-            OPTIONAL { ?creator nco:websiteUrl ?website }
+            OPTIONAL { ?msg nco:creator ?creator .
+                       OPTIONAL { ?creator nco:hasEmailAddress ?email } .
+                       OPTIONAL { ?creator nco:websiteUrl ?website }}
           }""" % url
 
         results = self.sparql.query(query)
@@ -178,11 +180,11 @@ class Tracker(GObject.GObject):
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
           { ?msg a mfo:FeedMessage;
-                 nmo:communicationChannel ?chan;
-                 nco:creator ?creator
-                   { ?chan nie:url "%s" }.
-            OPTIONAL { ?creator nco:hasEmailAddress ?email } .
-            OPTIONAL { ?creator nco:websiteUrl ?website }
+                 nmo:communicationChannel ?chan .
+            ?chan nie:url "%s" .
+            OPTIONAL { ?msg nco:creator ?creator .
+                       OPTIONAL { ?creator nco:hasEmailAddress ?email } .
+                       OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
         ORDER BY DESC (nie:contentCreated(?msg))
         LIMIT %s
@@ -249,11 +251,11 @@ class Tracker(GObject.GObject):
             query += """nmo:communicationChannel ?chan;"""
 
         query += """
-                 fts:match "%s";
-                 nco:creator ?creator
-                 { ?chan nie:url "%s" }.
-            OPTIONAL { ?creator nco:hasEmailAddress ?email } .
-            OPTIONAL { ?creator nco:websiteUrl ?website }
+                 fts:match "%s" .
+                 ?chan nie:url "%s" .
+            OPTIONAL { ?msg nco:creator ?creator .
+                       OPTIONAL { ?creator nco:hasEmailAddress ?email } .
+                       OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
