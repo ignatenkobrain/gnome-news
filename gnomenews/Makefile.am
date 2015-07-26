@@ -1,5 +1,3 @@
-SUBDIRS = web-extension
-
 appdir = $(pythondir)/gnomenews/
 
 app_PYTHON = \

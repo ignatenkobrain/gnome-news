@@ -27,7 +27,7 @@ try:
     gi.require_version('WebKit2', '4.0')
 except ValueError as e:
     sys.exit("Missing dependency: {}".format(e))
-from gi.repository import Gio, WebKit2
+from gi.repository import Gio
 import gnomenews
 
 localedir = "@localedir@"
@@ -51,9 +51,6 @@ def install_excepthook():
             Gtk.main_quit()
         sys.exit()
     sys.excepthook = new_hook
-
-def initialize_web_extensions(web_context):
-    web_context.set_web_extensions_directory("@pkglibdir@")
 
 if __name__ == "__main__":
     install_excepthook()
@@ -85,8 +82,6 @@ if __name__ == "__main__":
 
     resource = Gio.resource_load(os.path.join(pkgdatadir, "gnome-news.gresource"))
     Gio.Resource._register(resource)
-
-    WebKit2.WebContext.get_default().connect('initialize-web-extensions', initialize_web_extensions)
 
     from gnomenews.application import Application
 
