@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/News">
-    <file preprocess="xml-stripblanks">HeaderBar.ui</file>
-    <file>application.css</file>
+    <file compressed="true" alias="VERSION">../VERSION</file>
+    <file compressed="true" alias="ARTISTS">../ARTISTS</file>
+    <file compressed="true" alias="AUTHORS">../AUTHORS</file>
+    <file compressed="true" preprocess="xml-stripblanks">Menu.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">HeaderBar.ui</file>
+    <file compressed="true">application.css</file>
   </gresource>
 </gresources>

@@ -5,6 +5,7 @@ bin_SCRIPTS = gnome-news
 EXTRA_DIST = \
 	AUTHORS \
 	gnome-news.in \
+	VERSION.in \
 	$(NULL)
 
 CLEANFILES = \
@@ -30,6 +31,7 @@ GITIGNOREFILES = \
 	install-sh \
 	missing \
 	py-compile \
+	VERSION \
 	$(NULL)
 
 dist-hook: AUTHORS

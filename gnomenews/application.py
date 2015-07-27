@@ -19,6 +19,7 @@ from gettext import gettext as _
 
 from gnomenews import log
 from gnomenews.window import Window
+from gnomenews.about import AboutDialog
 
 import os
 import os.path
@@ -45,6 +46,7 @@ class Application(Gtk.Application):
                                              Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         self._window = None
+        self._about_dialog = None
 
         delete_action = Gio.SimpleAction.new('delete_channel', parameter_type=GLib.VariantType.new('i'))
         self.add_action(delete_action)
@@ -65,7 +67,28 @@ class Application(Gtk.Application):
     def quit(self, action=None, param=None):
         self._window.destroy()
 
+    @log
+    def about(self, action, param):
+        def on_destroy(window):
+            self._about_dialog = None
+
+        if not self._about_dialog:
+            self._about_dialog = AboutDialog(self)
+
+        self._about_dialog.connect("destroy", on_destroy)
+        self._about_dialog.present()
+
     def do_activate(self):
+        if not self.get_app_menu():
+            builder = Gtk.Builder()
+            builder.add_from_resource("/org/gnome/News/Menu.ui")
+            menu = builder.get_object("app-menu")
+            self.set_app_menu(menu)
+            for action_name in ["about", "quit"]:
+                action = Gio.SimpleAction.new(action_name, None)
+                action.connect("activate", getattr(self, action_name))
+                self.add_action(action)
+
         if not self._window:
             self._window = Window(self)
 

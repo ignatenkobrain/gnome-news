@@ -28,6 +28,7 @@ GLIB_GSETTINGS
 APPSTREAM_XML
 
 AC_CONFIG_FILES([
+  VERSION
   Makefile
   data/Makefile
   gnomenews/Makefile
