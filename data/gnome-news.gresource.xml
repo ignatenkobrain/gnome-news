@@ -7,5 +7,6 @@
     <file compressed="true" preprocess="xml-stripblanks">Menu.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">HeaderBar.ui</file>
     <file compressed="true">application.css</file>
+    <file compressed="true">aboutReaderContent.css</file>
   </gresource>
 </gresources>

@@ -173,60 +173,17 @@ class FeedView(Gtk.Stack):
     def __init__(self, tracker, post):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
+        stylesheet = Gio.File.new_for_uri('resource:///org/gnome/News/aboutReaderContent.css')
         webview = WebKit2.WebView()
         if post.content:
             html = """
-            <style>
-              * {
-                max-width: 100%%;
-                height: auto;
-              }
-
-              article {
-                overflow-y: hidden;
-                margin: 20px auto;
-                width: 640px;
-                color: #333;
-                font-family: Sans;
-                font-size: 18px;
-                word-wrap:break-word;
-              }
-
-              figure {
-                margin: 0 0 30px 0;
-              }
-
-              figcaption {
-                font-size: 16px;
-                font-style: italic;
-              }
-
-              h1 {
-                margin-bottom: 2px;
-              }
-
-              #footer {
-                font-size: 14px;
-                color: #777;
-              }
-
-              #footer a:link,
-              #footer a:active,
-              #footer a:visited {
-                text-decoration: none;
-                color: #777;
-              }
-
-              #footer a:hover {
-                text-decoration: underline;
-              }
-            </style>
-            <body>
-              <article>
-              <h1>%s</h1>
-              <span>%s</span>
-              <p>%s</p>
-              <div id="footer">""" % (post.title, post.author, post.content)
+                <style>%s</style>
+                <body>
+                  <article>
+                  <h1>%s</h1>
+                  <span>%s</span>
+                  <p>%s</p>
+                  <div id="footer">""" % (stylesheet.load_contents(None)[1].decode(), post.title, post.author, post.content)
 
             if post.author_homepage:
                 html += """<p><a href="%s">%s</a></p>""" % post.author_homepage
