@@ -31,6 +31,7 @@ AC_CONFIG_FILES([
   VERSION
   Makefile
   data/Makefile
+  data/icons/Makefile
   gnomenews/Makefile
   po/Makefile.in
 ])
