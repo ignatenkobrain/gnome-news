@@ -27,6 +27,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_license_type(Gtk.License.GPL_3_0)
         self.set_version(self._read_file("VERSION")[0])
         self.set_website("https://wiki.gnome.org/Design/Apps/Potential/News")
+        self.set_logo_icon_name("gnome-news")
 
     @staticmethod
     def _read_file(fname):
