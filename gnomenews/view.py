@@ -186,7 +186,7 @@ class FeedView(Gtk.Stack):
                   <div id="footer">""" % (stylesheet.load_contents(None)[1].decode(), post.title, post.author, post.content)
 
             if post.author_homepage:
-                html += """<p><a href="%s">%s</a></p>""" % post.author_homepage
+                html += """<p><a href="%s">%s</a></p>""" % (post.author_homepage, post.author_homepage)
 
             if post.author_email:
                 html += """<p><a href="mailto:%s?Subject=%s">%s</a></p>""" % (post.author_email, post.title, post.author_email)
