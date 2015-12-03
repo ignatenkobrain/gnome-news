@@ -9,6 +9,7 @@
   <homepage rdf:resource="https://wiki.gnome.org/Design/Apps/Potential/News" />
   <download-page rdf:resource="https://github.com/ignatenkobrain/gnome-news/releases" />
   <bug-database rdf:resource="https://github.com/ignatenkobrain/gnome-news/issues" />
+  <description>A GNOME 3 Feed Reader.</description>
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
   <programming-language>Python</programming-language>
