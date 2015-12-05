@@ -1,0 +1,105 @@
+# Portuguese translation for gnome-news.
+# Copyright (C) 2015 gnome-news's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-news package.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-news master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"news&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-12-04 21:27+0000\n"
+"PO-Revision-Date: 2015-12-05 08:20+0000\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: ../data/HeaderBar.ui.h:1
+msgid "Add a new feed"
+msgstr "Adicionar nova fonte"
+
+#: ../data/HeaderBar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Insira o endereço da fonte a adicionar"
+
+#: ../data/HeaderBar.ui.h:3
+msgid "Add"
+msgstr "Adicionar"
+
+#: ../data/HeaderBar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Já subscreveu essa fonte!"
+
+#: ../data/HeaderBar.ui.h:5
+msgid "Select All"
+msgstr "Selecionar tudo"
+
+#: ../data/HeaderBar.ui.h:6
+msgid "Select None"
+msgstr "Não selecionar nada"
+
+#: ../data/HeaderBar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Clique nos itens para os selecionar"
+
+#: ../data/HeaderBar.ui.h:8
+msgid "Search"
+msgstr "Procurar"
+
+#: ../data/HeaderBar.ui.h:9
+msgid "Select"
+msgstr "Selecionar"
+
+#: ../data/HeaderBar.ui.h:10
+msgid "Back"
+msgstr "Recuar"
+
+#: ../data/Menu.ui.h:1
+msgid "About"
+msgstr "Sobre"
+
+#: ../data/Menu.ui.h:2
+msgid "Quit"
+msgstr "Sair"
+
+#. TRANSLATORS: the application name
+#: ../data/org.gnome.News.desktop.in.h:1
+#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
+#: ../gnomenews/window.py:35
+msgid "News"
+msgstr "Notícias"
+
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Leitor de fontes para o GNOME"
+
+#. TRANSLATORS: one-line description for the app
+#: ../data/org.gnome.News.appdata.xml.in.h:4
+msgid "Feed Reader"
+msgstr "Leitor de fontes"
+
+#. TRANSLATORS: AppData description marketing paragraph
+#: ../data/org.gnome.News.appdata.xml.in.h:6
+msgid "GNOME News can be used to read news."
+msgstr "O Notícias do GNOME pode ser usado para ler notícias."
+
+#: ../gnomenews/view.py:116
+msgid "Unknown feed"
+msgstr "Fonte desconhecida"
+
+#: ../gnomenews/view.py:231
+msgid "New"
+msgstr "Nova"
+
+#: ../gnomenews/view.py:240
+msgid "Feeds"
+msgstr "Fontes"
+
+#: ../gnomenews/view.py:289
+msgid "Starred"
+msgstr "Com estrela"
