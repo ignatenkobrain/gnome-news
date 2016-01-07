@@ -1,0 +1,105 @@
+# Finnish translation for gnome-news.
+# Copyright (C) 2016 gnome-news's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-news package.
+# Jiri Grönroos <jiri.gronroos+l10n@iki.fi>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-news master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"news&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-01-07 09:26+0000\n"
+"PO-Revision-Date: 2016-01-07 23:19+0200\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
+"Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.7\n"
+
+#: ../data/HeaderBar.ui.h:1
+msgid "Add a new feed"
+msgstr "Lisää uusi syöte"
+
+#: ../data/HeaderBar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Anna lisättävän syötteen osoite"
+
+#: ../data/HeaderBar.ui.h:3
+msgid "Add"
+msgstr "Lisää"
+
+#: ../data/HeaderBar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Olet jo tilannut tämän syötteen!"
+
+#: ../data/HeaderBar.ui.h:5
+msgid "Select All"
+msgstr "Valitse kaikki"
+
+#: ../data/HeaderBar.ui.h:6
+msgid "Select None"
+msgstr "Älä valitse mitään"
+
+#: ../data/HeaderBar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Napsauta kohteita valitaksesi ne"
+
+#: ../data/HeaderBar.ui.h:8
+msgid "Search"
+msgstr "Etsi"
+
+#: ../data/HeaderBar.ui.h:9
+msgid "Select"
+msgstr "Valitse"
+
+#: ../data/HeaderBar.ui.h:10
+msgid "Back"
+msgstr "Takaisin"
+
+#: ../data/Menu.ui.h:1
+msgid "About"
+msgstr "Tietoja"
+
+#: ../data/Menu.ui.h:2
+msgid "Quit"
+msgstr "Lopeta"
+
+#. TRANSLATORS: the application name
+#: ../data/org.gnome.News.desktop.in.h:1
+#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
+#: ../gnomenews/window.py:35
+msgid "News"
+msgstr "Uutiset"
+
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Syötteenlukija Gnomelle"
+
+#. TRANSLATORS: one-line description for the app
+#: ../data/org.gnome.News.appdata.xml.in.h:4
+msgid "Feed Reader"
+msgstr "Syötteenlukija"
+
+#. TRANSLATORS: AppData description marketing paragraph
+#: ../data/org.gnome.News.appdata.xml.in.h:6
+msgid "GNOME News can be used to read news."
+msgstr "Gnomen syötteenlukijaa voi käyttää uutisten lukemiseen."
+
+#: ../gnomenews/view.py:116
+msgid "Unknown feed"
+msgstr "Tuntematon syöte"
+
+#: ../gnomenews/view.py:231
+msgid "New"
+msgstr "Uudet"
+
+#: ../gnomenews/view.py:240
+msgid "Feeds"
+msgstr "Syötteet"
+
+#: ../gnomenews/view.py:289
+msgid "Starred"
+msgstr "Suosikit"
