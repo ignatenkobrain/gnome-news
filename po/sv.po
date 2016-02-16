@@ -1,0 +1,105 @@
+# Swedish translation for gnome-news.
+# Copyright © 2015 gnome-news's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-news package.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-news master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"news&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-12-21 09:26+0000\n"
+"PO-Revision-Date: 2016-01-26 22:35+0100\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: ../data/HeaderBar.ui.h:1
+msgid "Add a new feed"
+msgstr "Lägg till en ny kanal"
+
+#: ../data/HeaderBar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Ange adress för kanal att lägga till"
+
+#: ../data/HeaderBar.ui.h:3
+msgid "Add"
+msgstr "Lägg till"
+
+#: ../data/HeaderBar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Du prenumererar redan på den kanalen!"
+
+#: ../data/HeaderBar.ui.h:5
+msgid "Select All"
+msgstr "Markera alla"
+
+#: ../data/HeaderBar.ui.h:6
+msgid "Select None"
+msgstr "Markera ingen"
+
+#: ../data/HeaderBar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Klicka på objekt för att markera dem"
+
+#: ../data/HeaderBar.ui.h:8
+msgid "Search"
+msgstr "Sök"
+
+#: ../data/HeaderBar.ui.h:9
+msgid "Select"
+msgstr "Välj"
+
+#: ../data/HeaderBar.ui.h:10
+msgid "Back"
+msgstr "Bakåt"
+
+#: ../data/Menu.ui.h:1
+msgid "About"
+msgstr "Om"
+
+#: ../data/Menu.ui.h:2
+msgid "Quit"
+msgstr "Avsluta"
+
+#. TRANSLATORS: the application name
+#: ../data/org.gnome.News.desktop.in.h:1
+#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
+#: ../gnomenews/window.py:35
+msgid "News"
+msgstr "Nyheter"
+
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Nyhetsläsare för GNOME"
+
+#. TRANSLATORS: one-line description for the app
+#: ../data/org.gnome.News.appdata.xml.in.h:4
+msgid "Feed Reader"
+msgstr "Nyhetsläsare"
+
+#. TRANSLATORS: AppData description marketing paragraph
+#: ../data/org.gnome.News.appdata.xml.in.h:6
+msgid "GNOME News can be used to read news."
+msgstr "GNOME Nyheter kan användas för att läsa nyheter."
+
+#: ../gnomenews/view.py:116
+msgid "Unknown feed"
+msgstr "Okänd kanal"
+
+#: ../gnomenews/view.py:231
+msgid "New"
+msgstr "Nytt"
+
+#: ../gnomenews/view.py:240
+msgid "Feeds"
+msgstr "Kanaler"
+
+#: ../gnomenews/view.py:289
+msgid "Starred"
+msgstr "Favoriter"
