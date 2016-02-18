@@ -1,0 +1,105 @@
+# Italian translation for gnome-news.
+# Copyright (C) 2016 gnome-news's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-news package.
+# Gianvito Cavasoli <gianvito@gmx.it>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-news master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"news&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-02-13 09:30+0000\n"
+"PO-Revision-Date: 2016-02-18 11:25+0100\n"
+"Last-Translator: Gianvito Cavasoli <gianvito@gmx.it>\n"
+"Language-Team: Italiano <gnome-it-list@gnome.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.7\n"
+
+#: ../data/HeaderBar.ui.h:1
+msgid "Add a new feed"
+msgstr "Aggiunge un nuovo notiziario"
+
+#: ../data/HeaderBar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Immettere l'indirizzo del notiziario da aggiungere"
+
+#: ../data/HeaderBar.ui.h:3
+msgid "Add"
+msgstr "Aggiungi"
+
+#: ../data/HeaderBar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Si è già abbonati a questo notiziario."
+
+#: ../data/HeaderBar.ui.h:5
+msgid "Select All"
+msgstr "Seleziona tutto"
+
+#: ../data/HeaderBar.ui.h:6
+msgid "Select None"
+msgstr "Nessuna selezione"
+
+#: ../data/HeaderBar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Fare clic sugli elementi per selezionarli"
+
+#: ../data/HeaderBar.ui.h:8
+msgid "Search"
+msgstr "Cerca"
+
+#: ../data/HeaderBar.ui.h:9
+msgid "Select"
+msgstr "Seleziona"
+
+#: ../data/HeaderBar.ui.h:10
+msgid "Back"
+msgstr "Indietro"
+
+#: ../data/Menu.ui.h:1
+msgid "About"
+msgstr "Informazioni"
+
+#: ../data/Menu.ui.h:2
+msgid "Quit"
+msgstr "Esci"
+
+#. TRANSLATORS: the application name
+#: ../data/org.gnome.News.desktop.in.h:1
+#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
+#: ../gnomenews/window.py:35
+msgid "News"
+msgstr "Notizie"
+
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Lettore notiziari per GNOME"
+
+#. TRANSLATORS: one-line description for the app
+#: ../data/org.gnome.News.appdata.xml.in.h:4
+msgid "Feed Reader"
+msgstr "Lettore notiziari"
+
+#. TRANSLATORS: AppData description marketing paragraph
+#: ../data/org.gnome.News.appdata.xml.in.h:6
+msgid "GNOME News can be used to read news."
+msgstr "GNOME News può essere usato per leggere le notizie."
+
+#: ../gnomenews/view.py:116
+msgid "Unknown feed"
+msgstr "Notiziario sconosciuto"
+
+#: ../gnomenews/view.py:231
+msgid "New"
+msgstr "Nuovo"
+
+#: ../gnomenews/view.py:240
+msgid "Feeds"
+msgstr "Notiziari"
+
+#: ../gnomenews/view.py:289
+msgid "Starred"
+msgstr "Contrassegnato"
