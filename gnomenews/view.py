@@ -173,7 +173,7 @@ class FeedView(Gtk.Stack):
     def __init__(self, tracker, post):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
-        stylesheet = Gio.File.new_for_uri('resource:///org/gnome/News/aboutReaderContent.css')
+        stylesheet = Gio.File.new_for_uri('resource:///org/gnome/News/theme/reader.css')
         webview = WebKit2.WebView()
         if post.content:
             html = """

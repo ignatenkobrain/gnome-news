@@ -4,9 +4,9 @@
     <file compressed="true" alias="VERSION">../VERSION</file>
     <file compressed="true" alias="ARTISTS">../ARTISTS</file>
     <file compressed="true" alias="AUTHORS">../AUTHORS</file>
-    <file compressed="true" preprocess="xml-stripblanks">Menu.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">HeaderBar.ui</file>
-    <file compressed="true">application.css</file>
-    <file compressed="true">aboutReaderContent.css</file>
+    <file compressed="true" preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/headerbar.ui</file>
+    <file compressed="true">theme/Adwaita.css</file>
+    <file compressed="true">theme/reader.css</file>
   </gresource>
 </gresources>

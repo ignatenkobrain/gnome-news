@@ -37,7 +37,7 @@ class Application(Gtk.Application):
         GLib.set_prgname('gnome-news')
         self.settings = Gio.Settings.new('org.gnome.News')
 
-        cssProviderFile = Gio.File.new_for_uri('resource:///org/gnome/News/application.css')
+        cssProviderFile = Gio.File.new_for_uri('resource:///org/gnome/News/theme/Adwaita.css')
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_file(cssProviderFile)
         screen = Gdk.Screen.get_default()
@@ -61,6 +61,13 @@ class Application(Gtk.Application):
 
     @log
     def do_startup(self):
+        actions = ["about", "quit"]
+
+        for action_name in actions:
+            action = Gio.SimpleAction.new(action_name, None)
+            action.connect("activate", getattr(self, action_name))
+            self.add_action(action)
+
         Gtk.Application.do_startup(self)
 
     @log
@@ -79,16 +86,6 @@ class Application(Gtk.Application):
         self._about_dialog.present()
 
     def do_activate(self):
-        if not self.get_app_menu():
-            builder = Gtk.Builder()
-            builder.add_from_resource("/org/gnome/News/Menu.ui")
-            menu = builder.get_object("app-menu")
-            self.set_app_menu(menu)
-            for action_name in ["about", "quit"]:
-                action = Gio.SimpleAction.new(action_name, None)
-                action.connect("activate", getattr(self, action_name))
-                self.add_action(action)
-
         if not self._window:
             self._window = Window(self)
 
