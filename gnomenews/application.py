@@ -80,7 +80,7 @@ class Application(Gtk.Application):
             self._about_dialog = None
 
         if not self._about_dialog:
-            self._about_dialog = AboutDialog(self)
+            self._about_dialog = AboutDialog(self._window)
 
         self._about_dialog.connect("destroy", on_destroy)
         self._about_dialog.present()

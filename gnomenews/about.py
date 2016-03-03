@@ -20,7 +20,8 @@ class AboutDialog(Gtk.AboutDialog):
     def __init__(self, parent):
         Gtk.AboutDialog.__init__(self)
         self.parent = parent
-        self.set_transient_for(self.parent._window)
+        self.set_modal(True)
+        self.set_transient_for(parent)
         self.set_artists(self._read_file("ARTISTS"))
         self.set_authors(self._read_file("AUTHORS"))
         self.set_copyright("Copyright © 2015 GNOME Foundation")
