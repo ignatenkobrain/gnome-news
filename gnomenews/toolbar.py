@@ -115,6 +115,7 @@ class Toolbar(GObject.GObject):
             self.reset_header_title()
 
         self._back_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
+        self._search_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
         self.add_toggle_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
 
     @log

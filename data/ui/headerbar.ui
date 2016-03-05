@@ -146,7 +146,6 @@
     </child>
     <child>
       <object class="GtkToggleButton" id="select-button">
-        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">center</property>
         <property name="sensitive">True</property>
