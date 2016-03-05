@@ -6,6 +6,7 @@
     <file compressed="true" alias="AUTHORS">../AUTHORS</file>
     <file compressed="true" preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/headerbar.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/window.ui</file>
     <file compressed="true">theme/Adwaita.css</file>
     <file compressed="true">theme/reader.css</file>
   </gresource>

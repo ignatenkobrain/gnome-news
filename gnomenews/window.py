@@ -40,8 +40,11 @@ class Window(Gtk.ApplicationWindow):
         self.tracker = Tracker()
 
         self.restore_saved_size()
-        # Start drawing UI
-        self._setup_view()
+
+        # Setup UI widgets
+        self._setup_widgets()
+
+        self.show()
 
     @log
     def restore_saved_size(self):
@@ -79,24 +82,28 @@ class Window(Gtk.ApplicationWindow):
         self.settings.set_value('window-position', GLib.Variant('ai', [position[0], position[1]]))
 
     @log
-    def _setup_view(self):
-        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.views = []
-        self.toolbar = Toolbar(self)
-        self._stack = Gtk.Stack(
-            transition_type=Gtk.StackTransitionType.CROSSFADE,
-            transition_duration=100,
-            visible=True,
-            can_focus=False)
-        self._stack.connect("notify::visible-child", self.view_changed)
-        self._overlay = Gtk.Overlay(child=self._stack)
-        self.set_titlebar(self.toolbar.header_bar)
-        self._box.pack_start(self._overlay, True, True, 0)
+    def _setup_widgets(self):
+        self._ui = Gtk.Builder()
+        self._ui.add_from_resource('/org/gnome/News/ui/window.ui')
+
+        self._box = self._ui.get_object('box')
         self.add(self._box)
+
+        # Views
+        self.views = []
+        self._stack = self._ui.get_object('stack')
+        self._overlay = self._ui.get_object('overlay')
+        self._stack.connect("notify::visible-child", self.view_changed)
+
+        # Action bar
+        self.action_bar = self._ui.get_object('action_bar')
+
+        # Header bar
+        self.toolbar = Toolbar(self)
+        self.set_titlebar(self.toolbar.header_bar)
 
         self._add_views()
 
-        self.show_all()
         self.toolbar._back_button.set_visible(False)
 
     @log
