@@ -172,6 +172,7 @@ class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"))
 
+        # url -> (feed, row)
         self.feeds = {}
 
         app = Gio.Application.get_default()
@@ -190,6 +191,7 @@ class FeedsView(GenericFeedsView):
             if feed not in new_feed_urls:
                 logger.info("Removing channel %s" % feed)
                 self.feed_stack.remove(self.feed_stack.get_child_by_name(feed))
+                self.listbox.remove(self.feeds[feed][1])
                 del self.feeds[feed]
 
         # Add new feeds
@@ -221,41 +223,23 @@ class FeedsView(GenericFeedsView):
             feed['title'] = _("Unknown feed")
         self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
 
-        self.feeds[feed['url']] = feed
+        # Add a row to the listbox
+        row = Gtk.ListBoxRow()
+        row.add(Gtk.Label(label=feed['title'], margin=10, xalign=0))
+        row.set_tooltip_text(feed['url'])
+        row.feed = feed
+        row.show_all()
 
-        # Set URL as a tooltip
-        self.listbox.get_children()[-1].get_child().set_tooltip_text(feed['url'])
+        self.listbox.add(row)
 
-    @log
-    def _on_button_release(self, w, event):
-        (_, button) = event.get_button()
-
-        if button != Gdk.BUTTON_SECONDARY:
-            return Gdk.EVENT_PROPAGATE
-
-        try:
-            selected_row = self.listbox.get_row_at_y(event.y)
-            if selected_row:
-                index = selected_row.get_index()
-
-                menu = Gio.Menu()
-                menu.append("Remove", "app.delete_channel(%s)" % index)
-
-                popover = Gtk.Popover.new_from_model(selected_row, menu)
-                popover.position = Gtk.PositionType.BOTTOM
-                popover.show()
-
-        except Exception as e:
-            logger.warn("Error showing popover: %s" % str(e))
-
-        return Gdk.EVENT_STOP
+        self.feeds[feed['url']] = (feed, row)
 
     @log
     def delete_channel(self, action, index_variant):
         try:
             index = index_variant.get_int32()
             row = self.listbox.get_children()[index]
-            url = row.get_child().get_tooltip_text()
+            url = row.feed['url']
             self.tracker.remove_channel(url)
         except Exception as e:
             logger.warn("Failed to remove feed %s: %s" % (str(index_variant), str(e)))
@@ -268,21 +252,65 @@ class FeedsView(GenericFeedsView):
             visible=True,
             can_focus=False)
 
-        self.stacksidebar = Gtk.StackSidebar(visible=True, stack=self.feed_stack)
-        self.stacksidebar.set_size_request(200, -1)
+        feedstackScrolledWindow = Gtk.ScrolledWindow(expand=True)
+        feedstackScrolledWindow.add(self.feed_stack)
 
-        self.listbox = self.stacksidebar.get_children()[0].get_children()[0].get_children()[0]
+        self.listbox = Gtk.ListBox(selection_mode=Gtk.SelectionMode.SINGLE)
+        self.listbox.set_sort_func(self.sort_function)
         self.listbox.connect('button-release-event', self._on_button_release)
+        self.listbox.connect('row-selected', self._on_row_selected)
 
-        scrolledWindow = Gtk.ScrolledWindow()
+        listboxScrolledWindow = Gtk.ScrolledWindow(min_content_width=200)
+        listboxScrolledWindow.add(self.listbox)
 
         self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self._box.pack_start(self.stacksidebar, False, True, 0)
-        sep = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
-        self._box.pack_start(sep, False, True, 0)
-        self._box.pack_start(scrolledWindow, True, True, 0)
-        scrolledWindow.add(self.feed_stack)
+        self._box.add(listboxScrolledWindow)
+        self._box.add(Gtk.Separator.new(Gtk.Orientation.VERTICAL))
+        self._box.add(feedstackScrolledWindow)
+
         self.add(self._box)
+
+        self._box.show_all()
+
+    @log
+    def _on_row_selected(self, listbox, row, _=None):
+        if row:
+            self.feed_stack.set_visible_child_name(row.feed['url'])
+
+    @log
+    def _on_button_release(self, w, event):
+        selected_row = self.listbox.get_row_at_y(event.y)
+        (_, button) = event.get_button()
+
+        # Abort if the click is not in any row
+        if not selected_row:
+            return Gdk.EVENT_PROPAGATE
+
+        # Left click
+        if button is Gdk.BUTTON_PRIMARY:
+            self.feed_stack.set_visible_child_name(selected_row.feed['url'])
+
+            return Gdk.EVENT_PROPAGATE
+
+        # Right click
+        elif button is Gdk.BUTTON_SECONDARY:
+            try:
+                index = selected_row.get_index()
+
+                menu = Gio.Menu()
+                menu.append("Remove", "app.delete_channel(%s)" % index)
+
+                popover = Gtk.Popover.new_from_model(selected_row, menu)
+                popover.position = Gtk.PositionType.BOTTOM
+                popover.show()
+
+            except Exception as e:
+                logger.warn("Error showing popover: %s" % str(e))
+
+            return Gdk.EVENT_STOP
+
+    def sort_function(self, row1, row2, _=None):
+        return row1.feed['title'] > row2.feed['title']
 
 
 class StarredView(GenericFeedsView):
