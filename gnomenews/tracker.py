@@ -154,7 +154,7 @@ class Tracker(GObject.GObject):
         """
         query = """
         DELETE
-          { ?chan a mfo:FeedChannel }
+          { ?chan a rdfs:Resource }
         WHERE
           { ?chan nie:url "%s" }""" % url
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
