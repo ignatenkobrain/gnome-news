@@ -36,6 +36,9 @@ class GenericFeedsView(Gtk.Stack):
         self.name = name
         self.title = title
 
+        self._ui = Gtk.Builder()
+        self._ui.add_from_resource('/org/gnome/News/ui/empty-view.ui')
+
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             activate_on_single_click=True,
@@ -46,10 +49,22 @@ class GenericFeedsView(Gtk.Stack):
         self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
 
+        # Setup the layout
         self.setup_layout()
+
+        # Setup the Empty state view
+        self._empty_view = self._ui.get_object('empty-view')
+        self.add_named(self._empty_view, 'empty')
 
         self.tracker = tracker
         self.show_all()
+
+    @log
+    def show_empty_view(self, show):
+        if show:
+            self.set_visible_child_name('empty')
+        else:
+            self.set_visible_child_name('view')
 
     @log
     def _add_a_new_preview(self, cursor, child=None):
@@ -84,7 +99,8 @@ class GenericFeedsView(Gtk.Stack):
         self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self._box.pack_end(self.flowbox, True, True, 0)
         scrolledWindow.add(self._box)
-        self.add(scrolledWindow)
+
+        self.add_named(scrolledWindow, 'view')
 
     @log
     def update(self):
@@ -167,6 +183,8 @@ class NewView(GenericFeedsView):
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
+        self.show_empty_view(len(posts) is 0)
+
 
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
@@ -199,6 +217,8 @@ class FeedsView(GenericFeedsView):
             if new_feed['url'] not in self.feeds:
                 logger.info("Adding channel %s" % new_feed['url'])
                 self._add_new_feed(new_feed)
+
+        self.show_empty_view(len(new_feeds) is 0)
 
     @log
     def _add_new_feed(self, feed):
@@ -268,7 +288,7 @@ class FeedsView(GenericFeedsView):
         self._box.add(Gtk.Separator.new(Gtk.Orientation.VERTICAL))
         self._box.add(feedstackScrolledWindow)
 
-        self.add(self._box)
+        self.add_named(self._box, 'view')
 
         self._box.show_all()
 
@@ -317,6 +337,12 @@ class StarredView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'starred', _("Starred"))
 
+        # Setup a custom empty view
+        self.remove(self._empty_view)
+
+        self._empty_view = self._ui.get_object('empty-starred-view')
+        self.add_named(self._empty_view, 'empty')
+
         self.tracker.connect('items-updated', self.update)
 
     @log
@@ -326,6 +352,8 @@ class StarredView(GenericFeedsView):
         posts = self.tracker.get_post_sorted_by_date(10, starred=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
+
+        self.show_empty_view(len(posts) is 0)
 
 
 class SearchView(GenericFeedsView):
@@ -338,6 +366,12 @@ class SearchView(GenericFeedsView):
         GenericFeedsView.__init__(self, tracker, 'search')
 
         self.search_query = ""
+
+        # Setup a custom empty view
+        self.remove(self._empty_view)
+
+        self._empty_view = self._ui.get_object('empty-search-view')
+        self.add_named(self._empty_view, 'empty')
 
     @log
     def do_get_property(self, prop):
@@ -364,3 +398,5 @@ class SearchView(GenericFeedsView):
         posts = self.tracker.get_text_matches(self.search_query, 10)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
+
+        self.show_empty_view(len(posts) is 0)
