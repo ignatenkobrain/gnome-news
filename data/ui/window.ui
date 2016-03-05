@@ -41,6 +41,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="transition_type">crossfade</property>
             <child>
               <placeholder/>
             </child>
