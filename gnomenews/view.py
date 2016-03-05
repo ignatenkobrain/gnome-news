@@ -196,7 +196,18 @@ class FeedsView(GenericFeedsView):
         delete_channel_action = app.lookup_action('delete_channel')
         delete_channel_action.connect('activate', self.delete_channel)
 
+        self.tracker.connect('items-updated', self.update_items)
         self.tracker.connect('feeds-updated', self.update)
+
+    @log
+    def update_items(self, _=None):
+        for flowbox in self.feed_stack.get_children():
+            url = self.feed_stack.child_get_property(flowbox, 'name')
+
+            [flowbox.remove(old_feed) for old_feed in flowbox.get_children()]
+
+            posts = self.tracker.get_posts_for_channel(url)
+            [self._add_a_new_preview(post, flowbox) for post in posts]
 
     @log
     def update(self, _=None):
