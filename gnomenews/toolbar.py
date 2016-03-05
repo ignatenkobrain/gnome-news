@@ -80,7 +80,7 @@ class Toolbar(GObject.GObject):
     def _search_changed(self, entry, data=None):
         if entry.get_text_length() > 0:
             self.set_state(ToolbarState.SEARCH_VIEW)
-            self.header_bar.set_title(_("Searching for %s") % entry.get_text())
+            self.header_bar.set_title(_('Searching for "%s"') % entry.get_text())
         else:
             self.set_state(ToolbarState.MAIN)
             self.header_bar.set_title(_("News"))

@@ -237,29 +237,35 @@ class Tracker(GObject.GObject):
         """
         query = """
         SELECT
-          nie:url(?msg) AS url
-          nie:title(?msg) AS title
-          nco:fullname(?creator) AS fullname
-          nie:url(?website) AS author_homepage
-          nco:emailAddress(?email) AS author_email
-          nie:contentCreated(?msg) AS date_created
-          nmo:htmlMessageContent(?msg) AS content
-          nmo:isRead(?msg) AS is_read
+          nie:url(?msg) AS ?url
+          nie:title(?msg) AS ?title
+          nco:fullname(?creator) AS ?fullname
+          nie:url(?website) AS ?author_homepage
+          nco:emailAddress(?email) AS ?author_email
+          nie:contentCreated(?msg) AS ?date_created
+          nmo:htmlMessageContent(?msg) AS ?content
+          nmo:isRead(?msg) AS ?is_read
           { ?msg a mfo:FeedMessage; """
 
         if channel:
-            query += """nmo:communicationChannel ?chan;"""
+            query += """
+                nmo:communicationChannel ?chan;
+                ?chan nie:url "%s" . """
 
         query += """
                  fts:match "%s" .
-                 ?chan nie:url "%s" .
             OPTIONAL { ?msg nco:creator ?creator .
                        OPTIONAL { ?creator nco:hasEmailAddress ?email } .
                        OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
         ORDER BY fts:rank(?msg)
         LIMIT %d
-        """ % (text, channel, amount)
+        """
+
+        if channel:
+            query = query % (text, channel, amount)
+        else:
+            query = query % (text, amount)
 
         results = self.sparql.query(query)
         ret = []

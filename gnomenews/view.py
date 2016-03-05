@@ -358,6 +358,9 @@ class SearchView(GenericFeedsView):
     def update_search(self):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
+        if len(self.search_query) is 0:
+            return
+
         posts = self.tracker.get_text_matches(self.search_query, 10)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
