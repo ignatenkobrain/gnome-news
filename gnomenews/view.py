@@ -30,11 +30,12 @@ class GenericFeedsView(Gtk.Stack):
     }
 
     @log
-    def __init__(self, tracker, name, title=None, show_feedlist=False):
+    def __init__(self, tracker, name, title=None):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.name = name
         self.title = title
+        self.feeds = {}
 
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
@@ -52,27 +53,7 @@ class GenericFeedsView(Gtk.Stack):
             visible=True,
             can_focus=False)
 
-        self.stacksidebar = Gtk.StackSidebar(
-            visible=True,
-            stack=self.feed_stack)
-        self.stacksidebar.set_size_request(200, -1)
-
-        self.listbox = self.stacksidebar.get_children()[0].get_children()[0].get_children()[0]
-
-        scrolledWindow = Gtk.ScrolledWindow()
-        if show_feedlist:
-            self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-            self._box.pack_start(self.stacksidebar, False, True, 0)
-            sep = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
-            self._box.pack_start(sep, False, True, 0)
-            self._box.pack_start(scrolledWindow, True, True, 0)
-            scrolledWindow.add(self.feed_stack)
-            self.add(self._box)
-        else:
-            self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self._box.pack_end(self.flowbox, True, True, 0)
-            scrolledWindow.add(self._box)
-            self.add(scrolledWindow)
+        self.setup_layout()
 
         self.tracker = tracker
         self.show_all()
@@ -99,6 +80,10 @@ class GenericFeedsView(Gtk.Stack):
 
     @log
     def _add_new_feed(self, feed):
+        # Check if we're not adding an already added feed
+        if feed['url'] in self.feeds:
+            return
+
         flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             activate_on_single_click=True,
@@ -116,8 +101,7 @@ class GenericFeedsView(Gtk.Stack):
             feed['title'] = _("Unknown feed")
         self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
 
-        # Set URL as a tooltip
-        self.listbox.get_children()[-1].get_child().set_tooltip_text(feed['url'])
+        self.feeds[feed['url']] = feed
 
     @log
     def _post_activated(self, box, child, user_data=None):
@@ -145,19 +129,29 @@ class GenericFeedsView(Gtk.Stack):
     def update_feeds(self, _=None):
         new_feeds = self.tracker.get_channels()
         new_feed_urls = [new_feed['url'] for new_feed in new_feeds]
-        old_feed_urls = [child.get_child().get_tooltip_text() for child in self.listbox.get_children()]
 
         # Remove old feeds
-        for url in old_feed_urls:
-            if url not in new_feed_urls:
-                logger.info("Removing channel %s" % url)
-                self.feed_stack.remove(self.feed_stack.get_child_by_name(url))
+        for feed in list(self.feeds.keys()):
+            if feed not in new_feed_urls:
+                logger.info("Removing channel %s" % feed)
+                self.feed_stack.remove(self.feed_stack.get_child_by_name(feed))
+                del self.feeds[feed]
 
         # Add new feeds
         for new_feed in new_feeds:
-            if new_feed['url'] not in old_feed_urls:
+            if new_feed['url'] not in self.feeds:
                 logger.info("Adding channel %s" % new_feed['url'])
                 self._add_new_feed(new_feed)
+                self.feeds[new_feed['url']] = new_feed
+
+    @log
+    def setup_layout(self):
+        scrolledWindow = Gtk.ScrolledWindow()
+
+        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self._box.pack_end(self.flowbox, True, True, 0)
+        scrolledWindow.add(self._box)
+        self.add(scrolledWindow)
 
     @log
     def update(self):
@@ -237,9 +231,7 @@ class NewView(GenericFeedsView):
 
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
-        GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"), show_feedlist=True)
-
-        self.listbox.connect('button-release-event', self._on_button_release)
+        GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"))
 
         app = Gio.Application.get_default()
         delete_channel_action = app.lookup_action('delete_channel')
@@ -248,6 +240,13 @@ class FeedsView(GenericFeedsView):
     @log
     def update(self):
         self.update_feeds()
+
+    @log
+    def _add_new_feed(self, feed):
+        super()._add_new_feed(feed);
+
+        # Set URL as a tooltip
+        self.listbox.get_children()[-1].get_child().set_tooltip_text(feed['url'])
 
     @log
     def _on_button_release(self, w, event):
@@ -282,6 +281,24 @@ class FeedsView(GenericFeedsView):
             self.tracker.remove_channel(url)
         except Exception as e:
             logger.warn("Failed to remove feed %s: %s" % (str(index_variant), str(e)))
+
+    @log
+    def setup_layout(self):
+        self.stacksidebar = Gtk.StackSidebar(visible=True, stack=self.feed_stack)
+        self.stacksidebar.set_size_request(200, -1)
+
+        self.listbox = self.stacksidebar.get_children()[0].get_children()[0].get_children()[0]
+        self.listbox.connect('button-release-event', self._on_button_release)
+
+        scrolledWindow = Gtk.ScrolledWindow()
+
+        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self._box.pack_start(self.stacksidebar, False, True, 0)
+        sep = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
+        self._box.pack_start(sep, False, True, 0)
+        self._box.pack_start(scrolledWindow, True, True, 0)
+        scrolledWindow.add(self.feed_stack)
+        self.add(self._box)
 
 
 class StarredView(GenericFeedsView):
