@@ -35,7 +35,6 @@ class GenericFeedsView(Gtk.Stack):
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.name = name
         self.title = title
-        self.feeds = {}
 
         self.flowbox = Gtk.FlowBox(
             min_children_per_line=2,
@@ -46,12 +45,6 @@ class GenericFeedsView(Gtk.Stack):
             selection_mode=Gtk.SelectionMode.NONE)
         self.flowbox.get_style_context().add_class('feeds-list')
         self.flowbox.connect('child-activated', self._post_activated)
-
-        self.feed_stack = Gtk.Stack(
-            transition_type=Gtk.StackTransitionType.CROSSFADE,
-            transition_duration=100,
-            visible=True,
-            can_focus=False)
 
         self.setup_layout()
 
@@ -79,69 +72,10 @@ class GenericFeedsView(Gtk.Stack):
         source.flowbox.insert(image, -1)
 
     @log
-    def _add_new_feed(self, feed):
-        # Check if we're not adding an already added feed
-        if feed['url'] in self.feeds:
-            return
-
-        flowbox = Gtk.FlowBox(
-            min_children_per_line=2,
-            activate_on_single_click=True,
-            row_spacing=10, column_spacing=10,
-            valign=Gtk.Align.START,
-            margin=15,
-            selection_mode=Gtk.SelectionMode.NONE)
-        flowbox.get_style_context().add_class('feeds-list')
-        flowbox.connect('child-activated', self._post_activated)
-        flowbox.show()
-        posts = self.tracker.get_posts_for_channel(feed['url'], 10)
-        [self._add_a_new_preview(post, flowbox) for post in posts]
-
-        if not feed['title']:
-            feed['title'] = _("Unknown feed")
-        self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
-
-        self.feeds[feed['url']] = feed
-
-    @log
     def _post_activated(self, box, child, user_data=None):
         cursor = child.get_children()[0].post
         post = Post(cursor)
         self.emit('open-article', post)
-
-    @log
-    def update_new_items(self, _=None):
-        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
-
-        posts = self.tracker.get_post_sorted_by_date(10, unread=True)
-        [self._add_a_new_preview(post) for post in posts]
-        self.show_all()
-
-    @log
-    def update_starred_items(self):
-        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
-
-        posts = self.tracker.get_post_sorted_by_date(10, starred=True)
-        [self._add_a_new_preview(post) for post in posts]
-        self.show_all()
-
-    @log
-    def update_feeds(self, _=None):
-        new_feeds = self.tracker.get_channels()
-        new_feed_urls = [new_feed['url'] for new_feed in new_feeds]
-
-        # Remove old feeds
-        for feed in list(self.feeds.keys()):
-            if feed not in new_feed_urls:
-                logger.info("Removing channel %s" % feed)
-                self.feed_stack.remove(self.feed_stack.get_child_by_name(feed))
-                del self.feeds[feed]
-
-        # Add new feeds
-        for new_feed in new_feeds:
-            if new_feed['url'] not in self.feeds:
-                logger.info("Adding channel %s" % new_feed['url'])
-                self._add_new_feed(new_feed)
 
     @log
     def setup_layout(self):
@@ -223,26 +157,71 @@ class NewView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'new', _("New"))
 
+        self.tracker.connect('items-updated', self.update)
+
     @log
-    def update(self):
-        self.update_new_items()
+    def update(self, _=None):
+        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
+
+        posts = self.tracker.get_post_sorted_by_date(10, unread=True)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()
 
 
 class FeedsView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'feeds', _("Feeds"))
 
+        self.feeds = {}
+
         app = Gio.Application.get_default()
         delete_channel_action = app.lookup_action('delete_channel')
         delete_channel_action.connect('activate', self.delete_channel)
 
+        self.tracker.connect('feeds-updated', self.update)
+
     @log
-    def update(self):
-        self.update_feeds()
+    def update(self, _=None):
+        new_feeds = self.tracker.get_channels()
+        new_feed_urls = [new_feed['url'] for new_feed in new_feeds]
+
+        # Remove old feeds
+        for feed in list(self.feeds.keys()):
+            if feed not in new_feed_urls:
+                logger.info("Removing channel %s" % feed)
+                self.feed_stack.remove(self.feed_stack.get_child_by_name(feed))
+                del self.feeds[feed]
+
+        # Add new feeds
+        for new_feed in new_feeds:
+            if new_feed['url'] not in self.feeds:
+                logger.info("Adding channel %s" % new_feed['url'])
+                self._add_new_feed(new_feed)
 
     @log
     def _add_new_feed(self, feed):
-        super()._add_new_feed(feed);
+        # Check if we're not adding an already added feed
+        if feed['url'] in self.feeds:
+            return
+
+        flowbox = Gtk.FlowBox(
+            min_children_per_line=2,
+            activate_on_single_click=True,
+            row_spacing=10, column_spacing=10,
+            valign=Gtk.Align.START,
+            margin=15,
+            selection_mode=Gtk.SelectionMode.NONE)
+        flowbox.get_style_context().add_class('feeds-list')
+        flowbox.connect('child-activated', self._post_activated)
+        flowbox.show()
+        posts = self.tracker.get_posts_for_channel(feed['url'], 10)
+        [self._add_a_new_preview(post, flowbox) for post in posts]
+
+        if not feed['title']:
+            feed['title'] = _("Unknown feed")
+        self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
+
+        self.feeds[feed['url']] = feed
 
         # Set URL as a tooltip
         self.listbox.get_children()[-1].get_child().set_tooltip_text(feed['url'])
@@ -283,6 +262,12 @@ class FeedsView(GenericFeedsView):
 
     @log
     def setup_layout(self):
+        self.feed_stack = Gtk.Stack(
+            transition_type=Gtk.StackTransitionType.CROSSFADE,
+            transition_duration=100,
+            visible=True,
+            can_focus=False)
+
         self.stacksidebar = Gtk.StackSidebar(visible=True, stack=self.feed_stack)
         self.stacksidebar.set_size_request(200, -1)
 
@@ -304,9 +289,15 @@ class StarredView(GenericFeedsView):
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'starred', _("Starred"))
 
+        self.tracker.connect('items-updated', self.update)
+
     @log
-    def update(self):
-        self.update_starred_items()
+    def update(self, _=None):
+        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
+
+        posts = self.tracker.get_post_sorted_by_date(10, starred=True)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()
 
 
 class SearchView(GenericFeedsView):

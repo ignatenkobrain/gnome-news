@@ -146,9 +146,6 @@ class Window(Gtk.ApplicationWindow):
         self.search_entry.bind_property('text', self.search_view, 'search-query',
                                         GObject.BindingFlags.BIDIRECTIONAL)
 
-        self.tracker.connect('items-updated', self.views[0].update_new_items)
-        self.tracker.connect('feeds-updated', self.views[1].update_feeds)
-
     @log
     def _open_article_view(self, post):
         self.feed_view = view.FeedView(self.tracker, post)
