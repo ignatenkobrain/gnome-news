@@ -32,6 +32,7 @@ GITIGNOREFILES = \
 	missing \
 	py-compile \
 	VERSION \
+	gnomenews/__pycache__ \
 	$(NULL)
 
 dist-hook: AUTHORS
