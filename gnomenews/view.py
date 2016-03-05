@@ -79,7 +79,11 @@ class GenericFeedsView(Gtk.Stack):
     def _insert_post(self, source, post):
         image = Gtk.Image.new_from_file(post.thumbnail)
         image.get_style_context().add_class('feed-box')
-        image.show_all()
+        image.show()
+
+        if post.is_read:
+            image.set_opacity(0.5)
+            image.set_tooltip_text(_('This article was already read'))
 
         # Store the post object to refer to it later on
         image.post = post.cursor
@@ -90,6 +94,10 @@ class GenericFeedsView(Gtk.Stack):
     def _post_activated(self, box, child, user_data=None):
         cursor = child.get_children()[0].post
         post = Post(cursor)
+
+        child.set_opacity(0.5)
+        child.set_tooltip_text(_('This article was already read'))
+
         self.emit('open-article', post)
 
     @log
@@ -108,11 +116,6 @@ class GenericFeedsView(Gtk.Stack):
 
 
 class FeedView(Gtk.Stack):
-
-    __gsignals__ = {
-        'post-read': (GObject.SignalFlags.RUN_LAST, None, (str,)),
-    }
-
     def __init__(self, tracker, post):
         Gtk.Stack.__init__(self,
                            transition_type=Gtk.StackTransitionType.CROSSFADE)
@@ -162,10 +165,6 @@ class FeedView(Gtk.Stack):
                     # for example, irc://irc.gimp.org/#guadec
                     logger.warning("Couldn't open URI: %s" % uri)
                 return True
-        return False
-
-    def mark_post_as_read(self):
-        self.emit('post-read', self.url)
         return False
 
 
