@@ -44,7 +44,7 @@ class Tracker(GObject.GObject):
         self.sparql = Trackr.SparqlConnection.get(None)
 
     @log
-    def get_post_sorted_by_date(self, amount, unread=False, starred=False):
+    def get_post_sorted_by_date(self, unread=False, starred=False):
         query = """
         SELECT
           nie:url(?msg) AS url
@@ -71,8 +71,7 @@ class Tracker(GObject.GObject):
             }
           }
         ORDER BY DESC (nie:contentCreated(?msg))
-        LIMIT %s
-        """ % amount
+        """
 
         results = self.sparql.query(query)
         ret = []
@@ -123,7 +122,7 @@ class Tracker(GObject.GObject):
         """ % (update_interval, url), GLib.PRIORITY_DEFAULT, None)
 
     @log
-    def mark_post_as_read(self, caller, url, data=None):
+    def mark_post_as_read(self, url, data=None):
         """Marks given post as read
 
         Args:
@@ -161,12 +160,11 @@ class Tracker(GObject.GObject):
         self.emit('feeds-updated')
 
     @log
-    def get_posts_for_channel(self, url, amount):
+    def get_posts_for_channel(self, url):
         """Get posts for channel id
 
         Args:
             url (str): URL of the channel.
-            amount (int): number of items to fetch.
             unread (Optional[bool]): return only unread items if True.
         """
         query = """
@@ -187,8 +185,7 @@ class Tracker(GObject.GObject):
                        OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
         ORDER BY DESC (nie:contentCreated(?msg))
-        LIMIT %s
-        """ % (url, amount)
+        """ % url
 
         results = self.sparql.query(query)
         ret = []
@@ -227,13 +224,12 @@ class Tracker(GObject.GObject):
         return ret
 
     @log
-    def get_text_matches(self, text, amount, channel=None):
+    def get_text_matches(self, text, channel=None):
         """Do text search lookup
 
         Args:
             text (str): text to search for.
             channel (str): URL of the channel.
-            amount (int): number of items to fetch.
         """
         query = """
         SELECT
@@ -259,13 +255,12 @@ class Tracker(GObject.GObject):
                        OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
         ORDER BY fts:rank(?msg)
-        LIMIT %d
         """
 
         if channel:
-            query = query % (text, channel, amount)
+            query = query % text, channel
         else:
-            query = query % (text, amount)
+            query = query % text
 
         results = self.sparql.query(query)
         ret = []

@@ -178,7 +178,7 @@ class NewView(GenericFeedsView):
     def update(self, _=None):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
-        posts = self.tracker.get_post_sorted_by_date(10, unread=True)
+        posts = self.tracker.get_post_sorted_by_date(unread=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
@@ -235,7 +235,7 @@ class FeedsView(GenericFeedsView):
         flowbox.get_style_context().add_class('feeds-list')
         flowbox.connect('child-activated', self._post_activated)
         flowbox.show()
-        posts = self.tracker.get_posts_for_channel(feed['url'], 10)
+        posts = self.tracker.get_posts_for_channel(feed['url'])
         [self._add_a_new_preview(post, flowbox) for post in posts]
 
         if not feed['title']:
@@ -394,7 +394,7 @@ class SearchView(GenericFeedsView):
         if len(self.search_query) is 0:
             return
 
-        posts = self.tracker.get_text_matches(self.search_query, 10)
+        posts = self.tracker.get_text_matches(self.search_query)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
