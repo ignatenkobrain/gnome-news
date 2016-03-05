@@ -142,7 +142,6 @@ class GenericFeedsView(Gtk.Stack):
             if new_feed['url'] not in self.feeds:
                 logger.info("Adding channel %s" % new_feed['url'])
                 self._add_new_feed(new_feed)
-                self.feeds[new_feed['url']] = new_feed
 
     @log
     def setup_layout(self):
@@ -311,5 +310,35 @@ class StarredView(GenericFeedsView):
 
 
 class SearchView(GenericFeedsView):
+
+    __gproperties__ = {
+        'search-query': (str, 'Query', 'Search query', "", GObject.ParamFlags.READWRITE)
+    }
+
     def __init__(self, tracker):
         GenericFeedsView.__init__(self, tracker, 'search')
+
+        self.search_query = ""
+
+    @log
+    def do_get_property(self, prop):
+        if prop.name == 'search-query':
+            return self.search_query
+        else:
+            raise AttributeError('Unknown property %s' % prop.name)
+
+    @log
+    def do_set_property(self, prop, value):
+        if prop.name == 'search-query':
+            self.search_query = value
+            self.update_search()
+        else:
+            raise AttributeError('Unknown property %s' % prop.name)
+
+    @log
+    def update_search(self):
+        [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
+
+        posts = self.tracker.get_text_matches(self.search_query, 10)
+        [self._add_a_new_preview(post) for post in posts]
+        self.show_all()

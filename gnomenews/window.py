@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, Gio, GLib, GObject
 from gettext import gettext as _
 
 from gnomenews.toolbar import Toolbar, ToolbarState
@@ -64,6 +64,7 @@ class Window(Gtk.ApplicationWindow):
             self.maximize()
 
         # Save changes to window size
+        self.connect("key-press-event", self._on_key_press_event)
         self.connect("window-state-event", self._on_window_state_event)
         self.configure_event_handler = self.connect("configure-event", self._on_configure_event)
 
@@ -73,6 +74,9 @@ class Window(Gtk.ApplicationWindow):
     def _on_configure_event(self, widget, event):
         with self.handler_block(self.configure_event_handler):
             GLib.idle_add(self._store_window_size_and_position, widget, priority=GLib.PRIORITY_LOW)
+
+    def _on_key_press_event(self, widget, event):
+        return self.search_bar.handle_event(event)
 
     def _store_window_size_and_position(self, widget):
         size = widget.get_size()
@@ -97,6 +101,12 @@ class Window(Gtk.ApplicationWindow):
 
         # Action bar
         self.action_bar = self._ui.get_object('action_bar')
+
+        # Search bar
+        self.search_bar = self._ui.get_object('search_bar')
+        self.search_entry = self._ui.get_object('search_entry')
+
+        self.search_entry.connect('search-changed', self.on_search_changed)
 
         # Header bar
         self.toolbar = Toolbar(self)
@@ -130,6 +140,12 @@ class Window(Gtk.ApplicationWindow):
         self.toolbar.set_stack(self._stack)
         self._stack.set_visible_child(self.views[0])
 
+        # Search view
+        self.search_view = view.SearchView(self.tracker)
+
+        self.search_entry.bind_property('text', self.search_view, 'search-query',
+                                        GObject.BindingFlags.BIDIRECTIONAL)
+
         self.tracker.connect('items-updated', self.views[0].update_new_items)
         self.tracker.connect('feeds-updated', self.views[1].update_feeds)
 
@@ -149,3 +165,17 @@ class Window(Gtk.ApplicationWindow):
         self.toolbar.set_state(ToolbarState.MAIN)
         self.feed_view.disconnect(self.tracker.post_read_signal)
         self.feed_view = None
+
+    @log
+    def on_search_changed(self, entry, data=None):
+        if entry.get_text_length() > 0:
+            # Add the view if it's not added yet
+            if self.search_view not in self._stack.get_children():
+                self._stack.previous_view = self._stack.get_visible_child()
+                self._stack.add_named(self.search_view, 'search_view')
+
+            self._stack.set_visible_child(self.search_view)
+        else:
+            self._stack.set_visible_child(self._stack.previous_view)
+            self._stack.previous_view = None
+            self._stack.remove(self.search_view)

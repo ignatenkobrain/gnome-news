@@ -16,6 +16,8 @@
 
 from gi.repository import Gtk, GObject, GLib
 
+from gettext import gettext as _
+
 from gnomenews import log
 import logging
 logger = logging.getLogger(__name__)
@@ -60,6 +62,11 @@ class Toolbar(GObject.GObject):
         self._back_button.connect('clicked', self.window.on_back_button_clicked)
 
         self._search_button = self._ui.get_object('search-button')
+        self._search_button.bind_property('active',
+                                          self.window.search_bar, 'search-mode-enabled',
+                                          GObject.BindingFlags.BIDIRECTIONAL)
+
+        self.window.search_entry.connect('search-changed', self._search_changed)
 
         self.set_state(ToolbarState.MAIN)
 
@@ -68,6 +75,15 @@ class Toolbar(GObject.GObject):
     @log
     def reset_header_title(self):
         self.header_bar.set_custom_title(self._stack_switcher)
+
+    @log
+    def _search_changed(self, entry, data=None):
+        if entry.get_text_length() > 0:
+            self.set_state(ToolbarState.SEARCH_VIEW)
+            self.header_bar.set_title(_("Searching for %s") % entry.get_text())
+        else:
+            self.set_state(ToolbarState.MAIN)
+            self.header_bar.set_title(_("News"))
 
     @log
     def set_stack(self, stack):
@@ -98,7 +114,6 @@ class Toolbar(GObject.GObject):
         else:
             self.reset_header_title()
 
-        self._search_button.set_visible(self._state != ToolbarState.SEARCH_VIEW)
         self._back_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
         self.add_toggle_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
 
@@ -106,7 +121,7 @@ class Toolbar(GObject.GObject):
     def _add_new_feed(self, button):
         new_url = self.new_url.get_text()
         self.window.tracker.add_channel(new_url)
-        self.new_url.set_text("")
+        self.new_url.set_text('')
         self.add_popover.hide()
 
     @log
