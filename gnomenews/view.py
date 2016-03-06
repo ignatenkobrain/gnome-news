@@ -236,6 +236,16 @@ class FeedsView(GenericFeedsView):
         if feed['url'] in self.feeds:
             return
 
+        # Add a row to the listbox
+        row = Gtk.ListBoxRow()
+        row.add(Gtk.Label(label=feed['title'], margin=10, xalign=0))
+        row.set_tooltip_text(feed['url'])
+        row.feed = feed
+        row.show_all()
+
+        self.listbox.add(row)
+
+        # Add a flowbox with the items
         flowbox = Gtk.FlowBox(
             min_children_per_line=2,
             activate_on_single_click=True,
@@ -246,21 +256,16 @@ class FeedsView(GenericFeedsView):
         flowbox.get_style_context().add_class('feeds-list')
         flowbox.connect('child-activated', self._post_activated)
         flowbox.show()
+
+        flowbox.row = row
+        flowbox.feed = feed
+
         posts = self.tracker.get_posts_for_channel(feed['url'])
         [self._add_a_new_preview(post, flowbox) for post in posts]
 
         if not feed['title']:
             feed['title'] = _("Unknown feed")
         self.feed_stack.add_titled(flowbox, feed['url'], feed['title'])
-
-        # Add a row to the listbox
-        row = Gtk.ListBoxRow()
-        row.add(Gtk.Label(label=feed['title'], margin=10, xalign=0))
-        row.set_tooltip_text(feed['url'])
-        row.feed = feed
-        row.show_all()
-
-        self.listbox.add(row)
 
         self.feeds[feed['url']] = (feed, row)
 
@@ -281,6 +286,7 @@ class FeedsView(GenericFeedsView):
             transition_duration=100,
             visible=True,
             can_focus=False)
+        self.feed_stack.connect('notify::visible-child-name', self.visible_feed_changed)
 
         feedstackScrolledWindow = Gtk.ScrolledWindow(expand=True)
         feedstackScrolledWindow.add(self.feed_stack)
@@ -301,6 +307,12 @@ class FeedsView(GenericFeedsView):
         self.add_named(self._box, 'view')
 
         self._box.show_all()
+
+    @log
+    def visible_feed_changed(self, stack, property_name):
+        if stack.get_visible_child():
+            row = stack.get_visible_child().row
+            self.listbox.select_row(row)
 
     @log
     def _on_row_selected(self, listbox, row, _=None):
