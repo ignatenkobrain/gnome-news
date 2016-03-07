@@ -47,6 +47,7 @@ class Post(GObject.GObject):
         self.content = cursor['content']
         self.url = cursor['url']
         self.is_read = cursor['is_read']
+        self.is_starred = cursor['is_starred']
 
         self.author = self.sanitize_author(cursor['fullname'])
         self.author_email = cursor['author_email']

@@ -33,6 +33,7 @@ class Toolbar(GObject.GObject):
 
     __gsignals__ = {
         'state-changed': (GObject.SignalFlags.RUN_FIRST, None, ()),
+        'toggle-starred': (GObject.SignalFlags.RUN_FIRST, None, (bool,)),
     }
 
     @log
@@ -68,6 +69,13 @@ class Toolbar(GObject.GObject):
 
         self.window.search_entry.connect('search-changed', self._search_changed)
 
+        # Starred button
+        self._starred_button = self._ui.get_object('starred-button')
+        self._starred_image = self._ui.get_object('starred-button-image')
+
+        self._starred_button.connect('clicked', self._toggle_starred)
+        self.starred = False
+
         self.set_state(ToolbarState.MAIN)
 
         self._stack_switcher.show()
@@ -77,6 +85,11 @@ class Toolbar(GObject.GObject):
         self.header_bar.set_custom_title(self._stack_switcher)
 
     @log
+    def _toggle_starred(self, button):
+        self.set_starred(not self.starred)
+        self.emit('toggle-starred', self.starred)
+
+    @log
     def _search_changed(self, entry, data=None):
         if entry.get_text_length() > 0:
             self.set_state(ToolbarState.SEARCH_VIEW)
@@ -84,6 +97,19 @@ class Toolbar(GObject.GObject):
         else:
             self.set_state(ToolbarState.MAIN)
             self.header_bar.set_title(_("News"))
+
+    @log
+    def set_starred(self, starred):
+        # Don't set the same value
+        if starred is self.starred:
+            return
+
+        self.starred = starred
+
+        if starred:
+            self._starred_image.set_from_icon_name('starred-symbolic', Gtk.IconSize.BUTTON)
+        else:
+            self._starred_image.set_from_icon_name('non-starred-symbolic', Gtk.IconSize.BUTTON)
 
     @log
     def set_stack(self, stack):
@@ -116,6 +142,7 @@ class Toolbar(GObject.GObject):
 
         self._back_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
         self._search_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
+        self._starred_button.set_visible(self._state == ToolbarState.CHILD_VIEW)
         self.add_toggle_button.set_visible(self._state != ToolbarState.CHILD_VIEW)
 
     @log

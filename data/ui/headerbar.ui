@@ -122,6 +122,28 @@
     <property name="visible">True</property>
     <property name="vexpand">False</property>
     <child>
+      <object class="GtkButton" id="starred-button">
+        <property name="can_focus">False</property>
+        <property name="valign">center</property>
+        <property name="sensitive">True</property>
+        <property name="tooltip_text" translatable="yes">Mark this article as starred</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="starred-button-image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon-name">non-starred-symbolic</property>
+            <property name="icon-size">1</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToggleButton" id="search-button">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

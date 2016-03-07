@@ -55,6 +55,7 @@ class Tracker(GObject.GObject):
           nie:contentCreated(?msg) AS date
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
+          ?msg BOUND(?tag) as is_starred
         WHERE
           { ?msg a mfo:FeedMessage """
 
@@ -66,6 +67,8 @@ class Tracker(GObject.GObject):
 
         query += """.
             OPTIONAL { ?msg nco:creator ?creator .
+                       ?msg nao:hasTag ?tag .
+                       FILTER(?tag = nao:predefined-tag-favorite) .
                        OPTIONAL {?creator nco:hasEmailAddress ?email } .
                        OPTIONAL {?creator nco:websiteUrl ?website }
             }
@@ -145,6 +148,35 @@ class Tracker(GObject.GObject):
         self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
 
     @log
+    def mark_post_as_starred(self, url, starred=True):
+        """Marks given post as starred
+
+        Args:
+            url (str): URL of the post.
+            starred (Optional): whether the post is starred or not.
+        """
+
+        query = ''
+
+        if starred:
+            query = """
+            INSERT
+              { ?msg nao:hasTag nao:predefined-tag-favorite }
+            WHERE
+              { ?msg nie:url "%s" }
+            """ % url
+        else:
+            query = """
+            DELETE
+              { ?msg nao:hasTag nao:predefined-tag-favorite }
+            WHERE
+              { ?msg nie:url "%s";
+                     nao:hasTag nao:predefined-tag-favorite }
+            """ % url
+
+        self.sparql.update(query, GLib.PRIORITY_DEFAULT, None)
+
+    @log
     def remove_channel(self, url):
         """Drop channel from fetching by tracker
 
@@ -177,10 +209,13 @@ class Tracker(GObject.GObject):
           nie:contentCreated(?msg) AS date
           nmo:htmlMessageContent(?msg) AS content
           nmo:isRead(?msg) AS is_read
+          ?msg BOUND(?tag) as is_starred
           { ?msg a mfo:FeedMessage;
                  nmo:communicationChannel ?chan .
             ?chan nie:url "%s" .
             OPTIONAL { ?msg nco:creator ?creator .
+                       ?msg nao:hasTag ?tag .
+                       FILTER(?tag = nao:predefined-tag-favorite) .
                        OPTIONAL { ?creator nco:hasEmailAddress ?email } .
                        OPTIONAL { ?creator nco:websiteUrl ?website }}
           }
@@ -241,6 +276,7 @@ class Tracker(GObject.GObject):
           nie:contentCreated(?msg) AS ?date_created
           nmo:htmlMessageContent(?msg) AS ?content
           nmo:isRead(?msg) AS ?is_read
+          ?msg BOUND(?tag) as ?is_starred
           { ?msg a mfo:FeedMessage; """
 
         if channel:
@@ -251,6 +287,8 @@ class Tracker(GObject.GObject):
         query += """
                  fts:match "%s" .
             OPTIONAL { ?msg nco:creator ?creator .
+                       ?msg nao:hasTag ?tag .
+                       FILTER(?tag = nao:predefined-tag-favorite) .
                        OPTIONAL { ?creator nco:hasEmailAddress ?email } .
                        OPTIONAL { ?creator nco:websiteUrl ?website }}
           }

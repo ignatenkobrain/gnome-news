@@ -112,6 +112,8 @@ class Window(Gtk.ApplicationWindow):
         self.toolbar = Toolbar(self)
         self.set_titlebar(self.toolbar.header_bar)
 
+        self.toolbar.connect('toggle-starred', self.toggle_starred)
+
         self._add_views()
 
         self.toolbar._back_button.set_visible(False)
@@ -121,6 +123,17 @@ class Window(Gtk.ApplicationWindow):
         visible_view = self._stack.get_visible_child()
         if visible_view in self.views:
             visible_view.update()
+
+    @log
+    def toggle_starred(self, toolbar, starred):
+        # Ignore the signal when we're not in FeedView
+        if not self.feed_view:
+            return
+
+        post = self.feed_view.post
+        post.is_starred = starred
+
+        self.tracker.mark_post_as_starred(post.url, starred)
 
     @log
     def _add_views(self):
@@ -152,6 +165,8 @@ class Window(Gtk.ApplicationWindow):
         self._stack.previous_view = self._stack.get_visible_child()
         self._stack.add_named(self.feed_view, 'feedview')
         self._stack.set_visible_child(self.feed_view)
+
+        self.toolbar.set_starred(post.is_starred)
 
         # Mark the post as read
         self.tracker.mark_post_as_read(post.url)

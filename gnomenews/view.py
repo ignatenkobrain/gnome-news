@@ -150,6 +150,7 @@ class FeedView(Gtk.Stack):
         self.add(webview)
         self.show_all()
 
+        self.post = post
         self.url = post.url
 
     @staticmethod
@@ -371,7 +372,7 @@ class StarredView(GenericFeedsView):
     def update(self, _=None):
         [self.flowbox.remove(old_feed) for old_feed in self.flowbox.get_children()]
 
-        posts = self.tracker.get_post_sorted_by_date(10, starred=True)
+        posts = self.tracker.get_post_sorted_by_date(starred=True)
         [self._add_a_new_preview(post) for post in posts]
         self.show_all()
 
