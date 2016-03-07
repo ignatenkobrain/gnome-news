@@ -296,15 +296,18 @@ class Tracker(GObject.GObject):
         """
 
         if channel:
-            query = query % text, channel
+            query = query % Trackr.sparql_escape_string(text), channel
         else:
-            query = query % text
+            query = query % Trackr.sparql_escape_string(text)
 
-        results = self.sparql.query(query)
-        ret = []
-        while (results.next(None)):
-            ret.append(self.parse_sparql(results))
-        return ret
+        try:
+            results = self.sparql.query(query)
+            ret = []
+            while (results.next(None)):
+                ret.append(self.parse_sparql(results))
+            return ret
+        except Exception:
+            return []
 
     @log
     def on_graph_updated(self, connection, sender_name, object_path,
