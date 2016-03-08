@@ -1,9 +1,13 @@
 # List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
 [encoding: UTF-8]
-[type: gettext/glade]data/HeaderBar.ui
-[type: gettext/glade]data/Menu.ui
-data/org.gnome.News.desktop.in
+[type: gettext/glade]data/gtk/menus.ui
 data/org.gnome.News.appdata.xml.in
+data/org.gnome.News.desktop.in
+data/org.gnome.News.gschema.xml
+[type: gettext/glade]data/ui/empty-view.ui
+[type: gettext/glade]data/ui/headerbar.ui
 gnomenews/application.py
+gnomenews/toolbar.py
 gnomenews/view.py
 gnomenews/window.py
