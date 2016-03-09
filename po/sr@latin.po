@@ -1,17 +1,18 @@
 # Serbian translation for gnome-news.
 # Copyright (C) 2016 gnome-news's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-news package.
-# MirosNik <miroslavnikolic@rocketmail.com>, 2016.
+#
+# Translators: 
 # Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-news master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "news&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-02 09:28+0000\n"
-"PO-Revision-Date: 2016-01-02 19:56+0200\n"
+"POT-Creation-Date: 2016-03-08 14:37+0000\n"
+"PO-Revision-Date: 2016-03-09 09:05+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <gnom@prevod.org>\n"
+"Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,64 +21,20 @@ msgstr ""
 "n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
-#: ../data/HeaderBar.ui.h:1
-msgid "Add a new feed"
-msgstr "Dodaj novi dovod"
-
-#: ../data/HeaderBar.ui.h:2
-msgid "Enter feed address to add"
-msgstr "Upišite adresu dovoda za dodavanje"
-
-#: ../data/HeaderBar.ui.h:3
-msgid "Add"
-msgstr "Dodaj"
-
-#: ../data/HeaderBar.ui.h:4
-msgid "You are already subscribed to that feed!"
-msgstr "Već ste se pretplatili na taj dovod!"
-
-#: ../data/HeaderBar.ui.h:5
-msgid "Select All"
-msgstr "Izaberi sve"
-
-#: ../data/HeaderBar.ui.h:6
-msgid "Select None"
-msgstr "Poništi izbor"
-
-#: ../data/HeaderBar.ui.h:7
-msgid "Click on items to select them"
-msgstr "Pritisnite na stavke da ih izaberete"
-
-#: ../data/HeaderBar.ui.h:8
-msgid "Search"
-msgstr "Traži"
-
-#: ../data/HeaderBar.ui.h:9
-msgid "Select"
-msgstr "Izaberi"
-
-#: ../data/HeaderBar.ui.h:10
-msgid "Back"
-msgstr "Nazad"
-
-#: ../data/Menu.ui.h:1
+#: ../data/gtk/menus.ui.h:1
 msgid "About"
 msgstr "O programu"
 
-#: ../data/Menu.ui.h:2
+#: ../data/gtk/menus.ui.h:2
 msgid "Quit"
 msgstr "Izađi"
 
 #. TRANSLATORS: the application name
-#: ../data/org.gnome.News.desktop.in.h:1
-#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
-#: ../gnomenews/window.py:35
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
 msgid "News"
 msgstr "Vesti"
-
-#: ../data/org.gnome.News.desktop.in.h:2
-msgid "Feed reader for GNOME"
-msgstr "Čitač dovoda za Gnom"
 
 #. TRANSLATORS: one-line description for the app
 #: ../data/org.gnome.News.appdata.xml.in.h:4
@@ -89,18 +46,123 @@ msgstr "Čitač dovoda"
 msgid "GNOME News can be used to read news."
 msgstr "Gnomove vesti se mogu koristiti za čitanje vesti."
 
-#: ../gnomenews/view.py:116
-msgid "Unknown feed"
-msgstr "Nepoznat dovod"
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Čitač dovoda za Gnom"
 
-#: ../gnomenews/view.py:231
+#: ../data/org.gnome.News.gschema.xml.h:1
+msgid "Window size"
+msgstr "Veličina prozora"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+msgid "Window size (width and height)."
+msgstr "Veličina prozora (širina i visina)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+msgid "Window position"
+msgstr "Položaj prozora"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+msgid "Window position (x and y)."
+msgstr "Položaj prozora (h i u)."
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+msgid "Window maximized"
+msgstr "Uvećan prozor"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+msgid "Window maximized state."
+msgstr "Stanje uvećanog prozora."
+
+#: ../data/ui/empty-view.ui.h:1
+msgid "No Results Found"
+msgstr "Nema rezultata"
+
+#: ../data/ui/empty-view.ui.h:2
+msgid "Try a different search"
+msgstr "Probajte sa drugačijom pretragom"
+
+#: ../data/ui/empty-view.ui.h:3
+msgid "No Starred Articles Found"
+msgstr "Nisam našao članke sa zvezdicama"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr "Možete da vidite vaše članke sa zvezdicama nakon što ih označite"
+
+#: ../data/ui/empty-view.ui.h:5
+msgid "No Feed Subscription Found"
+msgstr "Nisam našao pretplatu na dovod"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr "Možete da se pretplatite na dovode koristeći dugme +"
+
+#: ../data/ui/headerbar.ui.h:1
+msgid "Add a new feed"
+msgstr "Dodaj novi dovod"
+
+#: ../data/ui/headerbar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Upišite adresu dovoda za dodavanje"
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Dodaj"
+
+#: ../data/ui/headerbar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Već ste se pretplatili na taj dovod!"
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Izaberi sve"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "Poništi izbor"
+
+#: ../data/ui/headerbar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Pritisnite na stavke da ih izaberete"
+
+#: ../data/ui/headerbar.ui.h:8
+msgid "Mark this article as starred"
+msgstr "Označite ovaj članak da ima zvezdice"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Traži"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Izaberi"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Nazad"
+
+#: ../gnomenews/toolbar.py:96
+#, python-format
+msgid "Searching for \"%s\""
+msgstr "Tražim „%s“"
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+msgid "This article was already read"
+msgstr "Ovaj članak je već pročitan"
+
+#: ../gnomenews/view.py:174
 msgid "New"
 msgstr "Novo"
 
-#: ../gnomenews/view.py:240
+#: ../gnomenews/view.py:191
 msgid "Feeds"
 msgstr "Dovodi"
 
-#: ../gnomenews/view.py:289
+#: ../gnomenews/view.py:268
+msgid "Unknown feed"
+msgstr "Nepoznat dovod"
+
+#: ../gnomenews/view.py:361
 msgid "Starred"
 msgstr "Započeto"
