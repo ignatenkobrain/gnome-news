@@ -1,82 +1,39 @@
 # Brazilian Portuguese translation for gnome-news.
 # Copyright (C) 2015 gnome-news's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-news package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Enrico Nicoletto <liverig@gmail.com>, 2015.
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-news master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "news&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-21 21:26+0000\n"
-"PO-Revision-Date: 2015-12-21 22:29-0200\n"
+"POT-Creation-Date: 2016-03-08 14:37+0000\n"
+"PO-Revision-Date: 2016-03-10 11:20-0300\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.7\n"
 
-#: ../data/HeaderBar.ui.h:1
-msgid "Add a new feed"
-msgstr "Adicionar um novo feed"
-
-#: ../data/HeaderBar.ui.h:2
-msgid "Enter feed address to add"
-msgstr "Insira o endereço do feed para adicioná-lo"
-
-#: ../data/HeaderBar.ui.h:3
-msgid "Add"
-msgstr "Adicionar"
-
-#: ../data/HeaderBar.ui.h:4
-msgid "You are already subscribed to that feed!"
-msgstr "Você já está inscrito naquele feed!"
-
-#: ../data/HeaderBar.ui.h:5
-msgid "Select All"
-msgstr "Selecionar tudo"
-
-#: ../data/HeaderBar.ui.h:6
-msgid "Select None"
-msgstr "Selecionar nenhum"
-
-#: ../data/HeaderBar.ui.h:7
-msgid "Click on items to select them"
-msgstr "Clique nos itens para selecioná-los"
-
-#: ../data/HeaderBar.ui.h:8
-msgid "Search"
-msgstr "Pesquisar"
-
-#: ../data/HeaderBar.ui.h:9
-msgid "Select"
-msgstr "Selecionar"
-
-#: ../data/HeaderBar.ui.h:10
-msgid "Back"
-msgstr "Voltar"
-
-#: ../data/Menu.ui.h:1
+#: ../data/gtk/menus.ui.h:1
 msgid "About"
 msgstr "Sobre"
 
-#: ../data/Menu.ui.h:2
+#: ../data/gtk/menus.ui.h:2
 msgid "Quit"
 msgstr "Sair"
 
 #. TRANSLATORS: the application name
-#: ../data/org.gnome.News.desktop.in.h:1
-#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
-#: ../gnomenews/window.py:35
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
 msgid "News"
 msgstr "Notícias"
-
-#: ../data/org.gnome.News.desktop.in.h:2
-msgid "Feed reader for GNOME"
-msgstr "Leitor de feed para o GNOME"
 
 #. TRANSLATORS: one-line description for the app
 #: ../data/org.gnome.News.appdata.xml.in.h:4
@@ -88,18 +45,123 @@ msgstr "Leitor de feed"
 msgid "GNOME News can be used to read news."
 msgstr "GNOME News pode ser usado para ler notícias."
 
-#: ../gnomenews/view.py:116
-msgid "Unknown feed"
-msgstr "Feed desconhecido"
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Leitor de feed para o GNOME"
 
-#: ../gnomenews/view.py:231
+#: ../data/org.gnome.News.gschema.xml.h:1
+msgid "Window size"
+msgstr "Tamanho da janela"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+msgid "Window size (width and height)."
+msgstr "Tamanho da janela (largura e altura)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+msgid "Window position"
+msgstr "Posição da janela"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+msgid "Window position (x and y)."
+msgstr "Posição da janela (x e y)."
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+msgid "Window maximized"
+msgstr "Janela maximizada"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+msgid "Window maximized state."
+msgstr "Estado de janela maximizada"
+
+#: ../data/ui/empty-view.ui.h:1
+msgid "No Results Found"
+msgstr "Nenhum resultado encontrado"
+
+#: ../data/ui/empty-view.ui.h:2
+msgid "Try a different search"
+msgstr "Tente uma pesquisa diferente"
+
+#: ../data/ui/empty-view.ui.h:3
+msgid "No Starred Articles Found"
+msgstr "Nenhum artigo favorito encontrado"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr "Você pode ver seus artigos favoritos após marcá-los"
+
+#: ../data/ui/empty-view.ui.h:5
+msgid "No Feed Subscription Found"
+msgstr "Nenhuma inscrição de feed encontrada"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr "Você pode se inscrever aos feeds usando o botão \"\""
+
+#: ../data/ui/headerbar.ui.h:1
+msgid "Add a new feed"
+msgstr "Adicionar um novo feed"
+
+#: ../data/ui/headerbar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Insira o endereço do feed para adicioná-lo"
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Adicionar"
+
+#: ../data/ui/headerbar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Você já está inscrito naquele feed!"
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Selecionar tudo"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "Selecionar nenhum"
+
+#: ../data/ui/headerbar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Clique nos itens para selecioná-los"
+
+#: ../data/ui/headerbar.ui.h:8
+msgid "Mark this article as starred"
+msgstr "Marcar este artigo como favorito"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Pesquisar"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Selecionar"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Voltar"
+
+#: ../gnomenews/toolbar.py:96
+#, python-format
+msgid "Searching for \"%s\""
+msgstr "Pesquisando por \"%s\""
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+msgid "This article was already read"
+msgstr "Esta artigo já foi lido"
+
+#: ../gnomenews/view.py:174
 msgid "New"
 msgstr "Novo"
 
-#: ../gnomenews/view.py:240
+#: ../gnomenews/view.py:191
 msgid "Feeds"
 msgstr "Feeds"
 
-#: ../gnomenews/view.py:289
+#: ../gnomenews/view.py:268
+msgid "Unknown feed"
+msgstr "Feed desconhecido"
+
+#: ../gnomenews/view.py:361
 msgid "Starred"
-msgstr "Marcado com estrelas"
+msgstr "Favorito"
