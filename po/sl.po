@@ -1,0 +1,190 @@
+# Slovenian translation for gnome-news.
+# Copyright (C) 2016 gnome-news's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-news package.
+#
+# Matej Urbančič <mateju@svn.gnome.org>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-news master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"news&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-03-11 09:29+0000\n"
+"PO-Revision-Date: 2016-03-11 22:27+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups."
+"com>\n"
+"Language: sl_SI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "About"
+msgstr "O programu"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "Quit"
+msgstr "Končaj"
+
+#. TRANSLATORS: the application name
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
+msgid "News"
+msgstr "Novice"
+
+#. TRANSLATORS: one-line description for the app
+#: ../data/org.gnome.News.appdata.xml.in.h:4
+#, fuzzy
+msgid "Feed Reader"
+msgstr "Viri"
+
+#. TRANSLATORS: AppData description marketing paragraph
+#: ../data/org.gnome.News.appdata.xml.in.h:6
+msgid "GNOME News can be used to read news."
+msgstr ""
+
+#: ../data/org.gnome.News.desktop.in.h:2
+#, fuzzy
+msgid "Feed reader for GNOME"
+msgstr "Pridobivanje vira"
+
+#: ../data/org.gnome.News.gschema.xml.h:1
+#, fuzzy
+msgid "Window size"
+msgstr "Veikost okna"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+#, fuzzy
+msgid "Window size (width and height)."
+msgstr "Velikost okna (širina in višina)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+#, fuzzy
+msgid "Window position"
+msgstr "Položaj okna"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+#, fuzzy
+msgid "Window position (x and y)."
+msgstr "Položaj okna (x in y)."
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+#, fuzzy
+msgid "Window maximized"
+msgstr "Razpeto okno"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+#, fuzzy
+msgid "Window maximized state."
+msgstr "Razpeto stanje okna"
+
+#: ../data/ui/empty-view.ui.h:1
+#, fuzzy
+msgid "No Results Found"
+msgstr "Ni zadetkov"
+
+#: ../data/ui/empty-view.ui.h:2
+#, fuzzy
+msgid "Try a different search"
+msgstr "Poskusite drugačno iskanje"
+
+#: ../data/ui/empty-view.ui.h:3
+#, fuzzy
+msgid "No Starred Articles Found"
+msgstr "Zaznamovano"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr ""
+
+#: ../data/ui/empty-view.ui.h:5
+#, fuzzy
+msgid "No Feed Subscription Found"
+msgstr "Viri"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr ""
+
+#: ../data/ui/headerbar.ui.h:1
+#, fuzzy
+msgid "Add a new feed"
+msgstr "Ni mogoče dodati vira"
+
+#: ../data/ui/headerbar.ui.h:2
+#, fuzzy
+msgid "Enter feed address to add"
+msgstr "Vnesite uporabniško ime/geslo za vir"
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Dodaj"
+
+#: ../data/ui/headerbar.ui.h:4
+#, fuzzy
+msgid "You are already subscribed to that feed!"
+msgstr "Vir že obstaja!"
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Izberi vse"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "Odstrani izbor"
+
+#: ../data/ui/headerbar.ui.h:7
+#, fuzzy
+msgid "Click on items to select them"
+msgstr "S klikom se predmeti izberejo"
+
+#: ../data/ui/headerbar.ui.h:8
+#, fuzzy
+msgid "Mark this article as starred"
+msgstr "Članek"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Iskanje"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Izberi"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Nazaj"
+
+#: ../gnomenews/toolbar.py:96
+#, fuzzy, python-format
+msgid "Searching for \"%s\""
+msgstr "Vir za brskanje in iskanje fotografij flickr uporabnika %s"
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+#, fuzzy
+msgid "This article was already read"
+msgstr "Članek"
+
+#: ../gnomenews/view.py:174
+msgid "New"
+msgstr "Novo"
+
+#: ../gnomenews/view.py:191
+msgid "Feeds"
+msgstr "Viri"
+
+#: ../gnomenews/view.py:268
+#, fuzzy
+msgid "Unknown feed"
+msgstr "Viri"
+
+#: ../gnomenews/view.py:361
+#, fuzzy
+msgid "Starred"
+msgstr "Zaznamovano"
