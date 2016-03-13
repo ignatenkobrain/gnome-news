@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-news master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "news&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-07 09:26+0000\n"
-"PO-Revision-Date: 2016-01-07 23:19+0200\n"
+"POT-Creation-Date: 2016-03-08 14:37+0000\n"
+"PO-Revision-Date: 2016-03-13 17:59+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -19,64 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: ../data/HeaderBar.ui.h:1
-msgid "Add a new feed"
-msgstr "Lisää uusi syöte"
-
-#: ../data/HeaderBar.ui.h:2
-msgid "Enter feed address to add"
-msgstr "Anna lisättävän syötteen osoite"
-
-#: ../data/HeaderBar.ui.h:3
-msgid "Add"
-msgstr "Lisää"
-
-#: ../data/HeaderBar.ui.h:4
-msgid "You are already subscribed to that feed!"
-msgstr "Olet jo tilannut tämän syötteen!"
-
-#: ../data/HeaderBar.ui.h:5
-msgid "Select All"
-msgstr "Valitse kaikki"
-
-#: ../data/HeaderBar.ui.h:6
-msgid "Select None"
-msgstr "Älä valitse mitään"
-
-#: ../data/HeaderBar.ui.h:7
-msgid "Click on items to select them"
-msgstr "Napsauta kohteita valitaksesi ne"
-
-#: ../data/HeaderBar.ui.h:8
-msgid "Search"
-msgstr "Etsi"
-
-#: ../data/HeaderBar.ui.h:9
-msgid "Select"
-msgstr "Valitse"
-
-#: ../data/HeaderBar.ui.h:10
-msgid "Back"
-msgstr "Takaisin"
-
-#: ../data/Menu.ui.h:1
+#: ../data/gtk/menus.ui.h:1
 msgid "About"
 msgstr "Tietoja"
 
-#: ../data/Menu.ui.h:2
+#: ../data/gtk/menus.ui.h:2
 msgid "Quit"
 msgstr "Lopeta"
 
 #. TRANSLATORS: the application name
-#: ../data/org.gnome.News.desktop.in.h:1
-#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
-#: ../gnomenews/window.py:35
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
 msgid "News"
 msgstr "Uutiset"
-
-#: ../data/org.gnome.News.desktop.in.h:2
-msgid "Feed reader for GNOME"
-msgstr "Syötteenlukija Gnomelle"
 
 #. TRANSLATORS: one-line description for the app
 #: ../data/org.gnome.News.appdata.xml.in.h:4
@@ -88,18 +44,123 @@ msgstr "Syötteenlukija"
 msgid "GNOME News can be used to read news."
 msgstr "Gnomen syötteenlukijaa voi käyttää uutisten lukemiseen."
 
-#: ../gnomenews/view.py:116
-msgid "Unknown feed"
-msgstr "Tuntematon syöte"
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Syötteenlukija Gnomelle"
 
-#: ../gnomenews/view.py:231
+#: ../data/org.gnome.News.gschema.xml.h:1
+msgid "Window size"
+msgstr "Ikkunan koko"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+msgid "Window size (width and height)."
+msgstr "Ikkunan koko (leveys ja korkeus)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+msgid "Window position"
+msgstr "Ikkunan sijainti"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+msgid "Window position (x and y)."
+msgstr "Ikkunan sijainti (x ja y)."
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+msgid "Window maximized"
+msgstr "Ikkuna suurennettu"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+msgid "Window maximized state."
+msgstr "Suurennetun ikkunan tila."
+
+#: ../data/ui/empty-view.ui.h:1
+msgid "No Results Found"
+msgstr "Tuloksia ei löytynyt"
+
+#: ../data/ui/empty-view.ui.h:2
+msgid "Try a different search"
+msgstr "Kokeile eri hakuehtoja"
+
+#: ../data/ui/empty-view.ui.h:3
+msgid "No Starred Articles Found"
+msgstr "Tähdellä merkittyjä artikkeleita ei löytynyt"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr "Näet tähdellä merkityt artikkelit täällä, kunhan ensin merkitset ne"
+
+#: ../data/ui/empty-view.ui.h:5
+msgid "No Feed Subscription Found"
+msgstr "Syötetilausta ei löytynyt"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr "Voit tilata syötteitä napsauttamalla \"+\""
+
+#: ../data/ui/headerbar.ui.h:1
+msgid "Add a new feed"
+msgstr "Lisää uusi syöte"
+
+#: ../data/ui/headerbar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Anna lisättävän syötteen osoite"
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Lisää"
+
+#: ../data/ui/headerbar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Olet jo tilannut tämän syötteen!"
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Valitse kaikki"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "Älä valitse mitään"
+
+#: ../data/ui/headerbar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Napsauta kohteita valitaksesi ne"
+
+#: ../data/ui/headerbar.ui.h:8
+msgid "Mark this article as starred"
+msgstr "Merkitse tämä artikkeli tähdellä"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Etsi"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Valitse"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Takaisin"
+
+#: ../gnomenews/toolbar.py:96
+#, python-format
+msgid "Searching for \"%s\""
+msgstr "Etsitään \"%s\""
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+msgid "This article was already read"
+msgstr "Tämä artikkeli on jo luettu"
+
+#: ../gnomenews/view.py:174
 msgid "New"
 msgstr "Uudet"
 
-#: ../gnomenews/view.py:240
+#: ../gnomenews/view.py:191
 msgid "Feeds"
 msgstr "Syötteet"
 
-#: ../gnomenews/view.py:289
+#: ../gnomenews/view.py:268
+msgid "Unknown feed"
+msgstr "Tuntematon syöte"
+
+#: ../gnomenews/view.py:361
 msgid "Starred"
 msgstr "Suosikit"
