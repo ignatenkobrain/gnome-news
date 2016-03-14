@@ -1,15 +1,15 @@
 # Czech translation for gnome-news.
 # Copyright (C) 2015 gnome-news's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-news package.
-# Marek Černocký <marek@manet.cz>, 2015.
+# Marek Černocký <marek@manet.cz>, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-news master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "news&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-24 09:25+0000\n"
-"PO-Revision-Date: 2015-12-24 11:10+0100\n"
+"POT-Creation-Date: 2016-03-08 14:37+0000\n"
+"PO-Revision-Date: 2016-03-14 03:30+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -19,64 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: ../data/HeaderBar.ui.h:1
-msgid "Add a new feed"
-msgstr "Přidat nový kanál"
-
-#: ../data/HeaderBar.ui.h:2
-msgid "Enter feed address to add"
-msgstr "Zadejte adresu kanálu, který se má přidat"
-
-#: ../data/HeaderBar.ui.h:3
-msgid "Add"
-msgstr "Přidat"
-
-#: ../data/HeaderBar.ui.h:4
-msgid "You are already subscribed to that feed!"
-msgstr "K tomuto kanálu jste již přihlášeni!"
-
-#: ../data/HeaderBar.ui.h:5
-msgid "Select All"
-msgstr "Vybrat vše"
-
-#: ../data/HeaderBar.ui.h:6
-msgid "Select None"
-msgstr "Zrušit výběr"
-
-#: ../data/HeaderBar.ui.h:7
-msgid "Click on items to select them"
-msgstr "Vyberte položky klikáním"
-
-#: ../data/HeaderBar.ui.h:8
-msgid "Search"
-msgstr "Hledat"
-
-#: ../data/HeaderBar.ui.h:9
-msgid "Select"
-msgstr "Vybrat"
-
-#: ../data/HeaderBar.ui.h:10
-msgid "Back"
-msgstr "Zpět"
-
-#: ../data/Menu.ui.h:1
+#: ../data/gtk/menus.ui.h:1
 msgid "About"
 msgstr "O aplikaci"
 
-#: ../data/Menu.ui.h:2
+#: ../data/gtk/menus.ui.h:2
 msgid "Quit"
 msgstr "Ukončit"
 
 #. TRANSLATORS: the application name
-#: ../data/org.gnome.News.desktop.in.h:1
-#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
-#: ../gnomenews/window.py:35
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
 msgid "News"
 msgstr "Zpravodajství"
-
-#: ../data/org.gnome.News.desktop.in.h:2
-msgid "Feed reader for GNOME"
-msgstr "Čtečka kanálů pro GNOME"
 
 #. TRANSLATORS: one-line description for the app
 #: ../data/org.gnome.News.appdata.xml.in.h:4
@@ -88,18 +44,123 @@ msgstr "Čtečka kanálů"
 msgid "GNOME News can be used to read news."
 msgstr "Zpravodajství GNOME můžete použít ke čtení aktualit."
 
-#: ../gnomenews/view.py:116
-msgid "Unknown feed"
-msgstr "Neznámý kanál"
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Čtečka kanálů pro GNOME"
 
-#: ../gnomenews/view.py:231
+#: ../data/org.gnome.News.gschema.xml.h:1
+msgid "Window size"
+msgstr "Velikost okna"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+msgid "Window size (width and height)."
+msgstr "Velikost okna (šířka a výška)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+msgid "Window position"
+msgstr "Poloha okna"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+msgid "Window position (x and y)."
+msgstr "Poloha okna (x a y)."
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+msgid "Window maximized"
+msgstr "Okno je maximalizováno"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+msgid "Window maximized state."
+msgstr "Stav maximalizace okna."
+
+#: ../data/ui/empty-view.ui.h:1
+msgid "No Results Found"
+msgstr "Nebyly nalezeny žádné výsledky"
+
+#: ../data/ui/empty-view.ui.h:2
+msgid "Try a different search"
+msgstr "Zkuste hledat jinak"
+
+#: ../data/ui/empty-view.ui.h:3
+msgid "No Starred Articles Found"
+msgstr "Nebyl nalezen žádný oblíbený článek"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr "Své oblíbené články zde uvidíte, až je označíte zvězdičkou"
+
+#: ../data/ui/empty-view.ui.h:5
+msgid "No Feed Subscription Found"
+msgstr "Nebyl nalezen žádný přihlášený odběr"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr "K odběru kanálů se můžete přihlásit tlačítkem „+“"
+
+#: ../data/ui/headerbar.ui.h:1
+msgid "Add a new feed"
+msgstr "Přidat nový kanál"
+
+#: ../data/ui/headerbar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Zadejte adresu kanálu, který se má přidat"
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Přidat"
+
+#: ../data/ui/headerbar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "K tomuto kanálu jste již přihlášeni!"
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Vybrat vše"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "Zrušit výběr"
+
+#: ../data/ui/headerbar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Vyberte položky klikáním"
+
+#: ../data/ui/headerbar.ui.h:8
+msgid "Mark this article as starred"
+msgstr "Označit tento článek jako oblíbený"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Hledat"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Vybrat"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Zpět"
+
+#: ../gnomenews/toolbar.py:96
+#, python-format
+msgid "Searching for \"%s\""
+msgstr "Hledá se „%s“"
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+msgid "This article was already read"
+msgstr "Tento článek jste již četli"
+
+#: ../gnomenews/view.py:174
 msgid "New"
 msgstr "Nový"
 
-#: ../gnomenews/view.py:240
+#: ../gnomenews/view.py:191
 msgid "Feeds"
 msgstr "Kanály"
 
-#: ../gnomenews/view.py:289
+#: ../gnomenews/view.py:268
+msgid "Unknown feed"
+msgstr "Neznámý kanál"
+
+#: ../gnomenews/view.py:361
 msgid "Starred"
 msgstr "Oblíbené"
