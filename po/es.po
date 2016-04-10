@@ -1,15 +1,15 @@
 # Spanish translation for gnome-news.
 # Copyright (C) 2015 gnome-news's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-news package.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-news master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "news&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-04 09:24+0000\n"
-"PO-Revision-Date: 2015-12-04 14:33+0100\n"
+"POT-Creation-Date: 2016-03-08 14:37+0000\n"
+"PO-Revision-Date: 2016-04-08 14:59+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -19,64 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: ../data/HeaderBar.ui.h:1
-msgid "Add a new feed"
-msgstr "Añadir un proveedor nuevo"
-
-#: ../data/HeaderBar.ui.h:2
-msgid "Enter feed address to add"
-msgstr "Introduzca la dirección del proveedor que añadir."
-
-#: ../data/HeaderBar.ui.h:3
-msgid "Add"
-msgstr "Añadir"
-
-#: ../data/HeaderBar.ui.h:4
-msgid "You are already subscribed to that feed!"
-msgstr "Ya está suscrito a ese proveedor."
-
-#: ../data/HeaderBar.ui.h:5
-msgid "Select All"
-msgstr "Seleccionar todo"
-
-#: ../data/HeaderBar.ui.h:6
-msgid "Select None"
-msgstr "No seleccionar nada"
-
-#: ../data/HeaderBar.ui.h:7
-msgid "Click on items to select them"
-msgstr "Pulse sobre los elementos para seleccionarlos"
-
-#: ../data/HeaderBar.ui.h:8
-msgid "Search"
-msgstr "Buscar"
-
-#: ../data/HeaderBar.ui.h:9
-msgid "Select"
-msgstr "Seleccionar"
-
-#: ../data/HeaderBar.ui.h:10
-msgid "Back"
-msgstr "Atrás"
-
-#: ../data/Menu.ui.h:1
+#: ../data/gtk/menus.ui.h:1
 msgid "About"
 msgstr "Acerca de"
 
-#: ../data/Menu.ui.h:2
+#: ../data/gtk/menus.ui.h:2
 msgid "Quit"
 msgstr "Salir"
 
 #. TRANSLATORS: the application name
-#: ../data/org.gnome.News.desktop.in.h:1
-#: ../data/org.gnome.News.appdata.xml.in.h:2 ../gnomenews/application.py:36
-#: ../gnomenews/window.py:35
+#: ../data/org.gnome.News.appdata.xml.in.h:2
+#: ../data/org.gnome.News.desktop.in.h:1 ../gnomenews/application.py:36
+#: ../gnomenews/toolbar.py:99 ../gnomenews/window.py:35
 msgid "News"
 msgstr "Noticias"
-
-#: ../data/org.gnome.News.desktop.in.h:2
-msgid "Feed reader for GNOME"
-msgstr "Lector de noticias para GNOME"
 
 #. TRANSLATORS: one-line description for the app
 #: ../data/org.gnome.News.appdata.xml.in.h:4
@@ -88,18 +44,123 @@ msgstr "Lector de noticias"
 msgid "GNOME News can be used to read news."
 msgstr "Noticias de GNOME se puede usar para leer noticias."
 
-#: ../gnomenews/view.py:116
-msgid "Unknown feed"
-msgstr "Proveedor desconocido"
+#: ../data/org.gnome.News.desktop.in.h:2
+msgid "Feed reader for GNOME"
+msgstr "Lector de noticias para GNOME"
 
-#: ../gnomenews/view.py:231
+#: ../data/org.gnome.News.gschema.xml.h:1
+msgid "Window size"
+msgstr "Tamaño de la ventana"
+
+#: ../data/org.gnome.News.gschema.xml.h:2
+msgid "Window size (width and height)."
+msgstr "Tamaño de la ventana (anchura y altura)."
+
+#: ../data/org.gnome.News.gschema.xml.h:3
+msgid "Window position"
+msgstr "Posición de la ventana"
+
+#: ../data/org.gnome.News.gschema.xml.h:4
+msgid "Window position (x and y)."
+msgstr "Posición de la ventana (x e y)"
+
+#: ../data/org.gnome.News.gschema.xml.h:5
+msgid "Window maximized"
+msgstr "Ventana maximizada"
+
+#: ../data/org.gnome.News.gschema.xml.h:6
+msgid "Window maximized state."
+msgstr "Estado maximizado de la ventana."
+
+#: ../data/ui/empty-view.ui.h:1
+msgid "No Results Found"
+msgstr "No se han encontrado resultados"
+
+#: ../data/ui/empty-view.ui.h:2
+msgid "Try a different search"
+msgstr "Pruebe una búsqueda diferente"
+
+#: ../data/ui/empty-view.ui.h:3
+msgid "No Starred Articles Found"
+msgstr "No se han encontrado artículos favoritos"
+
+#: ../data/ui/empty-view.ui.h:4
+msgid "You can see your starred articles after marking them"
+msgstr "Puede ver sus artículos favoritos después de marcarlos como tales"
+
+#: ../data/ui/empty-view.ui.h:5
+msgid "No Feed Subscription Found"
+msgstr "No se han encontrado suscripciones a proveedores"
+
+#: ../data/ui/empty-view.ui.h:6
+msgid "You can subscribe to feeds using the \"+\" button"
+msgstr "Puede suscribirse a proveedores usando el botón «+»"
+
+#: ../data/ui/headerbar.ui.h:1
+msgid "Add a new feed"
+msgstr "Añadir un proveedor nuevo"
+
+#: ../data/ui/headerbar.ui.h:2
+msgid "Enter feed address to add"
+msgstr "Introduzca la dirección del proveedor que añadir."
+
+#: ../data/ui/headerbar.ui.h:3
+msgid "Add"
+msgstr "Añadir"
+
+#: ../data/ui/headerbar.ui.h:4
+msgid "You are already subscribed to that feed!"
+msgstr "Ya está suscrito a ese proveedor."
+
+#: ../data/ui/headerbar.ui.h:5
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#: ../data/ui/headerbar.ui.h:6
+msgid "Select None"
+msgstr "No seleccionar nada"
+
+#: ../data/ui/headerbar.ui.h:7
+msgid "Click on items to select them"
+msgstr "Pulse sobre los elementos para seleccionarlos"
+
+#: ../data/ui/headerbar.ui.h:8
+msgid "Mark this article as starred"
+msgstr "Marcar este artículo como favorito"
+
+#: ../data/ui/headerbar.ui.h:9
+msgid "Search"
+msgstr "Buscar"
+
+#: ../data/ui/headerbar.ui.h:10
+msgid "Select"
+msgstr "Seleccionar"
+
+#: ../data/ui/headerbar.ui.h:11
+msgid "Back"
+msgstr "Atrás"
+
+#: ../gnomenews/toolbar.py:96
+#, python-format
+msgid "Searching for \"%s\""
+msgstr "Buscando «%s»"
+
+#: ../gnomenews/view.py:86 ../gnomenews/view.py:99
+msgid "This article was already read"
+msgstr "Este artículo ya se había leído"
+
+#: ../gnomenews/view.py:174
 msgid "New"
 msgstr "Nuevo"
 
-#: ../gnomenews/view.py:240
+#: ../gnomenews/view.py:191
 msgid "Feeds"
 msgstr "Proveedores"
 
-#: ../gnomenews/view.py:289
+#: ../gnomenews/view.py:268
+msgid "Unknown feed"
+msgstr "Proveedor desconocido"
+
+#: ../gnomenews/view.py:361
 msgid "Starred"
 msgstr "Favoritos"
