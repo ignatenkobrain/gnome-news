@@ -24,7 +24,7 @@ from gnomenews.about import AboutDialog
 import os
 import os.path
 
-CACHE_PATH = "~/.cache/gnome-news"
+CACHE_PATH = GLib.get_user_cache_dir()
 
 
 class Application(Gtk.Application):
@@ -55,9 +55,8 @@ class Application(Gtk.Application):
 
     @log
     def create_cache(self):
-        cache_full_path = os.path.expanduser(CACHE_PATH)
-        if not os.path.isdir(cache_full_path):
-            os.mkdir(cache_full_path)
+        if not os.path.isdir(CACHE_PATH):
+            GLib.mkdir_with_parents(CACHE_PATH, 0755)
 
     @log
     def do_startup(self):

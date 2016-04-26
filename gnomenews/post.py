@@ -20,13 +20,12 @@ import os.path
 import re
 
 from gnomenews import log
+from gnomenews.application import CACHE_PATH
 import logging
 logger = logging.getLogger(__name__)
 
 THUMBNAIL_WIDTH = 256
 THUMBNAIL_HEIGHT = 256
-# FIXME: Remove duplication with application.py
-CACHE_PATH = "~/.cache/gnome-news"
 
 NAME_REGEX = re.compile("\(([^\)]+)\)")
 
@@ -55,7 +54,7 @@ class Post(GObject.GObject):
 
         # Check cache first
         hashed_url = hashlib.md5(cursor['url'].encode()).hexdigest()
-        self.cached_thumbnail_path = os.path.join(os.path.expanduser(CACHE_PATH), '%s.png' % hashed_url)
+        self.cached_thumbnail_path = os.path.join(CACHE_PATH, '%s.png' % hashed_url)
 
         GLib.idle_add(self.try_to_load_image_from_cache)
 
