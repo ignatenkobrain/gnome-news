@@ -17,6 +17,8 @@
 from gi.repository import Gtk, GLib, Gio, Gdk
 from gettext import gettext as _
 
+CACHE_PATH = GLib.get_user_cache_dir()
+
 from gnomenews import log
 from gnomenews.window import Window
 from gnomenews.about import AboutDialog
@@ -24,7 +26,6 @@ from gnomenews.about import AboutDialog
 import os
 import os.path
 
-CACHE_PATH = GLib.get_user_cache_dir()
 
 
 class Application(Gtk.Application):
@@ -56,7 +57,7 @@ class Application(Gtk.Application):
     @log
     def create_cache(self):
         if not os.path.isdir(CACHE_PATH):
-            GLib.mkdir_with_parents(CACHE_PATH, 0755)
+            GLib.mkdir_with_parents(CACHE_PATH, int("0755", 8))
 
     @log
     def do_startup(self):
