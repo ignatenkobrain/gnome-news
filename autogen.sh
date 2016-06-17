@@ -1,7 +1,11 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
-srcdir=`dirname $0`
-test -z "$srcdir" && srcdir=.
+test -n "$srcdir" || srcdir=`dirname "$0"`
+test -n "$srcdir" || srcdir=.
+
+olddir=`pwd`
+
+cd "$srcdir"
 
 (test -f $srcdir/configure.ac) || {
         echo "**Error**: Directory "\`$srcdir\'" does not look like the top-level project directory"
@@ -21,11 +25,15 @@ touch ChangeLog
 touch INSTALL
 
 set -x
+
 aclocal --install || exit 1
 glib-gettextize --force --copy || exit 1
 intltoolize --force --copy --automake || exit 1
 autoreconf --verbose --force --install -Wno-portability || exit 1
+
 { set +x; } 2>/dev/null
+
+cd "$olddir"
 
 if [ "$NOCONFIGURE" = "" ]; then
         set -x
