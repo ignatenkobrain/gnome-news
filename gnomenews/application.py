@@ -57,7 +57,7 @@ class Application(Gtk.Application):
     @log
     def create_cache(self):
         if not os.path.isdir(CACHE_PATH):
-            GLib.mkdir_with_parents(CACHE_PATH, int("0755", 8))
+            GLib.mkdir_with_parents(CACHE_PATH, 0o0755)
 
     @log
     def do_startup(self):
